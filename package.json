@@ -1,0 +1,24 @@
+{
+  "name": "talk",
+  "version": "1.0.0",
+  "description": "A video chat app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nickchen2016/talk.io.git"
+  },
+  "author": "Nick Chen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Nickchen2016/talk.io/issues"
+  },
+  "homepage": "https://github.com/Nickchen2016/talk.io#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "nodemon": "^1.17.5"
+  }
+}
