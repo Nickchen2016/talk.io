@@ -18,8 +18,16 @@
   },
   "homepage": "https://github.com/Nickchen2016/talk.io#readme",
   "dependencies": {
+    "axios": "^0.18.0",
+    "body-parser": "^1.18.3",
     "express": "^4.16.3",
-    "nodemon": "^1.17.5"
+    "nodemon": "^1.17.5",
+    "pg": "^7.4.3",
+    "react": "^16.4.0",
+    "react-dom": "^16.4.0",
+    "redux": "^4.0.0",
+    "sequelize": "^4.37.10",
+    "volleyball": "^1.5.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
