@@ -6,4 +6,8 @@ const Contact = require('./contact');
 Contact.belongsTo(User);
 User.hasMany(Contact);
  
-module.exports = db;
+module.exports = {
+    db,
+    User,
+    Contact
+};
