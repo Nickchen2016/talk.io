@@ -1,5 +1,9 @@
 const db = require('./just-the-db')
-require('./user');
-require('./contact');
+const User = require('./user');
+const Contact = require('./contact');
+
+
+Contact.belongsTo(User);
+User.hasMany(Contact);
  
 module.exports = db;

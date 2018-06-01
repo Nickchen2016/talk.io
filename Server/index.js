@@ -26,7 +26,7 @@ app.get('/', (req,res,next)=>{
 })
 
 
-db.sync()
+db.sync({force: true})
 .then(()=>{
     console.log('db is connected');
     app.listen(PORT, ()=>{
