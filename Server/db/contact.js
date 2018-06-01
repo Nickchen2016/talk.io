@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 const db = require('./just-the-db');
 
-const User = db.define('user', {
+const Contact = db.define('contact', {
     color: {
         type: Sequelize.STRING,
         allowNull: false
@@ -9,7 +9,7 @@ const User = db.define('user', {
     name: {
         type: Sequelize.STRING,
         allowNull: false,
-        validate:{
+        validate: {
             notEmpty: true
         }
     },
@@ -17,17 +17,10 @@ const User = db.define('user', {
         type: Sequelize.STRING,
         allowNull: false,
         validate:{
-            isEmail: true,
-            notEmpty: true
-        }
-    },
-    password: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        validate:{
-            notEmpty: true
+            notEmpty: true,
+            isEmail: true
         }
     }
 })
 
-module.exports = User;
+module.exports = Contact;

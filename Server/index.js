@@ -10,6 +10,8 @@ app.use(volleyball);
 
 app.use(express.static(path.join(__dirname, '../public')));
 
+// app.use('/api', require('./api'));
+
 app.get('/', (req,res,next)=>{
     res.send(`
     <html>
