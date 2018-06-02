@@ -1,12 +1,39 @@
 const express = require('express');
 const volleyball = require('volleyball');
+const bodyParser = require('body-parser');
 const path = require('path');
 const app = express();
 const db = require('./db/index').db;
+const expressSession = require('express-session');
 const PORT = 8080;
 
 
 app.use(volleyball);
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
+
+//session
+const sessionMiddleware = expressSession({
+    secret: 'talk.io',
+    resave: true,
+    saveUninitialized: true
+})
+app.use(sessionMiddleware);
+//assign req.session to any downstream middleware 
+app.get('/', (req,res,next)=>{
+    if(req.session.counter === undefined){
+        req.session.counter = 0;
+    }else{
+        req.session.counter++;
+    }
+    next();
+})
+app.use(function(req,res,next){
+    console.log('session',req.session);
+    next();
+})
+
 
 app.use(express.static(path.join(__dirname, '../public')));
 

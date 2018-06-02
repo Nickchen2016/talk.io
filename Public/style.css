@@ -1,0 +1,18 @@
+body {
+    background-color: #BCBEC0;
+}
+.gridContainer {
+    width: 100%;
+	max-width: 1232px;
+	padding-left: 0px;
+	padding-right: 0px;
+	margin: auto;
+	overflow:hidden;
+    box-sizing:border-box;
+}
+
+
+.back {
+    height: 100%;
+    width: 100%;
+}

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-export default class Main extends Component {
+export default class Signup extends Component {
     constructor(props){
         super(props)
         this.state = {
@@ -19,9 +19,13 @@ export default class Main extends Component {
 
     render() {
         return(
-            <ul>
-                {this.state.users.map(user=><li key={user.id}>{user.name}</li>)}
-            </ul>
+
+            <div class="gridContainer">
+                <ul>
+                    {this.state.users.map(user=><li key={user.id}>{user.name}</li>)}
+                </ul>
+                
+            </div>
         )
     }
 }
