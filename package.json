@@ -4,8 +4,7 @@
   "description": "A video chat app",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server/index.js"
+    "start": "webpack -w & nodemon server/index.js"
   },
   "repository": {
     "type": "git",
@@ -34,6 +33,7 @@
     "babel-loader": "^7.1.4",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
-    "webpack": "^4.9.1"
+    "webpack": "^4.9.1",
+    "webpack-cli": "^2.1.5"
   }
 }
