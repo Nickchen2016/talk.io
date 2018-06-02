@@ -3,7 +3,7 @@ const apiRouter = express.Router();
 
 // const db = require('../db').db;
 
-apiRouter.use('/user', require('./user'));
+apiRouter.use('/users', require('./users'));
 apiRouter.use('/contact', require('./contact'));
 
 module.exports = apiRouter;

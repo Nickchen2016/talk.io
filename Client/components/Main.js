@@ -1,28 +1,27 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-class Main extends Component {
+export default class Main extends Component {
     constructor(props){
         super(props)
         this.state = {
-            user : [123]
+            users : []
         }
     }
 
     componentDidMount(){
-        // axios.get('/')
-
+        axios.get('/api/users')
+            .then(res => res.data)
+            .then(users => this.setState({users}))
+            .catch(err => console.log(err))
     }
 
 
     render() {
         return(
             <ul>
-                {this.state.user}
+                {this.state.users.map(user=><li key={user.id}>{user.name}</li>)}
             </ul>
         )
     }
 }
-
-
-module.exports = Main;

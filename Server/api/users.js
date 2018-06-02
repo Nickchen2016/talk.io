@@ -1,10 +1,10 @@
 const apiRouter = require('express').Router();
-const User = require('../db').User;
+const Users = require('../db').Users;
 const Contact = require('../db').Contact;
 
 
 apiRouter.get('/', (req,res,next)=>{
-    User.findAll({
+    Users.findAll({
         include:[{model: Contact}]
     })
     .then((result)=>{

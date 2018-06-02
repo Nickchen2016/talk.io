@@ -1,13 +1,13 @@
 const db = require('./just-the-db')
-const User = require('./user');
+const Users = require('./users');
 const Contact = require('./contact');
 
 
-Contact.belongsTo(User);
-User.hasMany(Contact);
+Contact.belongsTo(Users);
+Users.hasMany(Contact);
  
 module.exports = {
     db,
-    User,
+    Users,
     Contact
 };

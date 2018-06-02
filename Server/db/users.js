@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 const db = require('./just-the-db');
 
-const User = db.define('user', {
+const Users = db.define('user', {
     color: {
         type: Sequelize.STRING,
         allowNull: false
@@ -30,4 +30,4 @@ const User = db.define('user', {
     }
 })
 
-module.exports = User;
+module.exports = Users;

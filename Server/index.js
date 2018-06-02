@@ -18,19 +18,6 @@ app.use((err,req,res,next)=>{
     res.status(err.status || 500).send(err.message);
 });
 
-// app.get('/', (req,res,next)=>{
-//     res.send(`
-//     <html>
-//      <head>
-//        <title>My site</title>
-//      </head>
-//      <body>
-//        <h1>Hello World</h1>
-//      </body>
-//     </html>
-//   `)
-// })
-
 
 db.sync({force: false})
 .then(()=>{
