@@ -91,6 +91,10 @@ var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 
 var _react2 = _interopRequireDefault(_react);
 
+var _axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+
+var _axios2 = _interopRequireDefault(_axios);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -99,36 +103,133 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-// import axios from 'axios';
+var Signup = function (_Component) {
+    _inherits(Signup, _Component);
 
-var Login = function (_Component) {
-    _inherits(Login, _Component);
+    function Signup(props) {
+        _classCallCheck(this, Signup);
 
-    function Login(props) {
-        _classCallCheck(this, Login);
+        var _this = _possibleConstructorReturn(this, (Signup.__proto__ || Object.getPrototypeOf(Signup)).call(this, props));
 
-        return _possibleConstructorReturn(this, (Login.__proto__ || Object.getPrototypeOf(Login)).call(this, props));
+        _this.state = {
+            users: []
+        };
+        return _this;
     }
 
-    _createClass(Login, [{
+    // componentDidMount(){
+    //     axios.get('/api/users')
+    //         .then(res => res.data)
+    //         .then(users => this.setState({users}))
+    //         .catch(err => console.log(err))
+    // }
+
+
+    _createClass(Signup, [{
         key: 'render',
         value: function render() {
             return _react2.default.createElement(
                 'div',
-                null,
+                { className: 'container' },
                 _react2.default.createElement(
-                    'h2',
-                    null,
-                    'wertyuioplkjhgfdsxcv'
+                    'div',
+                    { className: 'item1' },
+                    _react2.default.createElement('img', { src: './img/logo.png', id: 'logo' })
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'item2' },
+                    _react2.default.createElement(
+                        'div',
+                        null,
+                        _react2.default.createElement(
+                            'div',
+                            null,
+                            _react2.default.createElement(
+                                'form',
+                                null,
+                                _react2.default.createElement(
+                                    'div',
+                                    { id: 'table' },
+                                    _react2.default.createElement('input', { type: 'text', placeholder: 'Email', required: true }),
+                                    _react2.default.createElement('input', { type: 'text', placeholder: 'Password', required: true })
+                                ),
+                                _react2.default.createElement(
+                                    'button',
+                                    { type: 'submit' },
+                                    'Submit'
+                                )
+                            )
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            null,
+                            _react2.default.createElement(
+                                'h1',
+                                null,
+                                'Or'
+                            )
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            null,
+                            _react2.default.createElement(
+                                'div',
+                                { id: 'google-icon' },
+                                _react2.default.createElement(
+                                    'a',
+                                    {
+                                        // target="_self"
+                                        href: '/auth/google',
+                                        id: 'google-btn' },
+                                    _react2.default.createElement('img', { src: './img/google.png', id: 'icon' }),
+                                    _react2.default.createElement('span', { id: 'line' }),
+                                    _react2.default.createElement(
+                                        'span',
+                                        { id: 'words' },
+                                        'Log in with Google'
+                                    )
+                                )
+                            )
+                        )
+                    )
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'item3' },
+                    _react2.default.createElement(
+                        'div',
+                        null,
+                        _react2.default.createElement(
+                            'a',
+                            { href: '/' },
+                            _react2.default.createElement('span', { className: 'dot' }),
+                            _react2.default.createElement(
+                                'p',
+                                null,
+                                'Sign up'
+                            )
+                        ),
+                        _react2.default.createElement(
+                            'a',
+                            { href: '/login' },
+                            _react2.default.createElement('span', { className: 'dot' }),
+                            _react2.default.createElement(
+                                'p',
+                                null,
+                                'Log in'
+                            )
+                        )
+                    )
                 )
             );
         }
     }]);
 
-    return Login;
+    return Signup;
 }(_react.Component);
 
-exports.default = Login;
+exports.default = Signup;
 
 /***/ }),
 
@@ -354,11 +455,12 @@ var Signup = function (_Component) {
                                     {
                                         // target="_self"
                                         href: '/auth/google',
-                                        className: 'google-btn' },
-                                    _react2.default.createElement('i', { className: 'line' }),
+                                        id: 'google-btn' },
+                                    _react2.default.createElement('img', { src: './img/google.png', id: 'icon' }),
+                                    _react2.default.createElement('span', { id: 'line' }),
                                     _react2.default.createElement(
                                         'span',
-                                        null,
+                                        { id: 'words' },
                                         'sign up with Google'
                                     )
                                 )

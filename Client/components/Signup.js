@@ -44,9 +44,10 @@ export default class Signup extends Component {
                                 <a
                                     // target="_self"
                                     href="/auth/google"
-                                    className="google-btn">
-                                    <i className="line" />
-                                    <span>sign up with Google</span>
+                                    id="google-btn">
+                                        <img src="./img/google.png" id="icon"/>
+                                        <span id="line"></span>
+                                        <span id="words">sign up with Google</span>
                                 </a>
                             </div>
                         </div>
