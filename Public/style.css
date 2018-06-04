@@ -57,7 +57,7 @@
     display: flex;
 }
 
-input[type=text] {
+input {
     width: 90%;
     height: 33px;
     border: none;
@@ -67,9 +67,24 @@ input[type=text] {
     outline: none;
 }
 
-input[type=text]:focus {
-    border: 2px solid #555;
+input:focus {
+    border: 1px solid #555;
+    background-color: white;
     color: #555;
+}
+
+input:-webkit-autofill {
+    box-shadow: 0 0 0 30px white inset;
+    -webkit-box-shadow: 0 0 0 30px white inset;
+    -webkit-text-fill-color: #BCBEC0 !important;
+}
+
+input:-webkit-autofill:focus {
+    -webkit-text-fill-color: #555 !important;
+}
+
+input::placeholder {
+    color: #BCBEC0;
 }
 
 button {
@@ -81,6 +96,7 @@ button {
     font-size: 15px;
     width: 76%;
     height: 33px;
+    cursor: pointer;
 }
 
 button:hover {
@@ -94,7 +110,7 @@ h1 {
 }
 
 #google-icon {
-    margin: 150px auto 0 auto;
+    margin: 145px auto 0 auto;
     height: 38px;
     width: 260px;
     background-color: #FF3300;
@@ -158,7 +174,7 @@ a {
 }
 
 #words {
-    margin: 10px 40px;
+    margin: 10px 35px;
 }
 
 #google-btn {

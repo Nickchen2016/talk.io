@@ -111,21 +111,17 @@ var Signup = function (_Component) {
 
         var _this = _possibleConstructorReturn(this, (Signup.__proto__ || Object.getPrototypeOf(Signup)).call(this, props));
 
-        _this.state = {
-            users: []
-        };
+        _this.onLoginSubmit = _this.onLoginSubmit.bind(_this);
         return _this;
     }
 
-    // componentDidMount(){
-    //     axios.get('/api/users')
-    //         .then(res => res.data)
-    //         .then(users => this.setState({users}))
-    //         .catch(err => console.log(err))
-    // }
-
-
     _createClass(Signup, [{
+        key: 'onLoginSubmit',
+        value: function onLoginSubmit(event) {
+            event.preventDefault();
+            console.log('-------', event.target.email.value);
+        }
+    }, {
         key: 'render',
         value: function render() {
             return _react2.default.createElement(
@@ -147,12 +143,12 @@ var Signup = function (_Component) {
                             null,
                             _react2.default.createElement(
                                 'form',
-                                null,
+                                { onSubmit: this.onLoginSubmit },
                                 _react2.default.createElement(
                                     'div',
                                     { id: 'table' },
-                                    _react2.default.createElement('input', { type: 'text', placeholder: 'Email', required: true }),
-                                    _react2.default.createElement('input', { type: 'text', placeholder: 'Password', required: true })
+                                    _react2.default.createElement('input', { name: 'email', type: 'email', placeholder: 'Email', required: true }),
+                                    _react2.default.createElement('input', { name: 'password', type: 'password', placeholder: 'Password', required: true })
                                 ),
                                 _react2.default.createElement(
                                     'button',
@@ -384,9 +380,7 @@ var Signup = function (_Component) {
 
         var _this = _possibleConstructorReturn(this, (Signup.__proto__ || Object.getPrototypeOf(Signup)).call(this, props));
 
-        _this.state = {
-            users: []
-        };
+        _this.onSignupSubmit = _this.onSignupSubmit.bind(_this);
         return _this;
     }
 
@@ -399,6 +393,12 @@ var Signup = function (_Component) {
 
 
     _createClass(Signup, [{
+        key: 'onSignupSubmit',
+        value: function onSignupSubmit(event) {
+            event.preventDefault();
+            console.log('=======', event.target.email.value);
+        }
+    }, {
         key: 'render',
         value: function render() {
             return _react2.default.createElement(
@@ -420,13 +420,13 @@ var Signup = function (_Component) {
                             null,
                             _react2.default.createElement(
                                 'form',
-                                null,
+                                { onSubmit: this.onSignupSubmit },
                                 _react2.default.createElement(
                                     'div',
                                     { id: 'table' },
-                                    _react2.default.createElement('input', { type: 'text', placeholder: 'Name', required: true }),
-                                    _react2.default.createElement('input', { type: 'text', placeholder: 'Email', required: true }),
-                                    _react2.default.createElement('input', { type: 'text', placeholder: 'Password', required: true })
+                                    _react2.default.createElement('input', { name: 'name', type: 'text', placeholder: 'Name', required: true }),
+                                    _react2.default.createElement('input', { name: 'email', type: 'email', placeholder: 'Email', required: true }),
+                                    _react2.default.createElement('input', { name: 'password', type: 'password', placeholder: 'Password', required: true })
                                 ),
                                 _react2.default.createElement(
                                     'button',
@@ -461,7 +461,7 @@ var Signup = function (_Component) {
                                     _react2.default.createElement(
                                         'span',
                                         { id: 'words' },
-                                        'sign up with Google'
+                                        'Sign up with Google'
                                     )
                                 )
                             )

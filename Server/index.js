@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const app = express();
 const db = require('./db/index').db;
-const expressSession = require('express-session');
+const session = require('express-session');
 const PORT = 8080;
 
 
@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 //session
-const sessionMiddleware = expressSession({
+const sessionMiddleware = session({
     secret: 'talk.io',
     resave: true,
     saveUninitialized: true

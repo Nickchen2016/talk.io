@@ -4,9 +4,7 @@ import axios from 'axios';
 export default class Signup extends Component {
     constructor(props){
         super(props)
-        this.state = {
-            users : []
-        }
+        this.onSignupSubmit = this.onSignupSubmit.bind(this);
     }
 
     // componentDidMount(){
@@ -15,6 +13,10 @@ export default class Signup extends Component {
     //         .then(users => this.setState({users}))
     //         .catch(err => console.log(err))
     // }
+    onSignupSubmit(event) {
+        event.preventDefault();
+        console.log('=======', event.target.email.value);
+    }
 
 
     render() {
@@ -27,13 +29,13 @@ export default class Signup extends Component {
                 <div className="item2">
                     <div>
                         <div>
-                            <form>
+                            <form onSubmit={this.onSignupSubmit}>
                                 <div id="table">
-                                    <input type="text" placeholder="Name" required/>
-                                    <input type="text" placeholder="Email" required/>
-                                    <input type="text" placeholder="Password" required/>
+                                    <input name="name" type="text" placeholder="Name" required/>
+                                    <input name="email" type="email" placeholder="Email" required/>
+                                    <input name="password" type="password" placeholder="Password" required/>
                                 </div>
-                                <button type="submit" >Submit</button>
+                                <button type="submit">Submit</button>
                             </form>
                         </div>
                         <div>
@@ -47,7 +49,7 @@ export default class Signup extends Component {
                                     id="google-btn">
                                         <img src="./img/google.png" id="icon"/>
                                         <span id="line"></span>
-                                        <span id="words">sign up with Google</span>
+                                        <span id="words">Sign up with Google</span>
                                 </a>
                             </div>
                         </div>

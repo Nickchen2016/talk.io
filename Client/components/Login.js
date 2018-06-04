@@ -4,18 +4,13 @@ import axios from 'axios';
 export default class Signup extends Component {
     constructor(props){
         super(props)
-        this.state = {
-            users : []
-        }
+        this.onLoginSubmit=this.onLoginSubmit.bind(this);
     }
 
-    // componentDidMount(){
-    //     axios.get('/api/users')
-    //         .then(res => res.data)
-    //         .then(users => this.setState({users}))
-    //         .catch(err => console.log(err))
-    // }
-
+    onLoginSubmit(event) {
+        event.preventDefault();
+        console.log('-------', event.target.email.value);
+    }
 
     render() {
         return(
@@ -27,10 +22,10 @@ export default class Signup extends Component {
                 <div className="item2">
                     <div>
                         <div>
-                            <form>
+                            <form onSubmit={this.onLoginSubmit}>
                                 <div id="table">
-                                    <input type="text" placeholder="Email" required/>
-                                    <input type="text" placeholder="Password" required/>
+                                    <input name="email" type="email" placeholder="Email" required/>
+                                    <input name="password" type="password" placeholder="Password" required/>
                                 </div>
                                 <button type="submit" >Submit</button>
                             </form>

@@ -9,4 +9,10 @@ apiRouter.get('/', (req,res,next)=>{
     .then(next)
 });
 
+apiRouter.post('/', (req,res,next)=>{
+    Contact.create(req.body)
+    .then(result => res.status(201).json(result))
+    .catch(next);
+})
+
 module.exports = apiRouter;
