@@ -9,21 +9,61 @@ export default class Signup extends Component {
         }
     }
 
-    componentDidMount(){
-        axios.get('/api/users')
-            .then(res => res.data)
-            .then(users => this.setState({users}))
-            .catch(err => console.log(err))
-    }
+    // componentDidMount(){
+    //     axios.get('/api/users')
+    //         .then(res => res.data)
+    //         .then(users => this.setState({users}))
+    //         .catch(err => console.log(err))
+    // }
 
 
     render() {
         return(
 
-            <div class="gridContainer">
-                <ul>
-                    {this.state.users.map(user=><li key={user.id}>{user.name}</li>)}
-                </ul>
+            <div className="container">
+                <div className="item1">
+                    <img src="./img/logo.png" id="logo"/>
+                </div>
+                <div className="item2">
+                    <div>
+                        <div>
+                            <form>
+                                <div id="table">
+                                    <input type="text" placeholder="Name" required/>
+                                    <input type="text" placeholder="Email" required/>
+                                    <input type="text" placeholder="Password" required/>
+                                </div>
+                                <button type="submit" >Submit</button>
+                            </form>
+                        </div>
+                        <div>
+                            <h1>Or</h1>
+                        </div>
+                        <div>
+                            <div id="google-icon">
+                                <a
+                                    // target="_self"
+                                    href="/auth/google"
+                                    className="google-btn">
+                                    <i className="line" />
+                                    <span>sign up with Google</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="item3">
+                    <div>
+                        <a href="/">
+                            <span className="dot"></span>
+                            <p>Sign up</p>
+                        </a>
+                        <a href="/login">
+                            <span className="dot"></span>
+                            <p>Log in</p>
+                        </a>
+                    </div>
+                </div>
                 
             </div>
         )

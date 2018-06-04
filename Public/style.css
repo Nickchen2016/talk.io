@@ -1,18 +1,146 @@
-body {
+
+.container {
+    position: fixed;
+    top: 0; right: 0; bottom: 0; left: 0;
+    align-content: center;
     background-color: #BCBEC0;
 }
-.gridContainer {
-    width: 100%;
-	max-width: 1232px;
-	padding-left: 0px;
-	padding-right: 0px;
-	margin: auto;
-	overflow:hidden;
-    box-sizing:border-box;
+/* 
+.container > div {
+    border-style: groove 
+} */
+
+.item1, .item3 {
+    height: 150px;
+    /* width:100%; */
+    align-content: center;
 }
 
-
-.back {
-    height: 100%;
-    width: 100%;
+.item2 {
+    height: 340px;
+    /* width:1400px; */
+    /* display: flex; */
+    align-content: center;
+    text-align: center; 
 }
+
+#logo {
+    height: 38px;
+    padding: 25px 0 0 35px;
+}
+
+.item2 > div {
+    display: flex;
+    margin-left:auto;margin-right:auto;
+    width: 85%;
+}
+
+.item2 div div:first-child, .item2 div div:last-child {
+    width: 40%;
+    /* border-style: groove */
+}
+
+.item2 div div:nth-child(2) {
+    width: 20%;
+    /* border-style: groove */
+}
+
+#table {
+    width: 80%;
+    padding: 30px;
+    margin-left:auto;margin-right:auto;
+    /* border-style: groove */
+}
+
+#table > input {
+    padding-left: 15px;
+    margin: 30px auto 0 auto;
+    display: flex;
+}
+
+input[type=text] {
+    width: 90%;
+    height: 33px;
+    border: none;
+    border-radius: 6px;
+    color:#BCBEC0;
+    font-size: 15px;
+    outline: none;
+}
+
+input[type=text]:focus {
+    border: 2px solid #555;
+    color: #555;
+}
+
+button {
+    background-color: #66FF99;
+    border: none;
+    color: white;
+    text-align: center;
+    border-radius: 6px;
+    font-size: 15px;
+    width: 76%;
+    height: 33px;
+}
+
+button:hover {
+    background-color: #00CC99; 
+}
+
+h1 {
+    font-family: Arial;
+    margin-top:150px;
+    color: white;
+}
+
+#google-icon {
+    margin: 150px auto 0 auto;
+    height: 38px;
+    width: 260px;
+    background-color: #FF3300;
+    border-radius: 6px;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+    font-family: Arial;
+}
+
+#google-icon:hover {
+    background-color: #CC0000;
+}
+
+.item3 > div {
+    margin-top: 60px;
+    display: flex;
+    margin-left:auto;margin-right:auto;
+    width: 30%;
+    height: 80px;
+    text-align: center;
+}
+
+.dot {
+    border: 3px solid white;
+    height: 6px;
+    width: 6px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.item3 div > a {
+    width: 50%;
+    font-family: Arial;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.dot:hover {
+    border: 3px solid #D1D3D4;
+}
+
+.item3 div > a:hover {
+    color: #D1D3D4;
+} 

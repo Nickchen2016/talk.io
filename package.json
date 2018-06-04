@@ -4,7 +4,8 @@
   "description": "A video chat app",
   "main": "index.js",
   "scripts": {
-    "start": "webpack -w & nodemon server/index.js"
+    "start": "nodemon server",
+    "pack": "webpack -w"
   },
   "repository": {
     "type": "git",

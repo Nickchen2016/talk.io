@@ -36,8 +36,14 @@ app.use(function(req,res,next){
 
 
 app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(__dirname, '../node_module')));
 
 app.use('/api', require('./api'));
+
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public/index.html'));
+  }); // Send index.html for any other requests
 
 app.use((err,req,res,next)=>{
     console.error('there is a problem');

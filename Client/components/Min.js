@@ -1,18 +1,10 @@
-import React, { Component } from 'react';
-// import axios from 'axios';
+import React from 'react';
 
-export default class Min extends Component {
-    constructor(props){
-        super(props)
-    }
+export default function Min(){
 
-
-    render() {
-        return(
-
-            <div>
-               <h2>456789007654456789</h2>                
-            </div>
-        )
-    }
+    return(
+        <div>
+            <p>Welcome to Margaret Hamilton Academy</p>
+        </div>
+    )
 }

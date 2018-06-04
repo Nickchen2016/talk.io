@@ -11,7 +11,7 @@ export default class Login extends Component {
         return(
 
             <div>
-               <h1>wertyuioplkjhgfdsxcv</h1>
+               <h2>wertyuioplkjhgfdsxcv</h2>
                 
             </div>
         )
