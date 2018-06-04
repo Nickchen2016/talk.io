@@ -5,5 +5,6 @@ const apiRouter = express.Router();
 
 apiRouter.use('/users', require('./users'));
 apiRouter.use('/contact', require('./contact'));
+apiRouter.use('/me', require('./me'));
 
 module.exports = apiRouter;

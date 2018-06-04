@@ -1,21 +1,35 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { connect } from 'react-redux';
+import { signup } from '../redux/currentUser';
+import colorConfig from './Color';
 
-export default class Signup extends Component {
+
+class Signup extends Component {
     constructor(props){
         super(props)
         this.onSignupSubmit = this.onSignupSubmit.bind(this);
     }
 
-    // componentDidMount(){
-    //     axios.get('/api/users')
-    //         .then(res => res.data)
-    //         .then(users => this.setState({users}))
-    //         .catch(err => console.log(err))
-    // }
     onSignupSubmit(event) {
         event.preventDefault();
-        console.log('=======', event.target.email.value);
+        // console.log(this.props.history.push('/min'),colorConfig(),'=======', event.target.email.value);
+        this.props.signup({
+            color: colorConfig(),
+            name: event.target.name.value,
+            email: event.target.email.value,
+            password: event.target.password.value
+        });
+        this.props.history.push('/min');
+        // axios.post('/api/me', {
+        //     color: colorConfig(),
+        //     name: event.target.name.value,
+        //     email: event.target.email.value,
+        //     password: event.target.password.value
+        // }).then(res=>{
+        //     if(res)this.props.history.push('/min');
+        // })
+        // .catch(console.error);
     }
 
 
@@ -49,7 +63,7 @@ export default class Signup extends Component {
                                     id="google-btn">
                                         <img src="./img/google.png" id="icon"/>
                                         <span id="line"></span>
-                                        <span id="words">Sign up with Google</span>
+                                        <span id="words">{this.props.message} with Google</span>
                                 </a>
                             </div>
                         </div>
@@ -72,3 +86,11 @@ export default class Signup extends Component {
         )
     }
 }
+
+// Container
+const mapState = () => ({ message: 'Sign up' });
+const mapDispatch = (dispatch) =>({
+  signup: credentials => dispatch(signup(credentials))
+});
+
+export default connect(mapState, mapDispatch)(Signup);

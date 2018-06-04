@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { connect } from 'react-redux';
+import { login } from '../redux/currentUser';
+ 
 
-export default class Signup extends Component {
+class Login extends Component {
     constructor(props){
         super(props)
         this.onLoginSubmit=this.onLoginSubmit.bind(this);
@@ -9,7 +12,17 @@ export default class Signup extends Component {
 
     onLoginSubmit(event) {
         event.preventDefault();
-        console.log('-------', event.target.email.value);
+    //     console.log('-------', event.target.email.value);
+    //     axios.put('/api/me', {
+    //         email: event.target.email.value,
+    //         password: event.target.password.value
+    //     }).then(console.log)
+    //     .catch(console.error);
+        this.props.login({
+                email: event.target.email.value,
+                password: event.target.password.value
+        });
+        this.props.history.push('/min');
     }
 
     render() {
@@ -41,7 +54,7 @@ export default class Signup extends Component {
                                     id="google-btn">
                                         <img src="./img/google.png" id="icon"/>
                                         <span id="line"></span>
-                                        <span id="words">Log in with Google</span>
+                                        <span id="words">{this.props.message} with Google</span>
                                 </a>
                             </div>
                         </div>
@@ -64,3 +77,10 @@ export default class Signup extends Component {
         )
     }
 }
+
+const mapState = ()=>({message:'login'});
+const mapDispatch = (dispatch)=>({
+    login: credentials => dispatch(login(credentials))
+});
+
+export default connect(mapState,mapDispatch)(Login);
