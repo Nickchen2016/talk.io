@@ -13,10 +13,10 @@ apiRouter.get('/', (req,res,next)=>{
     .catch(next)
 })
 
-apiRouter.post('/', (req,res,next)=>{
-    Users.create(req.body)
-    .then(result => res.status(201).json(result))
-    .catch(next);
-})
+// apiRouter.post('/', (req,res,next)=>{
+//     Users.create(req.body)
+//     .then(result => res.status(201).json(result))
+//     .catch(next);
+// })
 
 module.exports = apiRouter;

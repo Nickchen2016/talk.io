@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
 import { connect } from 'react-redux';
 import { signup } from '../redux/currentUser';
-import colorConfig from './Color';
+import colorConfig from '../../Public/color';
 
 
 class Signup extends Component {
@@ -20,7 +20,7 @@ class Signup extends Component {
             email: event.target.email.value,
             password: event.target.password.value
         });
-        this.props.history.push('/min');
+        this.props.history.push('/talkpage');
         // axios.post('/api/me', {
         //     color: colorConfig(),
         //     name: event.target.name.value,

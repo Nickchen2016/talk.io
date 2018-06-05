@@ -27,7 +27,8 @@ const Users = db.define('user', {
         validate:{
             notEmpty: true
         }
-    }
+    },
+    googleProfileId: Sequelize.STRING
 })
 
 module.exports = Users;

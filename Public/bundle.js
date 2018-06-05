@@ -71,28 +71,6 @@
 /************************************************************************/
 /******/ ({
 
-/***/ "./Client/components/Color.js":
-/*!************************************!*\
-  !*** ./Client/components/Color.js ***!
-  \************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = colorConfig;
-function colorConfig() {
-    var rgb = ['rgb(255,102,102)', 'rgb(237,28,36)', 'rgb(255,242,0)', 'rgb(255,204,51)', 'rgb(255,102,255)', 'rgb(0,102,255)', 'rgb(0,0,204)', 'rgb(102,255,0)', 'rgb(102,255,153)', 'rgb(196,154,108)', 'rgb(153,102,255)', 'rgb(102,51,255)', 'rgb(102,0,153)', 'rgb(139,94,60)', 'rgb(188,190,192)'];
-    var index = Math.floor(Math.random() * 15);
-    return rgb[index];
-}
-
-/***/ }),
-
 /***/ "./Client/components/Login.js":
 /*!************************************!*\
   !*** ./Client/components/Login.js ***!
@@ -155,7 +133,7 @@ var Login = function (_Component) {
                 email: event.target.email.value,
                 password: event.target.password.value
             });
-            this.props.history.push('/min');
+            this.props.history.push('/talkpage');
         }
     }, {
         key: 'render',
@@ -277,42 +255,6 @@ exports.default = (0, _reactRedux.connect)(mapState, mapDispatch)(Login);
 
 /***/ }),
 
-/***/ "./Client/components/Min.js":
-/*!**********************************!*\
-  !*** ./Client/components/Min.js ***!
-  \**********************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = Min;
-
-var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-
-var _react2 = _interopRequireDefault(_react);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function Min() {
-
-    return _react2.default.createElement(
-        'div',
-        null,
-        _react2.default.createElement(
-            'p',
-            null,
-            'Welcome to Margaret Hamilton Academy'
-        )
-    );
-}
-
-/***/ }),
-
 /***/ "./Client/components/Root.js":
 /*!***********************************!*\
   !*** ./Client/components/Root.js ***!
@@ -343,9 +285,15 @@ var _Login = __webpack_require__(/*! ./Login */ "./Client/components/Login.js");
 
 var _Login2 = _interopRequireDefault(_Login);
 
-var _Min = __webpack_require__(/*! ./Min */ "./Client/components/Min.js");
+var _TalkPage = __webpack_require__(/*! ./TalkPage */ "./Client/components/TalkPage.js");
 
-var _Min2 = _interopRequireDefault(_Min);
+var _TalkPage2 = _interopRequireDefault(_TalkPage);
+
+var _store = __webpack_require__(/*! ../store */ "./Client/store.js");
+
+var _store2 = _interopRequireDefault(_store);
+
+var _users = __webpack_require__(/*! ../redux/users */ "./Client/redux/users.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -365,6 +313,11 @@ var Root = function (_Component) {
     }
 
     _createClass(Root, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            _store2.default.dispatch((0, _users.fetchUsers)());
+        }
+    }, {
         key: 'render',
         value: function render() {
             return _react2.default.createElement(
@@ -375,7 +328,7 @@ var Root = function (_Component) {
                     null,
                     _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _Signup2.default }),
                     _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/login', component: _Login2.default }),
-                    _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/min', component: _Min2.default })
+                    _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/talkpage', component: _TalkPage2.default })
                 )
             );
         }
@@ -408,17 +361,13 @@ var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 
 var _react2 = _interopRequireDefault(_react);
 
-var _axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-
-var _axios2 = _interopRequireDefault(_axios);
-
 var _reactRedux = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 
 var _currentUser = __webpack_require__(/*! ../redux/currentUser */ "./Client/redux/currentUser.js");
 
-var _Color = __webpack_require__(/*! ./Color */ "./Client/components/Color.js");
+var _color = __webpack_require__(/*! ../../Public/color */ "./Public/color.js");
 
-var _Color2 = _interopRequireDefault(_Color);
+var _color2 = _interopRequireDefault(_color);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -427,6 +376,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+// import axios from 'axios';
+
 
 var Signup = function (_Component) {
     _inherits(Signup, _Component);
@@ -446,12 +397,12 @@ var Signup = function (_Component) {
             event.preventDefault();
             // console.log(this.props.history.push('/min'),colorConfig(),'=======', event.target.email.value);
             this.props.signup({
-                color: (0, _Color2.default)(),
+                color: (0, _color2.default)(),
                 name: event.target.name.value,
                 email: event.target.email.value,
                 password: event.target.password.value
             });
-            this.props.history.push('/min');
+            this.props.history.push('/talkpage');
             // axios.post('/api/me', {
             //     color: colorConfig(),
             //     name: event.target.name.value,
@@ -583,6 +534,81 @@ var mapDispatch = function mapDispatch(dispatch) {
 };
 
 exports.default = (0, _reactRedux.connect)(mapState, mapDispatch)(Signup);
+
+/***/ }),
+
+/***/ "./Client/components/TalkPage.js":
+/*!***************************************!*\
+  !*** ./Client/components/TalkPage.js ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRedux = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var TalkPage = function (_Component) {
+    _inherits(TalkPage, _Component);
+
+    function TalkPage(props) {
+        _classCallCheck(this, TalkPage);
+
+        return _possibleConstructorReturn(this, (TalkPage.__proto__ || Object.getPrototypeOf(TalkPage)).call(this, props));
+    }
+
+    _createClass(TalkPage, [{
+        key: 'render',
+        value: function render() {
+            var _this2 = this;
+
+            // console.log('----------', this.props.loggedUser);
+            return _react2.default.createElement(
+                'div',
+                null,
+                this.props.users.map(function (user) {
+                    if (user.id === _this2.props.loggedUser.id) {
+                        return user.contacts.map(function (contact) {
+                            // console.log('=======',contact.name)
+                            return _react2.default.createElement(
+                                'h2',
+                                { key: contact.id },
+                                contact.name
+                            );
+                        });
+                    }
+                })
+            );
+        }
+    }]);
+
+    return TalkPage;
+}(_react.Component);
+
+var mapState = function mapState(state) {
+    return { loggedUser: state.currentUser, users: state.users };
+};
+
+exports.default = (0, _reactRedux.connect)(mapState)(TalkPage);
 
 /***/ }),
 
@@ -719,6 +745,53 @@ function reducer() {
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.fetchUsers = undefined;
+exports.default = reducer;
+
+var _axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+
+var _axios2 = _interopRequireDefault(_axios);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// action types
+
+var GET_USERS = 'GET_USERS';
+
+// action creators
+
+var getUsers = function getUsers(users) {
+  return { type: GET_USERS, users: users };
+};
+// const removeCurrentUser = () =>({ type: REMOVE_CURRENT_USER });
+
+// Thunk creators
+
+var fetchUsers = exports.fetchUsers = function fetchUsers() {
+  return function (dispatch) {
+    _axios2.default.get('/api/users').then(function (res) {
+      return dispatch(getUsers(res.data));
+    });
+  };
+};
+
+// Reducer
+
+function reducer() {
+  var allUsers = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var action = arguments[1];
+
+  switch (action.type) {
+    case GET_USERS:
+      return action.users;
+    default:
+      return allUsers;
+  }
+}
+
 /***/ }),
 
 /***/ "./Client/store.js":
@@ -762,6 +835,28 @@ var reducer = (0, _redux.combineReducers)({ currentUser: _currentUser2.default, 
 var store = (0, _redux.createStore)(reducer, (0, _reduxDevtoolsExtension.composeWithDevTools)((0, _redux.applyMiddleware)(_reduxThunk2.default, _reduxLogger2.default)));
 
 exports.default = store;
+
+/***/ }),
+
+/***/ "./Public/color.js":
+/*!*************************!*\
+  !*** ./Public/color.js ***!
+  \*************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = colorConfig;
+function colorConfig() {
+    var rgb = ['rgb(255,102,102)', 'rgb(237,28,36)', 'rgb(255,242,0)', 'rgb(255,204,51)', 'rgb(255,102,255)', 'rgb(0,102,255)', 'rgb(0,0,204)', 'rgb(102,255,0)', 'rgb(102,255,153)', 'rgb(196,154,108)', 'rgb(153,102,255)', 'rgb(102,51,255)', 'rgb(102,0,153)', 'rgb(139,94,60)', 'rgb(188,190,192)'];
+    var index = Math.floor(Math.random() * 15);
+    return rgb[index];
+}
 
 /***/ }),
 

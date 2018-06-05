@@ -11,9 +11,10 @@ apiRouter.put('/', (req,res,next)=>{
         where: req.body
     })
     .then((result)=>{
-        req.session.currentlyLoggedUserId = result.id;
-        res.status(201).json(result)
-        // console.log("++++++++++++++",result.id)
+        req.login(result, (err)=>{
+            if(err) next(err);
+            else res.json(result);
+            })
     })
     .catch(next)
 })
@@ -21,8 +22,11 @@ apiRouter.put('/', (req,res,next)=>{
 apiRouter.post('/', (req,res,next)=>{
     Users.create(req.body)
     .then(result => {
-        req.session.currentlyLoggedUserId = result.id;
-        res.status(201).json(result)})
+        req.login(result, (err)=>{
+            if(err) next(err);
+            else res.json(result);
+        })
+    })
     .catch(next);
 })
 
