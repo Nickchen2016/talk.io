@@ -240,7 +240,7 @@ var Login = function (_Component) {
     return Login;
 }(_react.Component);
 
-var mapState = function mapState() {
+var mapState = function mapState(state) {
     return { message: 'login' };
 };
 var mapDispatch = function mapDispatch(dispatch) {
@@ -277,6 +277,8 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRouterDom = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/es/index.js");
 
+var _reactRedux = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+
 var _Signup = __webpack_require__(/*! ./Signup */ "./Client/components/Signup.js");
 
 var _Signup2 = _interopRequireDefault(_Signup);
@@ -289,11 +291,9 @@ var _TalkPage = __webpack_require__(/*! ./TalkPage */ "./Client/components/TalkP
 
 var _TalkPage2 = _interopRequireDefault(_TalkPage);
 
-var _store = __webpack_require__(/*! ../store */ "./Client/store.js");
-
-var _store2 = _interopRequireDefault(_store);
-
 var _users = __webpack_require__(/*! ../redux/users */ "./Client/redux/users.js");
+
+var _currentUser = __webpack_require__(/*! ../redux/currentUser */ "./Client/redux/currentUser.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -315,7 +315,7 @@ var Root = function (_Component) {
     _createClass(Root, [{
         key: 'componentDidMount',
         value: function componentDidMount() {
-            _store2.default.dispatch((0, _users.fetchUsers)());
+            this.props.fetchInitialData();
         }
     }, {
         key: 'render',
@@ -337,7 +337,18 @@ var Root = function (_Component) {
     return Root;
 }(_react.Component);
 
-exports.default = Root;
+var mapState = null;
+
+var mapDispatch = function mapDispatch(dispatch) {
+    return {
+        fetchInitialData: function fetchInitialData() {
+            dispatch((0, _users.fetchUsers)());
+            dispatch((0, _currentUser.fetchCurrentUser)());
+        }
+    };
+};
+
+exports.default = (0, _reactRedux.connect)(mapState, mapDispatch)(Root);
 
 /***/ }),
 
@@ -581,14 +592,14 @@ var TalkPage = function (_Component) {
         value: function render() {
             var _this2 = this;
 
-            // console.log('----------', this.props.loggedUser);
+            console.log('----------', this.props.users, this.props.loggedUser);
             return _react2.default.createElement(
                 'div',
                 null,
                 this.props.users.map(function (user) {
                     if (user.id === _this2.props.loggedUser.id) {
+                        // console.log(user);
                         return user.contacts.map(function (contact) {
-                            // console.log('=======',contact.name)
                             return _react2.default.createElement(
                                 'h2',
                                 { key: contact.id },
@@ -781,7 +792,7 @@ var fetchUsers = exports.fetchUsers = function fetchUsers() {
 // Reducer
 
 function reducer() {
-  var allUsers = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var allUsers = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
   var action = arguments[1];
 
   switch (action.type) {

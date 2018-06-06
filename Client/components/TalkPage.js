@@ -7,18 +7,17 @@ class TalkPage extends Component{
     }
 
     render() {
-        // console.log('----------', this.props.loggedUser);
+        console.log('----------', this.props.users,this.props.loggedUser);
         return(
             <div>
                     {this.props.users.map(user=>{
                         if(user.id===this.props.loggedUser.id){
+                            // console.log(user);
                           return  user.contacts.map(contact=>{
-                                // console.log('=======',contact.name)
                                 return(
                                     <h2 key={contact.id}>{contact.name}</h2>
                                 )
                             })
-
                         }
                     })}
             </div>

@@ -18,7 +18,7 @@ const getUsers = users => ({ type: GET_USERS, users });
 
 // Reducer
 
-export default function reducer (allUsers = {}, action) {
+export default function reducer (allUsers = [], action) {
     switch (action.type) {
       case GET_USERS:
         return action.users;
