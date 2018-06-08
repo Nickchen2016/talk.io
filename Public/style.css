@@ -4,6 +4,15 @@
     align-content: center;
     background-color: #BCBEC0;
 }
+
+.talk-container {
+    display:flex;
+    position: fixed;
+    top: 0; right: 0; bottom: 0; left: 0;
+    align-content: center;
+    background-color: #BCBEC0;
+}
+
 /* 
 .container > div {
     border-style: groove 
@@ -161,10 +170,15 @@ a {
     color: #D1D3D4;
 } 
 
-#icon {
+.icon {
     width:24px;
     height:24px;
     margin: 7px 8px;
+}
+
+.sign {
+    width:18px;
+    margin: 12px 0 0 75px;
 }
 
 #line {
@@ -173,10 +187,114 @@ a {
     background-color: #555;
 }
 
-#words {
+#word {
     margin: 10px 35px;
 }
 
 #google-btn {
     display: flex;
+}
+
+/* sidebar */
+#sidebar {
+    height:100%;
+    width:175px;
+    background-color: white; 
+    transition: .5s;
+    transform: translateX(-175px);
+}
+
+#sidebar.active {
+    transition: .5s;
+    transform: translateX(0);
+}
+
+#search {
+    height:55px;
+    border-bottom: 2.5px solid #BCBEC0;  
+}
+
+#add {
+    height: 55px;
+}
+
+#me {
+    display: flex;
+    height: 55px;
+    background-color: rgb(0,0,255);  
+}
+
+#friends {
+    height:70%;
+    background-color: white; 
+}
+
+#pointer {
+    position: absolute;
+    bottom: 55%;
+    margin-left: 200px
+}
+
+#round {
+    position: absolute;
+    border: 3px solid white;
+    height: 6px;
+    width: 6px;
+    border-radius: 50%;
+    cursor: pointer
+}
+
+#round:hover {
+    animation: dotFlow 1.5s infinite;
+}
+
+#words {
+    position: absolute;
+    margin-top:-3px;
+    margin-left:30px;
+    white-space: nowrap;
+    color: #D1D3D4;
+    font-family: sans-serif;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+#words.isActive {
+    opacity: 100;
+    transition: opacity 1s ease-in-out;
+}
+
+#capital {
+    color: white;
+    font-family: sans-serif;
+    font-size: 20px;
+    margin-left: -35px;
+    margin-top: 17px
+}
+
+#username {
+    width:95px;
+    color: white;
+    font-family: sans-serif;
+    font-size: 18px;
+    margin-top: 17px;
+    margin-left: 20px
+}
+
+.status {
+    border-radius: 50%;
+    height: 12px;
+    width: 12px;
+    background-color: #66FF99;
+    margin-top: 23px
+}
+
+
+@keyframes dotFlow {
+    0%, 100% {
+        transform: scale(.9,.9)
+    }
+    50% {
+        transform: scale(1.2,1.2)
+    }
 }

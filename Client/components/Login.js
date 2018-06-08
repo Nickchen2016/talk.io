@@ -12,6 +12,9 @@ class Login extends Component {
 
     onLoginSubmit(event) {
         event.preventDefault();
+        // this.name.value = '';
+        // this.password.value = '';
+        
     //     console.log('-------', event.target.email.value);
     //     axios.put('/api/me', {
     //         email: event.target.email.value,
@@ -25,6 +28,7 @@ class Login extends Component {
         this.props.history.push('/talkpage');
     }
 
+    
     render() {
         return(
 
@@ -38,9 +42,11 @@ class Login extends Component {
                             <form onSubmit={this.onLoginSubmit}>
                                 <div id="table">
                                     <input name="email" type="email" placeholder="Email" required/>
+                                    {/* ref={ el=> this.name = el } */}
                                     <input name="password" type="password" placeholder="Password" required/>
+                                    {/* ref={ el=> this.password = el } */}
                                 </div>
-                                <button type="submit" >Submit</button>
+                                <button type="submit">Submit</button>
                             </form>
                         </div>
                         <div>
@@ -52,9 +58,9 @@ class Login extends Component {
                                     // target="_self"
                                     href="/auth/google"
                                     id="google-btn">
-                                        <img src="./img/google.png" id="icon"/>
+                                        <img src="./img/google.png" className='icon'/>
                                         <span id="line"></span>
-                                        <span id="words">{this.props.message} with Google</span>
+                                        <span id="word">{this.props.message} with Google</span>
                                 </a>
                             </div>
                         </div>

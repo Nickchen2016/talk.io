@@ -123,6 +123,9 @@ var Login = function (_Component) {
         key: 'onLoginSubmit',
         value: function onLoginSubmit(event) {
             event.preventDefault();
+            // this.name.value = '';
+            // this.password.value = '';
+
             //     console.log('-------', event.target.email.value);
             //     axios.put('/api/me', {
             //         email: event.target.email.value,
@@ -192,11 +195,11 @@ var Login = function (_Component) {
                                         // target="_self"
                                         href: '/auth/google',
                                         id: 'google-btn' },
-                                    _react2.default.createElement('img', { src: './img/google.png', id: 'icon' }),
+                                    _react2.default.createElement('img', { src: './img/google.png', className: 'icon' }),
                                     _react2.default.createElement('span', { id: 'line' }),
                                     _react2.default.createElement(
                                         'span',
-                                        { id: 'words' },
+                                        { id: 'word' },
                                         this.props.message,
                                         ' with Google'
                                     )
@@ -316,6 +319,7 @@ var Root = function (_Component) {
         key: 'componentDidMount',
         value: function componentDidMount() {
             this.props.fetchInitialData();
+            // console.log('+++++++++++++++', this.props)
         }
     }, {
         key: 'render',
@@ -482,11 +486,11 @@ var Signup = function (_Component) {
                                         // target="_self"
                                         href: '/auth/google',
                                         id: 'google-btn' },
-                                    _react2.default.createElement('img', { src: './img/google.png', id: 'icon' }),
+                                    _react2.default.createElement('img', { src: './img/google.png', className: 'icon' }),
                                     _react2.default.createElement('span', { id: 'line' }),
                                     _react2.default.createElement(
                                         'span',
-                                        { id: 'words' },
+                                        { id: 'word' },
                                         this.props.message,
                                         ' with Google'
                                     )
@@ -584,30 +588,113 @@ var TalkPage = function (_Component) {
     function TalkPage(props) {
         _classCallCheck(this, TalkPage);
 
-        return _possibleConstructorReturn(this, (TalkPage.__proto__ || Object.getPrototypeOf(TalkPage)).call(this, props));
+        var _this = _possibleConstructorReturn(this, (TalkPage.__proto__ || Object.getPrototypeOf(TalkPage)).call(this, props));
+
+        _this.state = {
+            active: '',
+            isActive: '',
+            words: ''
+        };
+        _this.onClick = _this.onCLick.bind(_this);
+        _this.mouseOver = _this.mouseOver.bind(_this);
+        _this.mouseLeave = _this.mouseLeave.bind(_this);
+        return _this;
     }
 
     _createClass(TalkPage, [{
+        key: 'onCLick',
+        value: function onCLick() {
+            if (this.state.active === '') {
+                this.setState({ active: 'active' });
+            } else {
+                this.setState({ active: '' });
+            }
+        }
+    }, {
+        key: 'mouseOver',
+        value: function mouseOver() {
+            if (this.state.words === '' && this.state.isActive === '') {
+                this.setState({ words: 'Toggle menu on click', isActive: 'isActive' });
+            }
+        }
+    }, {
+        key: 'mouseLeave',
+        value: function mouseLeave() {
+            if (this.state.words === 'Toggle menu on click' && this.state.isActive === 'isActive') {
+                this.setState({ words: '', isActive: '' });
+            }
+        }
+    }, {
         key: 'render',
         value: function render() {
             var _this2 = this;
 
-            console.log('----------', this.props.users, this.props.loggedUser);
+            // console.log('----------', typeof this.props.loggedUser.name);
             return _react2.default.createElement(
                 'div',
-                null,
-                this.props.users.map(function (user) {
-                    if (user.id === _this2.props.loggedUser.id) {
-                        // console.log(user);
-                        return user.contacts.map(function (contact) {
-                            return _react2.default.createElement(
-                                'h2',
-                                { key: contact.id },
-                                contact.name
-                            );
-                        });
-                    }
-                })
+                { className: 'talk-container' },
+                _react2.default.createElement(
+                    'div',
+                    { id: 'sidebar', className: this.state.active },
+                    _react2.default.createElement(
+                        'div',
+                        { id: 'search' },
+                        _react2.default.createElement('img', { src: './img/mag.png', className: 'sign', style: { marginTop: '18px' } })
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { id: 'add' },
+                        _react2.default.createElement('img', { src: './img/plus.png', className: 'sign' })
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { id: 'me' },
+                        _react2.default.createElement('span', { style: { margin: '10px', fontFamily: 'sans-serif', borderRadius: '50%', border: '1px solid rgb(0,0,255)', height: '33px', width: '33px', backgroundColor: 'rgb(255,204,51)' } }),
+                        _react2.default.createElement(
+                            'span',
+                            { id: 'capital', key: this.props.loggedUser.id },
+                            this.props.loggedUser.name && this.props.loggedUser.name[0].toUpperCase()
+                        ),
+                        _react2.default.createElement(
+                            'span',
+                            { id: 'username' },
+                            this.props.loggedUser.name
+                        ),
+                        _react2.default.createElement('span', { className: 'status' })
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { id: 'pointer', onMouseOver: this.mouseOver, onMouseLeave: this.mouseLeave },
+                        _react2.default.createElement('div', { id: 'round', onClick: this.onClick }),
+                        _react2.default.createElement(
+                            'span',
+                            { id: 'words', className: this.state.isActive },
+                            this.state.words
+                        )
+                    ),
+                    _react2.default.createElement('div', { id: 'friends' })
+                ),
+                _react2.default.createElement(
+                    'div',
+                    null,
+                    'dfyguhkjkl'
+                ),
+                _react2.default.createElement(
+                    'div',
+                    null,
+                    this.props.users.map(function (user) {
+                        if (user.id === _this2.props.loggedUser.id) {
+                            // console.log(user);
+                            return user.contacts.map(function (contact) {
+                                return _react2.default.createElement(
+                                    'h2',
+                                    { key: contact.id },
+                                    contact.name
+                                );
+                            });
+                        }
+                    })
+                )
             );
         }
     }]);

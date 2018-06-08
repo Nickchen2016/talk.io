@@ -61,9 +61,9 @@ class Signup extends Component {
                                     // target="_self"
                                     href="/auth/google"
                                     id="google-btn">
-                                        <img src="./img/google.png" id="icon"/>
+                                        <img src="./img/google.png" className='icon'/>
                                         <span id="line"></span>
-                                        <span id="words">{this.props.message} with Google</span>
+                                        <span id="word">{this.props.message} with Google</span>
                                 </a>
                             </div>
                         </div>

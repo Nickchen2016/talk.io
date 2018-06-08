@@ -12,7 +12,8 @@ import { fetchCurrentUser } from '../redux/currentUser';
 class Root extends Component {
 
     componentDidMount() {
-		this.props.fetchInitialData();
+        this.props.fetchInitialData();
+        // console.log('+++++++++++++++', this.props)
 	}
 
     render(){
