@@ -402,12 +402,14 @@ var Sidebar = function (_Component) {
             active: '',
             isActive: '',
             words: '',
-            delete: ''
+            delete: '',
+            id: ''
         };
         _this.onClick = _this.onCLick.bind(_this);
         _this.mouseOver = _this.mouseOver.bind(_this);
         _this.mouseLeave = _this.mouseLeave.bind(_this);
         _this.individualDelte = _this.individualDelte.bind(_this);
+        _this.undo = _this.undo.bind(_this);
         return _this;
     }
 
@@ -440,9 +442,16 @@ var Sidebar = function (_Component) {
             }
         }
     }, {
+        key: 'undo',
+        value: function undo() {
+            this.setState({ delete: '' });
+        }
+    }, {
         key: 'render',
         value: function render() {
-            // console.log('----------', this.state.delete);
+            var _this2 = this;
+
+            // console.log('----------', this.state.id);
             return _react2.default.createElement(
                 'div',
                 { className: 'talk-container' },
@@ -488,150 +497,56 @@ var Sidebar = function (_Component) {
                     _react2.default.createElement(
                         'div',
                         { id: 'contactList' },
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'individualContact' },
-                            _react2.default.createElement('div', { className: this.state.delete }),
-                            _react2.default.createElement('span', { className: 'close', onClick: this.individualDelte }),
-                            _react2.default.createElement('span', { className: 'individualProfile', style: { backgroundColor: 'rgb(102,255,153)' } }),
-                            _react2.default.createElement(
-                                'span',
-                                { className: 'individualCapital' },
-                                'N'
-                            ),
-                            _react2.default.createElement('span', { className: 'individualStatus', style: { backgroundColor: 'rgb(188,190,192)' } }),
-                            _react2.default.createElement(
-                                'span',
-                                { className: 'individualName' },
-                                'Sam Kwon'
-                            )
-                        ),
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'individualContact' },
-                            _react2.default.createElement('div', { className: this.state.delete }),
-                            _react2.default.createElement('span', { className: 'close', onClick: this.individualDelte }),
-                            _react2.default.createElement('span', { className: 'individualProfile', style: { backgroundColor: 'rgb(255,102,102)' } }),
-                            _react2.default.createElement(
-                                'span',
-                                { className: 'individualCapital' },
-                                'W'
-                            ),
-                            _react2.default.createElement('span', { className: 'individualStatus', style: { backgroundColor: 'rgb(188,190,192)' } }),
-                            _react2.default.createElement(
-                                'span',
-                                { className: 'individualName' },
-                                'William Lee'
-                            )
-                        ),
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'individualContact' },
-                            _react2.default.createElement('div', { className: this.state.delete }),
-                            _react2.default.createElement('span', { className: 'close', onClick: this.individualDelte }),
-                            _react2.default.createElement('span', { className: 'individualProfile', style: { backgroundColor: 'rgb(102,255,153)' } }),
-                            _react2.default.createElement(
-                                'span',
-                                { className: 'individualCapital' },
-                                'N'
-                            ),
-                            _react2.default.createElement('span', { className: 'individualStatus', style: { backgroundColor: 'rgb(188,190,192)' } }),
-                            _react2.default.createElement(
-                                'span',
-                                { className: 'individualName' },
-                                'Sam Kwon'
-                            )
-                        ),
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'individualContact' },
-                            _react2.default.createElement('div', { className: this.state.delete }),
-                            _react2.default.createElement('span', { className: 'close', onClick: this.individualDelte }),
-                            _react2.default.createElement('span', { className: 'individualProfile', style: { backgroundColor: 'rgb(255,102,102)' } }),
-                            _react2.default.createElement(
-                                'span',
-                                { className: 'individualCapital' },
-                                'W'
-                            ),
-                            _react2.default.createElement('span', { className: 'individualStatus', style: { backgroundColor: 'rgb(188,190,192)' } }),
-                            _react2.default.createElement(
-                                'span',
-                                { className: 'individualName' },
-                                'William Lee'
-                            )
-                        ),
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'individualContact' },
-                            _react2.default.createElement('div', { className: this.state.delete }),
-                            _react2.default.createElement('span', { className: 'close', onClick: this.individualDelte }),
-                            _react2.default.createElement('span', { className: 'individualProfile', style: { backgroundColor: 'rgb(102,255,153)' } }),
-                            _react2.default.createElement(
-                                'span',
-                                { className: 'individualCapital' },
-                                'N'
-                            ),
-                            _react2.default.createElement('span', { className: 'individualStatus', style: { backgroundColor: 'rgb(188,190,192)' } }),
-                            _react2.default.createElement(
-                                'span',
-                                { className: 'individualName' },
-                                'Sam Kwon'
-                            )
-                        ),
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'individualContact' },
-                            _react2.default.createElement('div', { className: this.state.delete }),
-                            _react2.default.createElement('span', { className: 'close', onClick: this.individualDelte }),
-                            _react2.default.createElement('span', { className: 'individualProfile', style: { backgroundColor: 'rgb(255,102,102)' } }),
-                            _react2.default.createElement(
-                                'span',
-                                { className: 'individualCapital' },
-                                'W'
-                            ),
-                            _react2.default.createElement('span', { className: 'individualStatus', style: { backgroundColor: 'rgb(188,190,192)' } }),
-                            _react2.default.createElement(
-                                'span',
-                                { className: 'individualName' },
-                                'William Lee'
-                            )
-                        ),
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'individualContact' },
-                            _react2.default.createElement('div', { className: this.state.delete }),
-                            _react2.default.createElement('span', { className: 'close', onClick: this.individualDelte }),
-                            _react2.default.createElement('span', { className: 'individualProfile', style: { backgroundColor: 'rgb(102,255,153)' } }),
-                            _react2.default.createElement(
-                                'span',
-                                { className: 'individualCapital' },
-                                'N'
-                            ),
-                            _react2.default.createElement('span', { className: 'individualStatus', style: { backgroundColor: 'rgb(188,190,192)' } }),
-                            _react2.default.createElement(
-                                'span',
-                                { className: 'individualName' },
-                                'Sam Kwon'
-                            )
-                        ),
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'individualContact' },
-                            _react2.default.createElement('div', { className: this.state.delete }),
-                            _react2.default.createElement('span', { className: 'close', onClick: this.individualDelte }),
-                            _react2.default.createElement('span', { className: 'individualProfile', style: { backgroundColor: 'rgb(255,102,102)' } }),
-                            _react2.default.createElement(
-                                'span',
-                                { className: 'individualCapital' },
-                                'W'
-                            ),
-                            _react2.default.createElement('span', { className: 'individualStatus', style: { backgroundColor: 'rgb(188,190,192)' } }),
-                            _react2.default.createElement(
-                                'span',
-                                { className: 'individualName' },
-                                'William Lee'
-                            )
-                        )
+                        this.props.users.map(function (user) {
+                            if (user.id === _this2.props.loggedUser.id) {
+                                return user.contacts.map(function (c) {
+                                    return _react2.default.createElement(
+                                        'div',
+                                        { className: 'individualContact', key: c.id },
+                                        _this2.state.id === c.id && _this2.state.delete === 'delete' ? _react2.default.createElement(
+                                            'div',
+                                            { className: _this2.state.delete },
+                                            _react2.default.createElement(
+                                                'span',
+                                                { className: 'confirmText' },
+                                                'Are you sure',
+                                                _react2.default.createElement('br', null),
+                                                ' to delete?'
+                                            ),
+                                            _react2.default.createElement(
+                                                'div',
+                                                { className: 'confirmButton' },
+                                                _react2.default.createElement(
+                                                    'span',
+                                                    { onClick: _this2.undo },
+                                                    _react2.default.createElement('img', { src: './img/no.png', width: '28px' })
+                                                ),
+                                                _react2.default.createElement(
+                                                    'span',
+                                                    null,
+                                                    _react2.default.createElement('img', { src: './img/yes.png', width: '28px' })
+                                                )
+                                            )
+                                        ) : '',
+                                        _react2.default.createElement('span', { className: 'close', onClick: function onClick() {
+                                                _this2.setState({ id: c.id });_this2.individualDelte();
+                                            } }),
+                                        _react2.default.createElement('span', { className: 'individualProfile', style: { backgroundColor: '' + c.color } }),
+                                        _react2.default.createElement(
+                                            'span',
+                                            { className: 'individualCapital' },
+                                            c.name[0].toUpperCase()
+                                        ),
+                                        _react2.default.createElement('span', { className: 'individualStatus', style: { backgroundColor: 'rgb(188,190,192)' } }),
+                                        _react2.default.createElement(
+                                            'span',
+                                            { className: 'individualName' },
+                                            c.name
+                                        )
+                                    );
+                                });
+                            }
+                        })
                     )
                 ),
                 _react2.default.createElement(_Talkpage2.default, null)

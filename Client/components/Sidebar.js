@@ -10,12 +10,14 @@ class Sidebar extends Component{
             active: '',
             isActive: '',
             words: '',
-            delete:''
+            delete:'',
+            id:''
         }
         this.onClick= this.onCLick.bind(this);
         this.mouseOver= this.mouseOver.bind(this);
         this.mouseLeave= this.mouseLeave.bind(this);
         this.individualDelte= this.individualDelte.bind(this);
+        this.undo= this.undo.bind(this);
     }
 
 individualDelte() {
@@ -37,9 +39,13 @@ mouseOver(){
 mouseLeave(){
     if(this.state.words==='Toggle menu on click'&& this.state.isActive==='isActive'){this.setState({words:'', isActive:''})}
 }
+
+undo(){
+    this.setState({delete:''})
+}
  
     render() {
-        // console.log('----------', this.state.delete);
+        // console.log('----------', this.state.id);
         return(
             <div className='talk-container'>
 
@@ -53,76 +59,37 @@ mouseLeave(){
                    <div id='add'><img src='./img/plus.png' className='sign'/></div> 
                    <div id='me'>
                       <span id='profile' style={{backgroundColor:'rgb(255,204,51)'}}></span>
-                      {/* `${this.props.color}` */}
+  
                       <span id='capital' key={this.props.loggedUser.id}>{this.props.loggedUser.name&&this.props.loggedUser.name[0].toUpperCase()}</span>
                       <span id='username'>{ this.props.loggedUser.name }</span>
                       <span className='status' style={{backgroundColor:'rgb(188,190,192)'}}></span>
                    </div> 
                    <div id='contactList'>
-                    <div className='individualContact'>
-                        <div className={this.state.delete}></div>
-                        <span className='close' onClick={this.individualDelte}></span>
-                        <span className='individualProfile' style={{backgroundColor:'rgb(102,255,153)'}}></span>
-                        <span className='individualCapital'>N</span>
-                        <span className='individualStatus' style={{backgroundColor:'rgb(188,190,192)'}}></span>
-                        <span className='individualName'>Sam Kwon</span>
-                    </div>
-                    <div className='individualContact'>
-                        <div className={this.state.delete}></div>
-                        <span className='close' onClick={this.individualDelte}></span>
-                        <span className='individualProfile' style={{backgroundColor:'rgb(255,102,102)'}}></span>
-                        <span className='individualCapital'>W</span>
-                        <span className='individualStatus' style={{backgroundColor:'rgb(188,190,192)'}}></span>
-                        <span className='individualName'>William Lee</span>
-                    </div>
-                    <div className='individualContact'>
-                        <div className={this.state.delete}></div>
-                        <span className='close' onClick={this.individualDelte}></span>
-                        <span className='individualProfile' style={{backgroundColor:'rgb(102,255,153)'}}></span>
-                        <span className='individualCapital'>N</span>
-                        <span className='individualStatus' style={{backgroundColor:'rgb(188,190,192)'}}></span>
-                        <span className='individualName'>Sam Kwon</span>
-                    </div>
-                    <div className='individualContact'>
-                        <div className={this.state.delete}></div>
-                        <span className='close' onClick={this.individualDelte}></span>
-                        <span className='individualProfile' style={{backgroundColor:'rgb(255,102,102)'}}></span>
-                        <span className='individualCapital'>W</span>
-                        <span className='individualStatus' style={{backgroundColor:'rgb(188,190,192)'}}></span>
-                        <span className='individualName'>William Lee</span>
-                    </div>
-                    <div className='individualContact'>
-                        <div className={this.state.delete}></div>
-                        <span className='close' onClick={this.individualDelte}></span>
-                        <span className='individualProfile' style={{backgroundColor:'rgb(102,255,153)'}}></span>
-                        <span className='individualCapital'>N</span>
-                        <span className='individualStatus' style={{backgroundColor:'rgb(188,190,192)'}}></span>
-                        <span className='individualName'>Sam Kwon</span>
-                    </div>
-                    <div className='individualContact'>
-                        <div className={this.state.delete}></div>
-                        <span className='close' onClick={this.individualDelte}></span>
-                        <span className='individualProfile' style={{backgroundColor:'rgb(255,102,102)'}}></span>
-                        <span className='individualCapital'>W</span>
-                        <span className='individualStatus' style={{backgroundColor:'rgb(188,190,192)'}}></span>
-                        <span className='individualName'>William Lee</span>
-                    </div>
-                    <div className='individualContact'>
-                        <div className={this.state.delete}></div>
-                        <span className='close' onClick={this.individualDelte}></span>
-                        <span className='individualProfile' style={{backgroundColor:'rgb(102,255,153)'}}></span>
-                        <span className='individualCapital'>N</span>
-                        <span className='individualStatus' style={{backgroundColor:'rgb(188,190,192)'}}></span>
-                        <span className='individualName'>Sam Kwon</span>
-                    </div>
-                    <div className='individualContact'>
-                        <div className={this.state.delete}></div>
-                        <span className='close' onClick={this.individualDelte}></span>
-                        <span className='individualProfile' style={{backgroundColor:'rgb(255,102,102)'}}></span>
-                        <span className='individualCapital'>W</span>
-                        <span className='individualStatus' style={{backgroundColor:'rgb(188,190,192)'}}></span>
-                        <span className='individualName'>William Lee</span>
-                    </div>
+
+                    { this.props.users.map(user=>{
+                        if(user.id===this.props.loggedUser.id){
+                            return user.contacts.map(c=>{
+                                return (
+                                    <div className='individualContact' key={c.id}>
+                                        {this.state.id===c.id&&this.state.delete==='delete'?
+                                            <div className={this.state.delete}>
+                                                <span className='confirmText'>Are you sure<br/> to delete?</span>
+                                                <div className='confirmButton'>
+                                                    <span onClick={this.undo}><img src='./img/no.png' width='28px'/></span>
+                                                    <span><img src='./img/yes.png' width='28px'/></span>
+                                                </div>
+                                            </div>:''}
+                                        <span className='close' onClick={()=>{this.setState({id: c.id});this.individualDelte()}}></span>
+                                        <span className='individualProfile' style={{backgroundColor:`${c.color}`}}></span>
+                                        <span className='individualCapital'>{ c.name[0].toUpperCase() }</span>
+                                        <span className='individualStatus' style={{backgroundColor:'rgb(188,190,192)'}}></span>
+                                        <span className='individualName'>{ c.name }</span>
+                                    </div>
+                                )
+                            })
+                        }
+                    }) }
+                    
                    </div> 
                 </div>
                 <Talkpage/>
