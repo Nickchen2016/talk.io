@@ -20,7 +20,7 @@ class Signup extends Component {
             email: event.target.email.value,
             password: event.target.password.value
         });
-        this.props.history.push('/talkpage');
+        this.props.history.push('/sidebar');
         // axios.post('/api/me', {
         //     color: colorConfig(),
         //     name: event.target.name.value,

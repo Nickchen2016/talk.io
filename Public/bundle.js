@@ -136,7 +136,7 @@ var Login = function (_Component) {
                 email: event.target.email.value,
                 password: event.target.password.value
             });
-            this.props.history.push('/talkpage');
+            this.props.history.push('/sidebar');
         }
     }, {
         key: 'render',
@@ -290,9 +290,9 @@ var _Login = __webpack_require__(/*! ./Login */ "./Client/components/Login.js");
 
 var _Login2 = _interopRequireDefault(_Login);
 
-var _TalkPage = __webpack_require__(/*! ./TalkPage */ "./Client/components/TalkPage.js");
+var _Sidebar = __webpack_require__(/*! ./Sidebar */ "./Client/components/Sidebar.js");
 
-var _TalkPage2 = _interopRequireDefault(_TalkPage);
+var _Sidebar2 = _interopRequireDefault(_Sidebar);
 
 var _users = __webpack_require__(/*! ../redux/users */ "./Client/redux/users.js");
 
@@ -332,7 +332,7 @@ var Root = function (_Component) {
                     null,
                     _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _Signup2.default }),
                     _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/login', component: _Login2.default }),
-                    _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/talkpage', component: _TalkPage2.default })
+                    _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/sidebar', component: _Sidebar2.default })
                 )
             );
         }
@@ -353,6 +353,300 @@ var mapDispatch = function mapDispatch(dispatch) {
 };
 
 exports.default = (0, _reactRedux.connect)(mapState, mapDispatch)(Root);
+
+/***/ }),
+
+/***/ "./Client/components/Sidebar.js":
+/*!**************************************!*\
+  !*** ./Client/components/Sidebar.js ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRedux = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+
+var _Talkpage = __webpack_require__(/*! ./Talkpage */ "./Client/components/Talkpage.js");
+
+var _Talkpage2 = _interopRequireDefault(_Talkpage);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Sidebar = function (_Component) {
+    _inherits(Sidebar, _Component);
+
+    function Sidebar(props) {
+        _classCallCheck(this, Sidebar);
+
+        var _this = _possibleConstructorReturn(this, (Sidebar.__proto__ || Object.getPrototypeOf(Sidebar)).call(this, props));
+
+        _this.state = {
+            active: '',
+            isActive: '',
+            words: '',
+            delete: ''
+        };
+        _this.onClick = _this.onCLick.bind(_this);
+        _this.mouseOver = _this.mouseOver.bind(_this);
+        _this.mouseLeave = _this.mouseLeave.bind(_this);
+        _this.individualDelte = _this.individualDelte.bind(_this);
+        return _this;
+    }
+
+    _createClass(Sidebar, [{
+        key: 'individualDelte',
+        value: function individualDelte() {
+            this.setState({ delete: 'delete' });
+        }
+    }, {
+        key: 'onCLick',
+        value: function onCLick() {
+            if (this.state.active === '') {
+                this.setState({ active: 'active' });
+            } else {
+                this.setState({ active: '' });
+            }
+        }
+    }, {
+        key: 'mouseOver',
+        value: function mouseOver() {
+            if (this.state.words === '' && this.state.isActive === '') {
+                this.setState({ words: 'Toggle menu on click', isActive: 'isActive' });
+            }
+        }
+    }, {
+        key: 'mouseLeave',
+        value: function mouseLeave() {
+            if (this.state.words === 'Toggle menu on click' && this.state.isActive === 'isActive') {
+                this.setState({ words: '', isActive: '' });
+            }
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            // console.log('----------', this.state.delete);
+            return _react2.default.createElement(
+                'div',
+                { className: 'talk-container' },
+                _react2.default.createElement(
+                    'div',
+                    { id: 'pointer', className: this.state.active, onMouseOver: this.mouseOver, onMouseLeave: this.mouseLeave },
+                    _react2.default.createElement('div', { id: 'round', onClick: this.onClick }),
+                    _react2.default.createElement(
+                        'span',
+                        { id: 'words', className: this.state.isActive },
+                        this.state.words
+                    )
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { id: 'sidebar', className: this.state.active },
+                    _react2.default.createElement(
+                        'div',
+                        { id: 'search' },
+                        _react2.default.createElement('img', { src: './img/mag.png', className: 'sign', style: { marginTop: '18px' } })
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { id: 'add' },
+                        _react2.default.createElement('img', { src: './img/plus.png', className: 'sign' })
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { id: 'me' },
+                        _react2.default.createElement('span', { id: 'profile', style: { backgroundColor: 'rgb(255,204,51)' } }),
+                        _react2.default.createElement(
+                            'span',
+                            { id: 'capital', key: this.props.loggedUser.id },
+                            this.props.loggedUser.name && this.props.loggedUser.name[0].toUpperCase()
+                        ),
+                        _react2.default.createElement(
+                            'span',
+                            { id: 'username' },
+                            this.props.loggedUser.name
+                        ),
+                        _react2.default.createElement('span', { className: 'status', style: { backgroundColor: 'rgb(188,190,192)' } })
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { id: 'contactList' },
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'individualContact' },
+                            _react2.default.createElement('div', { className: this.state.delete }),
+                            _react2.default.createElement('span', { className: 'close', onClick: this.individualDelte }),
+                            _react2.default.createElement('span', { className: 'individualProfile', style: { backgroundColor: 'rgb(102,255,153)' } }),
+                            _react2.default.createElement(
+                                'span',
+                                { className: 'individualCapital' },
+                                'N'
+                            ),
+                            _react2.default.createElement('span', { className: 'individualStatus', style: { backgroundColor: 'rgb(188,190,192)' } }),
+                            _react2.default.createElement(
+                                'span',
+                                { className: 'individualName' },
+                                'Sam Kwon'
+                            )
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'individualContact' },
+                            _react2.default.createElement('div', { className: this.state.delete }),
+                            _react2.default.createElement('span', { className: 'close', onClick: this.individualDelte }),
+                            _react2.default.createElement('span', { className: 'individualProfile', style: { backgroundColor: 'rgb(255,102,102)' } }),
+                            _react2.default.createElement(
+                                'span',
+                                { className: 'individualCapital' },
+                                'W'
+                            ),
+                            _react2.default.createElement('span', { className: 'individualStatus', style: { backgroundColor: 'rgb(188,190,192)' } }),
+                            _react2.default.createElement(
+                                'span',
+                                { className: 'individualName' },
+                                'William Lee'
+                            )
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'individualContact' },
+                            _react2.default.createElement('div', { className: this.state.delete }),
+                            _react2.default.createElement('span', { className: 'close', onClick: this.individualDelte }),
+                            _react2.default.createElement('span', { className: 'individualProfile', style: { backgroundColor: 'rgb(102,255,153)' } }),
+                            _react2.default.createElement(
+                                'span',
+                                { className: 'individualCapital' },
+                                'N'
+                            ),
+                            _react2.default.createElement('span', { className: 'individualStatus', style: { backgroundColor: 'rgb(188,190,192)' } }),
+                            _react2.default.createElement(
+                                'span',
+                                { className: 'individualName' },
+                                'Sam Kwon'
+                            )
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'individualContact' },
+                            _react2.default.createElement('div', { className: this.state.delete }),
+                            _react2.default.createElement('span', { className: 'close', onClick: this.individualDelte }),
+                            _react2.default.createElement('span', { className: 'individualProfile', style: { backgroundColor: 'rgb(255,102,102)' } }),
+                            _react2.default.createElement(
+                                'span',
+                                { className: 'individualCapital' },
+                                'W'
+                            ),
+                            _react2.default.createElement('span', { className: 'individualStatus', style: { backgroundColor: 'rgb(188,190,192)' } }),
+                            _react2.default.createElement(
+                                'span',
+                                { className: 'individualName' },
+                                'William Lee'
+                            )
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'individualContact' },
+                            _react2.default.createElement('div', { className: this.state.delete }),
+                            _react2.default.createElement('span', { className: 'close', onClick: this.individualDelte }),
+                            _react2.default.createElement('span', { className: 'individualProfile', style: { backgroundColor: 'rgb(102,255,153)' } }),
+                            _react2.default.createElement(
+                                'span',
+                                { className: 'individualCapital' },
+                                'N'
+                            ),
+                            _react2.default.createElement('span', { className: 'individualStatus', style: { backgroundColor: 'rgb(188,190,192)' } }),
+                            _react2.default.createElement(
+                                'span',
+                                { className: 'individualName' },
+                                'Sam Kwon'
+                            )
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'individualContact' },
+                            _react2.default.createElement('div', { className: this.state.delete }),
+                            _react2.default.createElement('span', { className: 'close', onClick: this.individualDelte }),
+                            _react2.default.createElement('span', { className: 'individualProfile', style: { backgroundColor: 'rgb(255,102,102)' } }),
+                            _react2.default.createElement(
+                                'span',
+                                { className: 'individualCapital' },
+                                'W'
+                            ),
+                            _react2.default.createElement('span', { className: 'individualStatus', style: { backgroundColor: 'rgb(188,190,192)' } }),
+                            _react2.default.createElement(
+                                'span',
+                                { className: 'individualName' },
+                                'William Lee'
+                            )
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'individualContact' },
+                            _react2.default.createElement('div', { className: this.state.delete }),
+                            _react2.default.createElement('span', { className: 'close', onClick: this.individualDelte }),
+                            _react2.default.createElement('span', { className: 'individualProfile', style: { backgroundColor: 'rgb(102,255,153)' } }),
+                            _react2.default.createElement(
+                                'span',
+                                { className: 'individualCapital' },
+                                'N'
+                            ),
+                            _react2.default.createElement('span', { className: 'individualStatus', style: { backgroundColor: 'rgb(188,190,192)' } }),
+                            _react2.default.createElement(
+                                'span',
+                                { className: 'individualName' },
+                                'Sam Kwon'
+                            )
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'individualContact' },
+                            _react2.default.createElement('div', { className: this.state.delete }),
+                            _react2.default.createElement('span', { className: 'close', onClick: this.individualDelte }),
+                            _react2.default.createElement('span', { className: 'individualProfile', style: { backgroundColor: 'rgb(255,102,102)' } }),
+                            _react2.default.createElement(
+                                'span',
+                                { className: 'individualCapital' },
+                                'W'
+                            ),
+                            _react2.default.createElement('span', { className: 'individualStatus', style: { backgroundColor: 'rgb(188,190,192)' } }),
+                            _react2.default.createElement(
+                                'span',
+                                { className: 'individualName' },
+                                'William Lee'
+                            )
+                        )
+                    )
+                ),
+                _react2.default.createElement(_Talkpage2.default, null)
+            );
+        }
+    }]);
+
+    return Sidebar;
+}(_react.Component);
+
+var mapState = function mapState(state) {
+    return { loggedUser: state.currentUser, users: state.users };
+};
+
+exports.default = (0, _reactRedux.connect)(mapState)(Sidebar);
 
 /***/ }),
 
@@ -417,7 +711,7 @@ var Signup = function (_Component) {
                 email: event.target.email.value,
                 password: event.target.password.value
             });
-            this.props.history.push('/talkpage');
+            this.props.history.push('/sidebar');
             // axios.post('/api/me', {
             //     color: colorConfig(),
             //     name: event.target.name.value,
@@ -552,9 +846,9 @@ exports.default = (0, _reactRedux.connect)(mapState, mapDispatch)(Signup);
 
 /***/ }),
 
-/***/ "./Client/components/TalkPage.js":
+/***/ "./Client/components/Talkpage.js":
 /*!***************************************!*\
-  !*** ./Client/components/TalkPage.js ***!
+  !*** ./Client/components/Talkpage.js ***!
   \***************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -582,131 +876,39 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var TalkPage = function (_Component) {
-    _inherits(TalkPage, _Component);
+var Talkpage = function (_Component) {
+    _inherits(Talkpage, _Component);
 
-    function TalkPage(props) {
-        _classCallCheck(this, TalkPage);
+    function Talkpage(props) {
+        _classCallCheck(this, Talkpage);
 
-        var _this = _possibleConstructorReturn(this, (TalkPage.__proto__ || Object.getPrototypeOf(TalkPage)).call(this, props));
-
-        _this.state = {
-            active: '',
-            isActive: '',
-            words: ''
-        };
-        _this.onClick = _this.onCLick.bind(_this);
-        _this.mouseOver = _this.mouseOver.bind(_this);
-        _this.mouseLeave = _this.mouseLeave.bind(_this);
-        return _this;
+        return _possibleConstructorReturn(this, (Talkpage.__proto__ || Object.getPrototypeOf(Talkpage)).call(this, props));
     }
 
-    _createClass(TalkPage, [{
-        key: 'onCLick',
-        value: function onCLick() {
-            if (this.state.active === '') {
-                this.setState({ active: 'active' });
-            } else {
-                this.setState({ active: '' });
-            }
-        }
-    }, {
-        key: 'mouseOver',
-        value: function mouseOver() {
-            if (this.state.words === '' && this.state.isActive === '') {
-                this.setState({ words: 'Toggle menu on click', isActive: 'isActive' });
-            }
-        }
-    }, {
-        key: 'mouseLeave',
-        value: function mouseLeave() {
-            if (this.state.words === 'Toggle menu on click' && this.state.isActive === 'isActive') {
-                this.setState({ words: '', isActive: '' });
-            }
-        }
-    }, {
+    _createClass(Talkpage, [{
         key: 'render',
         value: function render() {
-            var _this2 = this;
-
-            // console.log('----------', typeof this.props.loggedUser.name);
+            // console.log('----------', this.state.delete);
             return _react2.default.createElement(
                 'div',
-                { className: 'talk-container' },
+                null,
                 _react2.default.createElement(
-                    'div',
-                    { id: 'sidebar', className: this.state.active },
-                    _react2.default.createElement(
-                        'div',
-                        { id: 'search' },
-                        _react2.default.createElement('img', { src: './img/mag.png', className: 'sign', style: { marginTop: '18px' } })
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { id: 'add' },
-                        _react2.default.createElement('img', { src: './img/plus.png', className: 'sign' })
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { id: 'me' },
-                        _react2.default.createElement('span', { style: { margin: '10px', fontFamily: 'sans-serif', borderRadius: '50%', border: '1px solid rgb(0,0,255)', height: '33px', width: '33px', backgroundColor: 'rgb(255,204,51)' } }),
-                        _react2.default.createElement(
-                            'span',
-                            { id: 'capital', key: this.props.loggedUser.id },
-                            this.props.loggedUser.name && this.props.loggedUser.name[0].toUpperCase()
-                        ),
-                        _react2.default.createElement(
-                            'span',
-                            { id: 'username' },
-                            this.props.loggedUser.name
-                        ),
-                        _react2.default.createElement('span', { className: 'status' })
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { id: 'pointer', onMouseOver: this.mouseOver, onMouseLeave: this.mouseLeave },
-                        _react2.default.createElement('div', { id: 'round', onClick: this.onClick }),
-                        _react2.default.createElement(
-                            'span',
-                            { id: 'words', className: this.state.isActive },
-                            this.state.words
-                        )
-                    ),
-                    _react2.default.createElement('div', { id: 'friends' })
-                ),
-                _react2.default.createElement(
-                    'div',
+                    'h3',
                     null,
-                    'dfyguhkjkl'
-                ),
-                _react2.default.createElement(
-                    'div',
-                    null,
-                    this.props.users.map(function (user) {
-                        if (user.id === _this2.props.loggedUser.id) {
-                            // console.log(user);
-                            return user.contacts.map(function (contact) {
-                                return _react2.default.createElement(
-                                    'h2',
-                                    { key: contact.id },
-                                    contact.name
-                                );
-                            });
-                        }
-                    })
+                    'Hello World!!'
                 )
             );
         }
     }]);
 
-    return TalkPage;
+    return Talkpage;
 }(_react.Component);
 
 var mapState = function mapState(state) {
     return { loggedUser: state.currentUser, users: state.users };
 };
 
-exports.default = (0, _reactRedux.connect)(mapState)(TalkPage);
+exports.default = (0, _reactRedux.connect)(mapState)(Talkpage);
 
 /***/ }),
 

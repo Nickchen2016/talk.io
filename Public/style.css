@@ -178,7 +178,7 @@ a {
 
 .sign {
     width:18px;
-    margin: 12px 0 0 75px;
+    margin: 8% 0 0 45%
 }
 
 #line {
@@ -197,11 +197,16 @@ a {
 
 /* sidebar */
 #sidebar {
+    overflow: scroll;
     height:100%;
     width:175px;
     background-color: white; 
     transition: .5s;
     transform: translateX(-175px);
+}
+
+#sidebar::-webkit-scrollbar {
+    display: none
 }
 
 #sidebar.active {
@@ -224,15 +229,95 @@ a {
     background-color: rgb(0,0,255);  
 }
 
-#friends {
-    height:70%;
+#contactList {
+    height:100%;
     background-color: white; 
+}
+
+#contactList > div:nth-child(1) {
+    margin-top: 18%
+}
+
+.individualContact {
+    height: 100px;
+    /* border-style: groove */
+}
+
+.close {
+    position: absolute;
+    margin-top: 2%;
+    margin-left: 88%;
+    width: 15px;
+    height: 15px;
+    opacity: 0.4;
+    /* background-color: black; */
+    cursor: pointer
+  }
+  .close:hover {
+    opacity: 0.8;
+  }
+  .close:before, .close:after {
+    position: absolute;
+    margin-left: 40%;
+    content: ' ';
+    height: 12px;
+    width: 2px;
+    background-color: #BCBEC0;
+  }
+  .close:before {
+    transform: rotate(45deg);
+  }
+  .close:after {
+    transform: rotate(-45deg);
+  }
+
+.individualProfile {
+    position: absolute;
+    margin: 10% 0 0 37.5%;
+    border-radius: 50%;
+    height:44px; width:44px;   
+}
+
+.individualCapital {
+    position: absolute;
+    color: white;
+    font-size: 23px;
+    font-family: sans-serif;
+    text-align: center;
+    width: 100%;
+    margin-top: 15.5%
+}
+
+.individualStatus {
+    position: absolute;
+    border-radius: 50%;
+    height: 10px;
+    width: 10px;
+    border: 3px solid white;
+    margin: 28% 0 0 54%
+}
+
+.individualName {
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    margin-top: 40%;
+    color: #BCBEC0;
+    font-size: 15px;
+    font-family: sans-serif;
 }
 
 #pointer {
     position: absolute;
     bottom: 55%;
-    margin-left: 200px
+    margin-left: 200px;
+    transition: .5s;
+    transform: translateX(-175px);
+}
+
+#pointer.active {
+    transition: .5s;
+    transform: translateX(0);
 }
 
 #round {
@@ -250,7 +335,7 @@ a {
 
 #words {
     position: absolute;
-    margin-top:-3px;
+    margin-top:-2px;
     margin-left:30px;
     white-space: nowrap;
     color: #D1D3D4;
@@ -264,6 +349,13 @@ a {
     transition: opacity 1s ease-in-out;
 }
 
+#profile {
+    margin: 10px;
+    border-radius: 50%;
+    border: 1px solid rgb(0,0,255);
+    height:33px; width:33px;
+}
+
 #capital {
     color: white;
     font-family: sans-serif;
@@ -273,7 +365,7 @@ a {
 }
 
 #username {
-    width:95px;
+    width:55%;
     color: white;
     font-family: sans-serif;
     font-size: 18px;
@@ -285,16 +377,15 @@ a {
     border-radius: 50%;
     height: 12px;
     width: 12px;
-    background-color: #66FF99;
     margin-top: 23px
 }
 
 
 @keyframes dotFlow {
     0%, 100% {
-        transform: scale(.9,.9)
+        transform: scale(1,1)
     }
     50% {
-        transform: scale(1.2,1.2)
+        transform: scale(1.3,1.3)
     }
 }

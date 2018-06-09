@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Signup from './Signup';
 import Login from './Login';
-import TalkPage from './TalkPage';
+import Sidebar from './Sidebar';
 import { fetchUsers } from '../redux/users';
 import { fetchCurrentUser } from '../redux/currentUser';
 
@@ -22,7 +22,7 @@ class Root extends Component {
                <div>
                        <Route exact path="/" component={Signup} />
                        <Route exact path="/login" component={Login} />
-                       <Route exact path="/talkpage" component={TalkPage} />
+                       <Route exact path="/sidebar" component={Sidebar} />
                        {/* <Route component={Signup} /> */}
                </div>
            </Router> 
