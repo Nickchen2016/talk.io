@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Webcam from 'react-webcam';
 import { connect } from 'react-redux';
 
 class Talkpage extends Component{
@@ -9,9 +10,12 @@ class Talkpage extends Component{
     render() {
         // console.log('----------', this.state.delete);
         return(
-            <div>
-
-                <h3>Hello World!!</h3>
+            <div id='camera'>
+                <Webcam
+                    className='it' 
+                //    height={800}
+                //    width={1000}
+                />
             </div>
         )
     }

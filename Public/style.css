@@ -6,12 +6,17 @@
     font-family: sans-serif
 }
 
-.talk-container {
+#talk-container {
+    position: relative;
+}
+
+#talk-menu {
     display:flex;
     position: fixed;
     top: 0; right: 0; bottom: 0; left: 0;
     align-content: center;
-    background-color: #BCBEC0;
+    background-color: rgba(0,0,0,0.3);
+    /* background-color: #BCBEC0; */
     font-family: sans-serif
 }
 
@@ -191,8 +196,6 @@ a {
 
 /* sidebar */
 #sidebar {
-    /* overflow-y: auto;
-    overflow-x: hidden;  */
     height:100%;
     width:175px;
     background-color: white; 
@@ -353,7 +356,7 @@ a {
 #pointer {
     position: absolute;
     z-index:10;
-    bottom: 55%;
+    bottom: 52%;
     margin-left: 200px;
     transition: .5s;
     transform: translateX(-175px);
@@ -471,6 +474,21 @@ a {
 
 #bar > span:hover .status2, #bar > span:hover p {
     opacity: 0.5
+}
+
+#camera {
+    width: 100%; 
+    height: 100%; 
+    z-index: -1;
+    position: fixed;
+    top: 0; right: 0; bottom: 0; left: 0;
+    align-content: center
+}
+
+.it {
+    filter: blur(1.5rem);
+    min-width:100%; min-height:100%; 
+    width:auto; height:auto;
 }
 
 @keyframes dotFlow {
