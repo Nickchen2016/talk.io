@@ -403,19 +403,26 @@ var Sidebar = function (_Component) {
             isActive: '',
             words: '',
             delete: '',
-            id: ''
+            id: '',
+            statusBar: ''
         };
+        _this.showStatusBar = _this.showStatusBar.bind(_this);
         _this.onClick = _this.onCLick.bind(_this);
         _this.mouseOver = _this.mouseOver.bind(_this);
         _this.mouseLeave = _this.mouseLeave.bind(_this);
-        _this.individualDelte = _this.individualDelte.bind(_this);
+        _this.individualDelete = _this.individualDelete.bind(_this);
         _this.undo = _this.undo.bind(_this);
         return _this;
     }
 
     _createClass(Sidebar, [{
-        key: 'individualDelte',
-        value: function individualDelte() {
+        key: 'showStatusBar',
+        value: function showStatusBar() {
+            this.setState({ statusBar: 'statusBar' });
+        }
+    }, {
+        key: 'individualDelete',
+        value: function individualDelete() {
             this.setState({ delete: 'delete' });
         }
     }, {
@@ -465,6 +472,7 @@ var Sidebar = function (_Component) {
                         this.state.words
                     )
                 ),
+                this.props.loggedUser.id && this.state.statusBar === 'statusBar' ? _react2.default.createElement('div', { id: this.state.statusBar }) : '',
                 _react2.default.createElement(
                     'div',
                     { id: 'sidebar', className: this.state.active },
@@ -492,7 +500,7 @@ var Sidebar = function (_Component) {
                             { id: 'username' },
                             this.props.loggedUser.name
                         ),
-                        _react2.default.createElement('span', { className: 'status', style: { backgroundColor: 'rgb(188,190,192)' } })
+                        _react2.default.createElement('span', { className: 'status', onClick: this.showStatusBar, style: { backgroundColor: 'rgb(188,190,192)' } })
                     ),
                     _react2.default.createElement(
                         'div',
@@ -509,9 +517,9 @@ var Sidebar = function (_Component) {
                                             _react2.default.createElement(
                                                 'span',
                                                 { className: 'confirmText' },
-                                                'Are you sure',
+                                                'Are you sure to',
                                                 _react2.default.createElement('br', null),
-                                                ' to delete?'
+                                                'delete?'
                                             ),
                                             _react2.default.createElement(
                                                 'div',
@@ -529,7 +537,7 @@ var Sidebar = function (_Component) {
                                             )
                                         ) : '',
                                         _react2.default.createElement('span', { className: 'close', onClick: function onClick() {
-                                                _this2.setState({ id: c.id });_this2.individualDelte();
+                                                _this2.setState({ id: c.id });_this2.individualDelete();
                                             } }),
                                         _react2.default.createElement('span', { className: 'individualProfile', style: { backgroundColor: '' + c.color } }),
                                         _react2.default.createElement(

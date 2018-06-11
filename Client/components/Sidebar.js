@@ -11,16 +11,22 @@ class Sidebar extends Component{
             isActive: '',
             words: '',
             delete:'',
-            id:''
+            id:'',
+            statusBar:''
         }
+        this.showStatusBar= this.showStatusBar.bind(this);
         this.onClick= this.onCLick.bind(this);
         this.mouseOver= this.mouseOver.bind(this);
         this.mouseLeave= this.mouseLeave.bind(this);
-        this.individualDelte= this.individualDelte.bind(this);
+        this.individualDelete= this.individualDelete.bind(this);
         this.undo= this.undo.bind(this);
     }
 
-individualDelte() {
+showStatusBar(){
+    this.setState({statusBar:'statusBar'})
+}
+
+individualDelete() {
         this.setState({delete: 'delete'})
 }
 
@@ -54,16 +60,20 @@ undo(){
                      <span id='words' className={ this.state.isActive }>{ this.state.words }</span>
                 </div>
 
+                {this.props.loggedUser.id&&this.state.statusBar==='statusBar'?<div id={this.state.statusBar}></div>:''}
+            
                 <div id='sidebar' className={ this.state.active }>
+                
                    <div id='search'><img src='./img/mag.png' className='sign' style={{marginTop:'18px'}}/></div> 
                    <div id='add'><img src='./img/plus.png' className='sign'/></div> 
+                   
                    <div id='me'>
-                      <span id='profile' style={{backgroundColor:'rgb(255,204,51)'}}></span>
-  
-                      <span id='capital' key={this.props.loggedUser.id}>{this.props.loggedUser.name&&this.props.loggedUser.name[0].toUpperCase()}</span>
-                      <span id='username'>{ this.props.loggedUser.name }</span>
-                      <span className='status' style={{backgroundColor:'rgb(188,190,192)'}}></span>
+                        <span id='profile' style={{backgroundColor:'rgb(255,204,51)'}}></span>
+                        <span id='capital' key={this.props.loggedUser.id}>{this.props.loggedUser.name&&this.props.loggedUser.name[0].toUpperCase()}</span>
+                        <span id='username'>{ this.props.loggedUser.name }</span>
+                        <span className='status' onClick={this.showStatusBar} style={{backgroundColor:'rgb(188,190,192)'}}></span>
                    </div> 
+
                    <div id='contactList'>
 
                     { this.props.users.map(user=>{
@@ -73,13 +83,13 @@ undo(){
                                     <div className='individualContact' key={c.id}>
                                         {this.state.id===c.id&&this.state.delete==='delete'?
                                             <div className={this.state.delete}>
-                                                <span className='confirmText'>Are you sure<br/> to delete?</span>
+                                                <span className='confirmText'>Are you sure to<br/>delete?</span>
                                                 <div className='confirmButton'>
                                                     <span onClick={this.undo}><img src='./img/no.png' width='28px'/></span>
                                                     <span><img src='./img/yes.png' width='28px'/></span>
                                                 </div>
                                             </div>:''}
-                                        <span className='close' onClick={()=>{this.setState({id: c.id});this.individualDelte()}}></span>
+                                        <span className='close' onClick={()=>{this.setState({id: c.id});this.individualDelete()}}></span>
                                         <span className='individualProfile' style={{backgroundColor:`${c.color}`}}></span>
                                         <span className='individualCapital'>{ c.name[0].toUpperCase() }</span>
                                         <span className='individualStatus' style={{backgroundColor:'rgb(188,190,192)'}}></span>
@@ -92,7 +102,9 @@ undo(){
                     
                    </div> 
                 </div>
+
                 <Talkpage/>
+
             </div>
         )
     }

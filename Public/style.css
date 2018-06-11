@@ -189,17 +189,14 @@ a {
 
 /* sidebar */
 #sidebar {
-    overflow: scroll;
+    /* overflow-y: auto;
+    overflow-x: hidden;  */
     height:100%;
     width:175px;
     background-color: white; 
     transition: .5s;
     transform: translateX(-175px);
     /* filter: blur(1.5rem); */
-}
-
-#sidebar::-webkit-scrollbar {
-    display: none
 }
 
 #sidebar.active {
@@ -219,19 +216,30 @@ a {
 #me {
     display: flex;
     height: 55px;
-    background-color: rgb(0,0,255);  
+    background-color: rgb(0,0,255); 
+    cursor: pointer 
 }
 
 #contactList {
+    overflow: auto;
     height:100%;
-    /* background-color: white;  */
+    /* background-color: red;  */
+}
+
+#contactList::-webkit-scrollbar {
+    display: none
 }
 
 #contactList > div:nth-child(1) {
     margin-top: 18%
 }
 
+#contactList > div:last-child {
+    margin-bottom: 110%
+}
+
 .individualContact {
+    position: relative;
     height: 100px;
     /* border-style: groove */
 }
@@ -248,16 +256,16 @@ a {
 
 .confirmText {
     position: relative;
-    top: 12px;
+    top: 10px;
     font-family: sans-serif;
     color: #BCBEC0;
-    font-size: 19px
+    font-size: 18px
 }
 
 .confirmButton {
     position: relative;
     display: flex;
-    top: 16px;
+    top: 18px;
     height: 30px;
 }
 
@@ -342,6 +350,7 @@ a {
 
 #pointer {
     position: absolute;
+    z-index:10;
     bottom: 55%;
     margin-left: 200px;
     transition: .5s;
@@ -413,6 +422,14 @@ a {
     margin-top: 23px
 }
 
+#statusBar {
+    position: absolute;
+    margin-top: 120px;
+    margin-left: 200px;
+    background-color: white;
+    border-radius: 8px;
+    width:200px;height:35px
+}
 
 @keyframes dotFlow {
     0%, 100% {
