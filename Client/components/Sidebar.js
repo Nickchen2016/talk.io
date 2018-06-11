@@ -12,7 +12,8 @@ class Sidebar extends Component{
             words: '',
             delete:'',
             id:'',
-            statusBar:''
+            statusBar:'',
+            currentStatus: 'rgb(102,255,153)'
         }
         this.showStatusBar= this.showStatusBar.bind(this);
         this.onClick= this.onCLick.bind(this);
@@ -23,7 +24,11 @@ class Sidebar extends Component{
     }
 
 showStatusBar(){
-    this.setState({statusBar:'statusBar'})
+    if(this.state.statusBar===''){
+        this.setState({statusBar:'statusBar'})
+    }else{
+        this.setState({statusBar:''})
+    }
 }
 
 individualDelete() {
@@ -49,7 +54,8 @@ mouseLeave(){
 undo(){
     this.setState({delete:''})
 }
- 
+
+
     render() {
         // console.log('----------', this.state.id);
         return(
@@ -63,9 +69,9 @@ undo(){
                 {this.props.loggedUser.id&&this.state.statusBar==='statusBar'?<div id={this.state.statusBar}>
                                                                                 <span id='triangle'></span>
                                                                                 <span id='bar'>
-                                                                                    <span className='choiceOfStatus'><span className='status2' style={{backgroundColor:'rgb(102,255,153)'}}></span><p>Online</p></span>
-                                                                                    <span className='choiceOfStatus'><span className='status2' style={{backgroundColor:'rgb(239,65,54)'}}></span><p>Busy</p></span>
-                                                                                    <span className='choiceOfStatus'><span className='status2' style={{backgroundColor:'rgb(188,190,192)'}}></span><p>Leave</p></span>
+                                                                                    <span className='choiceOfStatus' onClick={()=>this.setState({currentStatus:'rgb(102,255,153)'})}><span className='status2' style={{backgroundColor:'rgb(102,255,153)'}}></span><p>Online</p></span>
+                                                                                    <span className='choiceOfStatus' onClick={()=>this.setState({currentStatus:'rgb(239,65,54)'})}><span className='status2' style={{backgroundColor:'rgb(239,65,54)'}}></span><p>Busy</p></span>
+                                                                                    <span className='choiceOfStatus' onClick={()=>this.setState({currentStatus:'rgb(188,190,192)'})}><span className='status2' style={{backgroundColor:'rgb(188,190,192)'}}></span><p>Leave</p></span>
                                                                                 </span>
                                                                               </div>:''}
             
@@ -78,7 +84,7 @@ undo(){
                         <span id='profile' style={{backgroundColor:'rgb(255,204,51)'}}></span>
                         <span id='capital' key={this.props.loggedUser.id}>{this.props.loggedUser.name&&this.props.loggedUser.name[0].toUpperCase()}</span>
                         <span id='username'>{ this.props.loggedUser.name }</span>
-                        <span className='status' onClick={this.showStatusBar} style={{backgroundColor:'rgb(188,190,192)'}}></span>
+                        <span className='status' onClick={this.showStatusBar} style={{backgroundColor:`${this.state.currentStatus}`}}></span>
                    </div> 
 
                    <div id='contactList'>

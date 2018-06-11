@@ -404,7 +404,8 @@ var Sidebar = function (_Component) {
             words: '',
             delete: '',
             id: '',
-            statusBar: ''
+            statusBar: '',
+            currentStatus: 'rgb(102,255,153)'
         };
         _this.showStatusBar = _this.showStatusBar.bind(_this);
         _this.onClick = _this.onCLick.bind(_this);
@@ -418,7 +419,11 @@ var Sidebar = function (_Component) {
     _createClass(Sidebar, [{
         key: 'showStatusBar',
         value: function showStatusBar() {
-            this.setState({ statusBar: 'statusBar' });
+            if (this.state.statusBar === '') {
+                this.setState({ statusBar: 'statusBar' });
+            } else {
+                this.setState({ statusBar: '' });
+            }
         }
     }, {
         key: 'individualDelete',
@@ -481,7 +486,9 @@ var Sidebar = function (_Component) {
                         { id: 'bar' },
                         _react2.default.createElement(
                             'span',
-                            { className: 'choiceOfStatus' },
+                            { className: 'choiceOfStatus', onClick: function onClick() {
+                                    return _this2.setState({ currentStatus: 'rgb(102,255,153)' });
+                                } },
                             _react2.default.createElement('span', { className: 'status2', style: { backgroundColor: 'rgb(102,255,153)' } }),
                             _react2.default.createElement(
                                 'p',
@@ -491,7 +498,9 @@ var Sidebar = function (_Component) {
                         ),
                         _react2.default.createElement(
                             'span',
-                            { className: 'choiceOfStatus' },
+                            { className: 'choiceOfStatus', onClick: function onClick() {
+                                    return _this2.setState({ currentStatus: 'rgb(239,65,54)' });
+                                } },
                             _react2.default.createElement('span', { className: 'status2', style: { backgroundColor: 'rgb(239,65,54)' } }),
                             _react2.default.createElement(
                                 'p',
@@ -501,7 +510,9 @@ var Sidebar = function (_Component) {
                         ),
                         _react2.default.createElement(
                             'span',
-                            { className: 'choiceOfStatus' },
+                            { className: 'choiceOfStatus', onClick: function onClick() {
+                                    return _this2.setState({ currentStatus: 'rgb(188,190,192)' });
+                                } },
                             _react2.default.createElement('span', { className: 'status2', style: { backgroundColor: 'rgb(188,190,192)' } }),
                             _react2.default.createElement(
                                 'p',
@@ -538,7 +549,7 @@ var Sidebar = function (_Component) {
                             { id: 'username' },
                             this.props.loggedUser.name
                         ),
-                        _react2.default.createElement('span', { className: 'status', onClick: this.showStatusBar, style: { backgroundColor: 'rgb(188,190,192)' } })
+                        _react2.default.createElement('span', { className: 'status', onClick: this.showStatusBar, style: { backgroundColor: '' + this.state.currentStatus } })
                     ),
                     _react2.default.createElement(
                         'div',

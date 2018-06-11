@@ -424,6 +424,10 @@ a {
     margin-top: 23px
 }
 
+.status:hover{
+    opacity: 0.5
+}
+
 .status2 {
     border-radius: 50%;
     height: 12px;
@@ -432,7 +436,7 @@ a {
 }
 
 #triangle {
-    margin: 13px -9px 0 0;
+    margin: 14px -9px 0 0;
     transform: rotate(152deg);    
     border-left: 8px solid transparent;
     border-right: 10px solid transparent;  
@@ -462,6 +466,11 @@ a {
 .choiceOfStatus {
     display: flex;
     margin: -5px 4px 0 8px;
+    cursor: pointer
+}
+
+#bar > span:hover .status2, #bar > span:hover p {
+    opacity: 0.5
 }
 
 @keyframes dotFlow {
