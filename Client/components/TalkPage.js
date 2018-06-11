@@ -11,9 +11,9 @@ class Talkpage extends Component{
         // console.log('----------', this.props.active);
         return(
             <div id='camera' className={this.props.active}>
-                 {/* <Webcam
-                    className='it'  
-                /> */}
+                 <Webcam
+                    className='webcam'  
+                />
             </div>
         )
     }

@@ -67,6 +67,8 @@ undo(){
                      <span id='words' className={ this.state.isActive }>{ this.state.words }</span>
                 </div>
 
+                <div></div>
+
                 {this.props.loggedUser.id&&this.state.statusBar==='statusBar'?<div id={this.state.statusBar}>
                                                                                 <span id='triangle'></span>
                                                                                 <span id='bar'>
@@ -79,6 +81,7 @@ undo(){
                 <div id='sidebar' className={ this.state.active }>
                 
                    <div id='search'><img src='./img/mag.png' className='sign' style={{marginTop:'18px'}}/></div> 
+                   
                    <div id='add'><img src='./img/plus.png' className='sign'/></div> 
                    
                    <div id='me'>

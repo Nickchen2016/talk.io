@@ -18,11 +18,12 @@
     align-content: center;
     font-family: sans-serif;
     background-color: rgba(0,0,0,0);
-    
+    transition: background-color 1s;
 }
 
 #talk-menu.active {
-    background-color: rgba(0,0,0,0.3);
+    background-color: rgba(0,0,0,0.4);
+    transition: background-color 1s;
 }
 
 .item1, .item3 {
@@ -493,13 +494,15 @@ a {
     position: fixed;
     top: 0; right: 0; bottom: 0; left: 0;
     align-content: center;
+    transition: filter .4s;
 }
 
 #camera.active {
     filter: blur(1.5rem);
+    transition: filter .4s;
 }
 
-.it {
+.webcam {
     min-width:100%; min-height:100%; 
     width:auto; height:auto;
 }

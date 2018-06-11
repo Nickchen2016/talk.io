@@ -480,6 +480,7 @@ var Sidebar = function (_Component) {
                             this.state.words
                         )
                     ),
+                    _react2.default.createElement('div', null),
                     this.props.loggedUser.id && this.state.statusBar === 'statusBar' ? _react2.default.createElement(
                         'div',
                         { id: this.state.statusBar },
@@ -869,7 +870,13 @@ var Talkpage = function (_Component) {
         key: 'render',
         value: function render() {
             // console.log('----------', this.props.active);
-            return _react2.default.createElement('div', { id: 'camera', className: this.props.active });
+            return _react2.default.createElement(
+                'div',
+                { id: 'camera', className: this.props.active },
+                _react2.default.createElement(_reactWebcam2.default, {
+                    className: 'webcam'
+                })
+            );
         }
     }]);
 
