@@ -436,7 +436,7 @@ a {
 }
 
 #triangle {
-    margin: 14px -9px 0 0;
+    margin: 13.5px -10px 0 0;
     transform: rotate(152deg);    
     border-left: 8px solid transparent;
     border-right: 10px solid transparent;  
@@ -460,7 +460,7 @@ a {
 }
 
 #bar > span p {
-    margin-left: 5px
+    margin-left: 6px
 }
 
 .choiceOfStatus {

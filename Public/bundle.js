@@ -434,9 +434,9 @@ var Sidebar = function (_Component) {
         key: 'onCLick',
         value: function onCLick() {
             if (this.state.active === '') {
-                this.setState({ active: 'active' });
+                this.setState({ active: 'active', statusBar: '' });
             } else {
-                this.setState({ active: '' });
+                this.setState({ active: '', statusBar: '' });
             }
         }
     }, {
@@ -594,7 +594,7 @@ var Sidebar = function (_Component) {
                                             { className: 'individualCapital' },
                                             c.name[0].toUpperCase()
                                         ),
-                                        _react2.default.createElement('span', { className: 'individualStatus', style: { backgroundColor: 'rgb(188,190,192)' } }),
+                                        _react2.default.createElement('span', { className: 'individualStatus', style: { backgroundColor: 'rgb(102,255,153)' } }),
                                         _react2.default.createElement(
                                             'span',
                                             { className: 'individualName' },

@@ -37,9 +37,9 @@ individualDelete() {
 
 onCLick(){
     if(this.state.active===''){
-        this.setState({active:'active'})
+        this.setState({active:'active', statusBar:''})
     }else{
-        this.setState({active:''})
+        this.setState({active:'', statusBar:''})
     }
 }
 
@@ -105,7 +105,7 @@ undo(){
                                         <span className='close' onClick={()=>{this.setState({id: c.id});this.individualDelete()}}></span>
                                         <span className='individualProfile' style={{backgroundColor:`${c.color}`}}></span>
                                         <span className='individualCapital'>{ c.name[0].toUpperCase() }</span>
-                                        <span className='individualStatus' style={{backgroundColor:'rgb(188,190,192)'}}></span>
+                                        <span className='individualStatus' style={{backgroundColor:'rgb(102,255,153)'}}></span>
                                         <span className='individualName'>{ c.name }</span>
                                     </div>
                                 )
@@ -114,6 +114,7 @@ undo(){
                     }) }
                     
                    </div> 
+
                 </div>
 
                 <Talkpage/>
