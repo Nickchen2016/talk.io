@@ -472,8 +472,8 @@ var Sidebar = function (_Component) {
                     { id: 'talk-menu', className: this.state.active },
                     _react2.default.createElement(
                         'div',
-                        { id: 'pointer', className: this.state.active, onMouseOver: this.mouseOver, onMouseLeave: this.mouseLeave },
-                        _react2.default.createElement('div', { id: 'round', onClick: this.onClick }),
+                        { id: 'pointer', className: this.state.active, onClick: this.onClick, onMouseOver: this.mouseOver, onMouseLeave: this.mouseLeave },
+                        _react2.default.createElement('div', { id: 'round' }),
                         _react2.default.createElement(
                             'span',
                             { id: 'words', className: this.state.isActive },
@@ -869,13 +869,7 @@ var Talkpage = function (_Component) {
         key: 'render',
         value: function render() {
             // console.log('----------', this.props.active);
-            return _react2.default.createElement(
-                'div',
-                { id: 'camera', className: this.props.active },
-                _react2.default.createElement(_reactWebcam2.default, {
-                    className: 'it'
-                })
-            );
+            return _react2.default.createElement('div', { id: 'camera', className: this.props.active });
         }
     }]);
 

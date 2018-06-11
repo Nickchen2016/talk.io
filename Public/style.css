@@ -360,10 +360,13 @@ a {
 #pointer {
     position: absolute;
     z-index:10;
-    bottom: 52%;
-    margin-left: 210px;
+    bottom: 50%;
+    height: 50px;
+    width: 50px;
+    margin-left: 190px;
     transition: .5s;
     transform: translateX(-175px);
+    cursor: pointer
 }
 
 #pointer.active {
@@ -371,24 +374,26 @@ a {
     transform: translateX(0);
 }
 
+#pointer:hover #round {
+    animation: dotFlow 1.5s infinite;
+}
+
 #round {
-    position: absolute;
+    /* position: absolute; */
     border: 3px solid white;
     height: 6px;
     width: 6px;
+    margin-top: 40%;
+    margin-left: 20px;
     border-radius: 50%;
     box-shadow: 0 0 28px 8px rgba(0,0,0,0.1);
-    cursor: pointer
-}
-
-#round:hover {
-    animation: dotFlow 1.5s infinite;
+    /* cursor: pointer */
 }
 
 #words {
     position: absolute;
-    margin-top:-2px;
-    margin-left:35px;
+    margin-top: -15px;
+    margin-left: 55px;
     white-space: nowrap;
     color: #D1D3D4;
     /* font-family: sans-serif; */
