@@ -472,7 +472,12 @@ var Sidebar = function (_Component) {
                         this.state.words
                     )
                 ),
-                this.props.loggedUser.id && this.state.statusBar === 'statusBar' ? _react2.default.createElement('div', { id: this.state.statusBar }) : '',
+                this.props.loggedUser.id && this.state.statusBar === 'statusBar' ? _react2.default.createElement(
+                    'div',
+                    { id: this.state.statusBar },
+                    _react2.default.createElement('span', { id: 'triangle' }),
+                    _react2.default.createElement('span', { id: 'bar' })
+                ) : '',
                 _react2.default.createElement(
                     'div',
                     { id: 'sidebar', className: this.state.active },

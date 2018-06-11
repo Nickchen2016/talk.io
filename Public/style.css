@@ -422,13 +422,26 @@ a {
     margin-top: 23px
 }
 
+#triangle {
+    margin: 14px -9px 0 0;
+    transform: rotate(152deg);    
+    border-left: 8px solid transparent;
+    border-right: 10px solid transparent;  
+    border-bottom: 15px solid white;
+}
+
 #statusBar {
+    display: flex;
     position: absolute;
-    margin-top: 120px;
+    width:230px; height: 38px;
+    margin-top: 123px;
     margin-left: 200px;
+}
+
+#bar {
     background-color: white;
     border-radius: 8px;
-    width:200px;height:35px
+    width:210px;height:38px
 }
 
 @keyframes dotFlow {

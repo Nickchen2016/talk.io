@@ -60,7 +60,7 @@ undo(){
                      <span id='words' className={ this.state.isActive }>{ this.state.words }</span>
                 </div>
 
-                {this.props.loggedUser.id&&this.state.statusBar==='statusBar'?<div id={this.state.statusBar}></div>:''}
+                {this.props.loggedUser.id&&this.state.statusBar==='statusBar'?<div id={this.state.statusBar}><span id='triangle'></span><span id='bar'></span></div>:''}
             
                 <div id='sidebar' className={ this.state.active }>
                 
