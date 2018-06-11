@@ -8,13 +8,11 @@ class Talkpage extends Component{
     }
  
     render() {
-        // console.log('----------', this.state.delete);
+        // console.log('----------', this.props.active);
         return(
-            <div id='camera'>
+            <div id='camera' className={this.props.active}>
                 <Webcam
-                    className='it' 
-                //    height={800}
-                //    width={1000}
+                    className='it'  
                 />
             </div>
         )

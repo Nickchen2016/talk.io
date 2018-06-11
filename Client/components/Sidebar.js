@@ -60,7 +60,7 @@ undo(){
         // console.log('----------', this.state.id);
         return(
             <div id='talk-container'>
-            <div id='talk-menu'>
+            <div id='talk-menu' className={this.state.active}>
 
                 <div id='pointer' className={ this.state.active } onMouseOver={ this.mouseOver } onMouseLeave={ this.mouseLeave }>
                      <div id='round' onClick={ this.onClick }></div>
@@ -120,7 +120,7 @@ undo(){
 
             </div>
 
-            <Talkpage/>
+            <Talkpage active={this.state.active}/>
             </div>
         )
     }
