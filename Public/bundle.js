@@ -476,7 +476,40 @@ var Sidebar = function (_Component) {
                     'div',
                     { id: this.state.statusBar },
                     _react2.default.createElement('span', { id: 'triangle' }),
-                    _react2.default.createElement('span', { id: 'bar' })
+                    _react2.default.createElement(
+                        'span',
+                        { id: 'bar' },
+                        _react2.default.createElement(
+                            'span',
+                            { className: 'choiceOfStatus' },
+                            _react2.default.createElement('span', { className: 'status2', style: { backgroundColor: 'rgb(102,255,153)' } }),
+                            _react2.default.createElement(
+                                'p',
+                                null,
+                                'Online'
+                            )
+                        ),
+                        _react2.default.createElement(
+                            'span',
+                            { className: 'choiceOfStatus' },
+                            _react2.default.createElement('span', { className: 'status2', style: { backgroundColor: 'rgb(239,65,54)' } }),
+                            _react2.default.createElement(
+                                'p',
+                                null,
+                                'Busy'
+                            )
+                        ),
+                        _react2.default.createElement(
+                            'span',
+                            { className: 'choiceOfStatus' },
+                            _react2.default.createElement('span', { className: 'status2', style: { backgroundColor: 'rgb(188,190,192)' } }),
+                            _react2.default.createElement(
+                                'p',
+                                null,
+                                'Leave'
+                            )
+                        )
+                    )
                 ) : '',
                 _react2.default.createElement(
                     'div',

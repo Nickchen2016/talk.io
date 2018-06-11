@@ -60,7 +60,14 @@ undo(){
                      <span id='words' className={ this.state.isActive }>{ this.state.words }</span>
                 </div>
 
-                {this.props.loggedUser.id&&this.state.statusBar==='statusBar'?<div id={this.state.statusBar}><span id='triangle'></span><span id='bar'></span></div>:''}
+                {this.props.loggedUser.id&&this.state.statusBar==='statusBar'?<div id={this.state.statusBar}>
+                                                                                <span id='triangle'></span>
+                                                                                <span id='bar'>
+                                                                                    <span className='choiceOfStatus'><span className='status2' style={{backgroundColor:'rgb(102,255,153)'}}></span><p>Online</p></span>
+                                                                                    <span className='choiceOfStatus'><span className='status2' style={{backgroundColor:'rgb(239,65,54)'}}></span><p>Busy</p></span>
+                                                                                    <span className='choiceOfStatus'><span className='status2' style={{backgroundColor:'rgb(188,190,192)'}}></span><p>Leave</p></span>
+                                                                                </span>
+                                                                              </div>:''}
             
                 <div id='sidebar' className={ this.state.active }>
                 

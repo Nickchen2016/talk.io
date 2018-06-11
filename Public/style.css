@@ -3,6 +3,7 @@
     top: 0; right: 0; bottom: 0; left: 0;
     align-content: center;
     background-color: #BCBEC0;
+    font-family: sans-serif
 }
 
 .talk-container {
@@ -11,6 +12,7 @@
     top: 0; right: 0; bottom: 0; left: 0;
     align-content: center;
     background-color: #BCBEC0;
+    font-family: sans-serif
 }
 
 .item1, .item3 {
@@ -105,7 +107,7 @@ button:hover {
 }
 
 h1 {
-    font-family: Arial;
+    /* font-family: Arial; */
     margin-top:150px;
     color: white;
 }
@@ -122,7 +124,7 @@ h1 {
 a {
     text-decoration: none;
     color: white;
-    font-family: Arial;
+    /* font-family: Arial; */
 }
 
 #google-icon:hover {
@@ -148,7 +150,7 @@ a {
 
 .item3 div > a {
     width: 50%;
-    font-family: Arial;
+    /* font-family: Arial; */
     color: white;
     font-size: 15px;
     cursor: pointer;
@@ -257,7 +259,7 @@ a {
 .confirmText {
     position: relative;
     top: 10px;
-    font-family: sans-serif;
+    /* font-family: sans-serif; */
     color: #BCBEC0;
     font-size: 18px
 }
@@ -323,7 +325,7 @@ a {
     position: absolute;
     color: white;
     font-size: 23px;
-    font-family: sans-serif;
+    /* font-family: sans-serif; */
     text-align: center;
     width: 100%;
     margin-top: 15.5%
@@ -345,7 +347,7 @@ a {
     margin-top: 40%;
     color: #BCBEC0;
     font-size: 15px;
-    font-family: sans-serif;
+    /* font-family: sans-serif; */
 }
 
 #pointer {
@@ -381,7 +383,7 @@ a {
     margin-left:30px;
     white-space: nowrap;
     color: #D1D3D4;
-    font-family: sans-serif;
+    /* font-family: sans-serif; */
     opacity: 0;
     transition: opacity 1s ease-in-out;
 }
@@ -400,7 +402,7 @@ a {
 
 #capital {
     color: white;
-    font-family: sans-serif;
+    /* font-family: sans-serif; */
     font-size: 20px;
     margin-left: -35px;
     margin-top: 17px
@@ -409,7 +411,7 @@ a {
 #username {
     width:55%;
     color: white;
-    font-family: sans-serif;
+    /* font-family: sans-serif; */
     font-size: 18px;
     margin-top: 17px;
     margin-left: 20px
@@ -422,8 +424,15 @@ a {
     margin-top: 23px
 }
 
+.status2 {
+    border-radius: 50%;
+    height: 12px;
+    width: 12px;
+    margin-top: 18px
+}
+
 #triangle {
-    margin: 14px -9px 0 0;
+    margin: 13px -9px 0 0;
     transform: rotate(152deg);    
     border-left: 8px solid transparent;
     border-right: 10px solid transparent;  
@@ -439,9 +448,20 @@ a {
 }
 
 #bar {
+    display:flex;
     background-color: white;
     border-radius: 8px;
-    width:210px;height:38px
+    color: #BCBEC0;
+    width:220px;height:38px
+}
+
+#bar > span p {
+    margin-left: 5px
+}
+
+.choiceOfStatus {
+    display: flex;
+    margin: -5px 4px 0 8px;
 }
 
 @keyframes dotFlow {
