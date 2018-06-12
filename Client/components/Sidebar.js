@@ -15,6 +15,7 @@ class Sidebar extends Component{
             delete:'',
             id:'',
             statusBar:'',
+            searchName:'',
             currentStatus: 'rgb(102,255,153)'
         }
         this.search= this.search.bind(this);
@@ -84,7 +85,12 @@ search(){
                                                                               </div>:''}
 
                 {this.state.search==='searchBar'?<div id={this.state.search}>
-                                                    <input type='email' placeholder='Search' required></input>
+                                                    <input type='text' name='search' placeholder='Search by name' required onChange={(el)=>{this.setState({searchName:el.target.value})}}></input>
+                                                    {/* {this.props.users.map((user)=>{
+                                                        if(this.props.loggedUser.id===user.id){
+                                                            user.contacts.map((contact)=>{contact.name.slice(this.state.searchName.length)===this.state.searchName})
+                                                        }
+                                                    })} */}
                                                 </div>:''}
             
                 <div id='sidebar' className={ this.state.active }>
@@ -104,7 +110,9 @@ search(){
 
                     { this.props.users.map(user=>{
                         if(user.id===this.props.loggedUser.id){
-                            return user.contacts.map(c=>{
+                            return user.contacts.sort((a,b)=>{
+                                return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
+                            }).map(c=>{
                                 return (
                                     <div className='individualContact' key={c.id}>
                                         {this.state.id===c.id&&this.state.delete==='delete'?

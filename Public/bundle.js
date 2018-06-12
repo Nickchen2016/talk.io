@@ -407,6 +407,7 @@ var Sidebar = function (_Component) {
             delete: '',
             id: '',
             statusBar: '',
+            searchName: '',
             currentStatus: 'rgb(102,255,153)'
         };
         _this.search = _this.search.bind(_this);
@@ -537,7 +538,9 @@ var Sidebar = function (_Component) {
                     this.state.search === 'searchBar' ? _react2.default.createElement(
                         'div',
                         { id: this.state.search },
-                        _react2.default.createElement('input', { type: 'email', placeholder: 'Search', required: true })
+                        _react2.default.createElement('input', { type: 'text', name: 'search', placeholder: 'Search by name', required: true, onChange: function onChange(el) {
+                                _this2.setState({ searchName: el.target.value });
+                            } })
                     ) : '',
                     _react2.default.createElement(
                         'div',
@@ -573,7 +576,9 @@ var Sidebar = function (_Component) {
                             { id: 'contactList' },
                             this.props.users.map(function (user) {
                                 if (user.id === _this2.props.loggedUser.id) {
-                                    return user.contacts.map(function (c) {
+                                    return user.contacts.sort(function (a, b) {
+                                        return a.name > b.name ? 1 : b.name > a.name ? -1 : 0;
+                                    }).map(function (c) {
                                         return _react2.default.createElement(
                                             'div',
                                             { className: 'individualContact', key: c.id },
