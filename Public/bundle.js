@@ -473,7 +473,7 @@ var Sidebar = function (_Component) {
         value: function render() {
             var _this2 = this;
 
-            // console.log('----------', this.state.id);
+            // console.log('----------', this.state.searchName);
             return _react2.default.createElement(
                 'div',
                 { id: 'talk-container' },
@@ -539,7 +539,7 @@ var Sidebar = function (_Component) {
                         'div',
                         { id: this.state.search },
                         _react2.default.createElement('input', { type: 'text', name: 'search', placeholder: 'Search by name', required: true, onChange: function onChange(el) {
-                                _this2.setState({ searchName: el.target.value });
+                                _this2.setState({ searchName: el.target.value.toLowerCase() });
                             } })
                     ) : '',
                     _react2.default.createElement(
@@ -578,6 +578,8 @@ var Sidebar = function (_Component) {
                                 if (user.id === _this2.props.loggedUser.id) {
                                     return user.contacts.sort(function (a, b) {
                                         return a.name > b.name ? 1 : b.name > a.name ? -1 : 0;
+                                    }).filter(function (el) {
+                                        return el.name.toLowerCase().includes(_this2.state.searchName);
                                     }).map(function (c) {
                                         return _react2.default.createElement(
                                             'div',

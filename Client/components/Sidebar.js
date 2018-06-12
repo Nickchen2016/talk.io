@@ -65,7 +65,7 @@ search(){
 }
 
     render() {
-        // console.log('----------', this.state.id);
+        // console.log('----------', this.state.searchName);
         return(
             <div id='talk-container'>
             <div id='talk-menu' className={this.state.active}>
@@ -85,12 +85,7 @@ search(){
                                                                               </div>:''}
 
                 {this.state.search==='searchBar'?<div id={this.state.search}>
-                                                    <input type='text' name='search' placeholder='Search by name' required onChange={(el)=>{this.setState({searchName:el.target.value})}}></input>
-                                                    {/* {this.props.users.map((user)=>{
-                                                        if(this.props.loggedUser.id===user.id){
-                                                            user.contacts.map((contact)=>{contact.name.slice(this.state.searchName.length)===this.state.searchName})
-                                                        }
-                                                    })} */}
+                                                    <input type='text' name='search' placeholder='Search by name' required onChange={(el)=>{this.setState({searchName:el.target.value.toLowerCase()})}}></input>
                                                 </div>:''}
             
                 <div id='sidebar' className={ this.state.active }>
@@ -112,7 +107,8 @@ search(){
                         if(user.id===this.props.loggedUser.id){
                             return user.contacts.sort((a,b)=>{
                                 return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
-                            }).map(c=>{
+                            }).filter(el=>el.name.toLowerCase().includes(this.state.searchName))
+                            .map(c=>{
                                 return (
                                     <div className='individualContact' key={c.id}>
                                         {this.state.id===c.id&&this.state.delete==='delete'?
