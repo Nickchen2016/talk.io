@@ -28182,7 +28182,7 @@ var Webcam = function (_Component) {
         return;
       }
       try {
-        var src = window.URL.createObjectURL(stream);
+        var src = window.HTMLMediaElement.srcObject(stream);
 
         this.stream = stream;
         this.setState({
