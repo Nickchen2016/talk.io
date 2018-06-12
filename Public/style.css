@@ -216,7 +216,12 @@ a {
 
 #search {
     height:55px;
-    border-bottom: 2.5px solid #BCBEC0;  
+    border-bottom: 2.5px solid #BCBEC0;
+    cursor: pointer  
+}
+
+#search:hover img {
+    opacity: 0.5
 }
 
 #add {
@@ -470,7 +475,7 @@ a {
     background-color: white;
     border-radius: 8px;
     color: #BCBEC0;
-    width:220px;height:38px
+    width:230px;height:38px
 }
 
 #bar > span p {
@@ -492,6 +497,7 @@ a {
     height: 100%; 
     z-index: -1;
     position: fixed;
+    background-color: #BCBEC0;
     top: 0; right: 0; bottom: 0; left: 0;
     align-content: center;
     transition: filter .4s;
@@ -505,6 +511,19 @@ a {
 .webcam {
     min-width:100%; min-height:100%; 
     width:auto; height:auto;
+}
+
+#searchBar {
+    position: absolute;
+    margin: 20% 50% 30% 42%;
+}
+
+#searchBar input {
+    padding-left: 38px;
+    width: 350px;
+    background: white url(./img/mag.png) left no-repeat;
+    background-size: 20px;
+    background-position: 7px
 }
 
 @keyframes dotFlow {

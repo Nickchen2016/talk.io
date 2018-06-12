@@ -7,6 +7,8 @@ class Sidebar extends Component{
     constructor(props){
         super(props);
         this.state = {
+            search:'',
+            add:'',
             active: '',
             isActive: '',
             words: '',
@@ -15,6 +17,8 @@ class Sidebar extends Component{
             statusBar:'',
             currentStatus: 'rgb(102,255,153)'
         }
+        this.search= this.search.bind(this);
+        // this.add= this.add.bind(this);
         this.showStatusBar= this.showStatusBar.bind(this);
         this.onClick= this.onCLick.bind(this);
         this.mouseOver= this.mouseOver.bind(this);
@@ -37,9 +41,9 @@ individualDelete() {
 
 onCLick(){
     if(this.state.active===''){
-        this.setState({active:'active', statusBar:''})
+        this.setState({active:'active', statusBar:'',search:''})
     }else{
-        this.setState({active:'', statusBar:''})
+        this.setState({active:'', statusBar:'',search:''})
     }
 }
 
@@ -55,6 +59,9 @@ undo(){
     this.setState({delete:''})
 }
 
+search(){
+    this.state.search===''?this.setState({search:'searchBar',statusBar:''}):this.setState({search:'',statusBar:''})
+}
 
     render() {
         // console.log('----------', this.state.id);
@@ -67,8 +74,6 @@ undo(){
                      <span id='words' className={ this.state.isActive }>{ this.state.words }</span>
                 </div>
 
-                <div></div>
-
                 {this.props.loggedUser.id&&this.state.statusBar==='statusBar'?<div id={this.state.statusBar}>
                                                                                 <span id='triangle'></span>
                                                                                 <span id='bar'>
@@ -77,10 +82,14 @@ undo(){
                                                                                     <span className='choiceOfStatus' onClick={()=>this.setState({currentStatus:'rgb(188,190,192)'})}><span className='status2' style={{backgroundColor:'rgb(188,190,192)'}}></span><p>Leave</p></span>
                                                                                 </span>
                                                                               </div>:''}
+
+                {this.state.search==='searchBar'?<div id={this.state.search}>
+                                                    <input type='email' placeholder='Search' required></input>
+                                                </div>:''}
             
                 <div id='sidebar' className={ this.state.active }>
                 
-                   <div id='search'><img src='./img/mag.png' className='sign' style={{marginTop:'18px'}}/></div> 
+                   <div id='search' onClick={this.search}><img src='./img/mag.png' className='sign' style={{marginTop:'18px'}}/></div> 
                    
                    <div id='add'><img src='./img/plus.png' className='sign'/></div> 
                    

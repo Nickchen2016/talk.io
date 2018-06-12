@@ -399,6 +399,8 @@ var Sidebar = function (_Component) {
         var _this = _possibleConstructorReturn(this, (Sidebar.__proto__ || Object.getPrototypeOf(Sidebar)).call(this, props));
 
         _this.state = {
+            search: '',
+            add: '',
             active: '',
             isActive: '',
             words: '',
@@ -407,6 +409,8 @@ var Sidebar = function (_Component) {
             statusBar: '',
             currentStatus: 'rgb(102,255,153)'
         };
+        _this.search = _this.search.bind(_this);
+        // this.add= this.add.bind(this);
         _this.showStatusBar = _this.showStatusBar.bind(_this);
         _this.onClick = _this.onCLick.bind(_this);
         _this.mouseOver = _this.mouseOver.bind(_this);
@@ -434,9 +438,9 @@ var Sidebar = function (_Component) {
         key: 'onCLick',
         value: function onCLick() {
             if (this.state.active === '') {
-                this.setState({ active: 'active', statusBar: '' });
+                this.setState({ active: 'active', statusBar: '', search: '' });
             } else {
-                this.setState({ active: '', statusBar: '' });
+                this.setState({ active: '', statusBar: '', search: '' });
             }
         }
     }, {
@@ -457,6 +461,11 @@ var Sidebar = function (_Component) {
         key: 'undo',
         value: function undo() {
             this.setState({ delete: '' });
+        }
+    }, {
+        key: 'search',
+        value: function search() {
+            this.state.search === '' ? this.setState({ search: 'searchBar', statusBar: '' }) : this.setState({ search: '', statusBar: '' });
         }
     }, {
         key: 'render',
@@ -480,7 +489,6 @@ var Sidebar = function (_Component) {
                             this.state.words
                         )
                     ),
-                    _react2.default.createElement('div', null),
                     this.props.loggedUser.id && this.state.statusBar === 'statusBar' ? _react2.default.createElement(
                         'div',
                         { id: this.state.statusBar },
@@ -526,12 +534,17 @@ var Sidebar = function (_Component) {
                             )
                         )
                     ) : '',
+                    this.state.search === 'searchBar' ? _react2.default.createElement(
+                        'div',
+                        { id: this.state.search },
+                        _react2.default.createElement('input', { type: 'email', placeholder: 'Search', required: true })
+                    ) : '',
                     _react2.default.createElement(
                         'div',
                         { id: 'sidebar', className: this.state.active },
                         _react2.default.createElement(
                             'div',
-                            { id: 'search' },
+                            { id: 'search', onClick: this.search },
                             _react2.default.createElement('img', { src: './img/mag.png', className: 'sign', style: { marginTop: '18px' } })
                         ),
                         _react2.default.createElement(
