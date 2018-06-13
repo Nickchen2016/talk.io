@@ -16,10 +16,11 @@ class Sidebar extends Component{
             id:'',
             statusBar:'',
             searchName:'',
+            addEmail:'',
             currentStatus: 'rgb(102,255,153)'
         }
         this.search= this.search.bind(this);
-        // this.add= this.add.bind(this);
+        this.add= this.add.bind(this);
         this.showStatusBar= this.showStatusBar.bind(this);
         this.onClick= this.onCLick.bind(this);
         this.mouseOver= this.mouseOver.bind(this);
@@ -42,9 +43,9 @@ individualDelete() {
 
 onCLick(){
     if(this.state.active===''){
-        this.setState({active:'active', statusBar:'',search:''})
+        this.setState({active:'active', statusBar:'',search:'',add:''})
     }else{
-        this.setState({active:'', statusBar:'',search:''})
+        this.setState({active:'', statusBar:'',search:'',add:''})
     }
 }
 
@@ -61,7 +62,11 @@ undo(){
 }
 
 search(){
-    this.state.search===''?this.setState({search:'searchBar',statusBar:''}):this.setState({search:'',statusBar:''})
+    this.state.search===''?this.setState({search:'searchBar',add:'',statusBar:''}):this.setState({search:'',add:'',statusBar:''})
+}
+
+add(){
+    this.state.add===''?this.setState({add:'addBar',search:'',statusBar:''}):this.setState({add:'',search:'',statusBar:''})
 }
 
     render() {
@@ -85,14 +90,18 @@ search(){
                                                                               </div>:''}
 
                 {this.state.search==='searchBar'?<div id={this.state.search}>
-                                                    <input type='text' name='search' placeholder='Search by name' required onChange={(el)=>{this.setState({searchName:el.target.value.toLowerCase()})}}></input>
+                                                    <input type='text' name='search' placeholder='Search by name' required onChange={el=>this.setState({searchName:el.target.value.toLowerCase()})}></input>
                                                 </div>:''}
+
+                {this.state.add==='addBar'?<div id={this.state.add}>
+                                                <input type='text' name='add' placeholder='Add new contact by typing Email address' required onChange={el=>this.setState({addEmail:el.target.value.toLowerCase()})}></input>
+                                           </div>:''}
             
                 <div id='sidebar' className={ this.state.active }>
                 
                    <div id='search' onClick={this.search}><img src='./img/mag.png' className='sign' style={{marginTop:'18px'}}/></div> 
                    
-                   <div id='add'><img src='./img/plus.png' className='sign'/></div> 
+                   <div id='add' onClick={this.add}><img src='./img/plus.png' className='sign'/></div> 
                    
                    <div id='me'>
                         <span id='profile' style={{backgroundColor:'rgb(255,204,51)'}}></span>
