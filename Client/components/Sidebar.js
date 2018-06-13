@@ -43,9 +43,9 @@ individualDelete() {
 
 onCLick(){
     if(this.state.active===''){
-        this.setState({active:'active', statusBar:'',search:''})
+        this.setState({active:'active', statusBar:'',search:'',add:''})
     }else{
-        this.setState({active:'', statusBar:'',search:''})
+        this.setState({active:'', statusBar:'',search:'',add:''})
     }
 }
 
