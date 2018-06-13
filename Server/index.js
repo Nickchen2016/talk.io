@@ -5,7 +5,7 @@ const path = require('path');
 const app = express();
 const db = require('./db/index').db;
 const session = require('express-session');
-const { Users } = require('./db/index');
+const { Users, Contact } = require('./db/index');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
@@ -50,7 +50,9 @@ passport.use(new GoogleStrategy({
     Users.findOne({
       where:{
         googleProfileId: profile.id
-      }
+      },
+        include:[{model: Contact}]
+      
     }).then(user =>{
       if(user) return user;
       return Users.create({
@@ -71,7 +73,7 @@ passport.use(new GoogleStrategy({
     done(null, user.id)
   }));
   passport.deserializeUser((id,done)=>{
-    Users.findById(id)
+    Users.findById(id, {include:[{model: Contact}]})
     .then(user=>{
       done(null, user);
     })

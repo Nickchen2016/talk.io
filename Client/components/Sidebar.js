@@ -95,13 +95,18 @@ add(){
 
                 {this.state.add==='addBar'?<div id={this.state.add}>
                                                 <input type='text' name='add' placeholder='Add new contact by typing Email address' required onChange={el=>this.setState({addEmail:el.target.value.toLowerCase()})}></input>
-                                                <div id='newContact'>
+                                                
+                                                {/* {this.props.users.map(user=>{
+                                                    {user.email===this.state.addEmail?<div id='newContact'>{user.name}</div>:''}
+                                                })} */}
+                                                
+                                                {/* <div id='newContact'>
                                                     <span style={{backgroundColor:'rgb(255,204,51)'}}></span>
                                                     <span>N</span>
                                                     <span>Nick Chen</span>
                                                     <span>chenyahua2012@hotmail.com</span>
                                                     <span><img src='./img/plus.png' width='18px'/></span>
-                                                </div>
+                                                </div> */}
                                            </div>:''}
             
                 <div id='sidebar' className={ this.state.active }>
