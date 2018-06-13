@@ -553,7 +553,32 @@ var Sidebar = function (_Component) {
                         { id: this.state.add },
                         _react2.default.createElement('input', { type: 'text', name: 'add', placeholder: 'Add new contact by typing Email address', required: true, onChange: function onChange(el) {
                                 return _this2.setState({ addEmail: el.target.value.toLowerCase() });
-                            } })
+                            } }),
+                        _react2.default.createElement(
+                            'div',
+                            { id: 'newContact' },
+                            _react2.default.createElement('span', { style: { backgroundColor: 'rgb(255,204,51)' } }),
+                            _react2.default.createElement(
+                                'span',
+                                null,
+                                'N'
+                            ),
+                            _react2.default.createElement(
+                                'span',
+                                null,
+                                'Nick Chen'
+                            ),
+                            _react2.default.createElement(
+                                'span',
+                                null,
+                                'chenyahua2012@hotmail.com'
+                            ),
+                            _react2.default.createElement(
+                                'span',
+                                null,
+                                _react2.default.createElement('img', { src: './img/plus.png', width: '18px' })
+                            )
+                        )
                     ) : '',
                     _react2.default.createElement(
                         'div',
@@ -903,13 +928,7 @@ var Talkpage = function (_Component) {
         key: 'render',
         value: function render() {
             // console.log('----------', this.props.active);
-            return _react2.default.createElement(
-                'div',
-                { id: 'camera', className: this.props.active },
-                _react2.default.createElement(_reactWebcam2.default, {
-                    className: 'webcam'
-                })
-            );
+            return _react2.default.createElement('div', { id: 'camera', className: this.props.active });
         }
     }]);
 
