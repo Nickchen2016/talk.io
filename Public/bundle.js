@@ -408,10 +408,11 @@ var Sidebar = function (_Component) {
             id: '',
             statusBar: '',
             searchName: '',
+            addEmail: '',
             currentStatus: 'rgb(102,255,153)'
         };
         _this.search = _this.search.bind(_this);
-        // this.add= this.add.bind(this);
+        _this.add = _this.add.bind(_this);
         _this.showStatusBar = _this.showStatusBar.bind(_this);
         _this.onClick = _this.onCLick.bind(_this);
         _this.mouseOver = _this.mouseOver.bind(_this);
@@ -466,7 +467,12 @@ var Sidebar = function (_Component) {
     }, {
         key: 'search',
         value: function search() {
-            this.state.search === '' ? this.setState({ search: 'searchBar', statusBar: '' }) : this.setState({ search: '', statusBar: '' });
+            this.state.search === '' ? this.setState({ search: 'searchBar', add: '', statusBar: '' }) : this.setState({ search: '', add: '', statusBar: '' });
+        }
+    }, {
+        key: 'add',
+        value: function add() {
+            this.state.add === '' ? this.setState({ add: 'addBar', search: '', statusBar: '' }) : this.setState({ add: '', search: '', statusBar: '' });
         }
     }, {
         key: 'render',
@@ -539,7 +545,14 @@ var Sidebar = function (_Component) {
                         'div',
                         { id: this.state.search },
                         _react2.default.createElement('input', { type: 'text', name: 'search', placeholder: 'Search by name', required: true, onChange: function onChange(el) {
-                                _this2.setState({ searchName: el.target.value.toLowerCase() });
+                                return _this2.setState({ searchName: el.target.value.toLowerCase() });
+                            } })
+                    ) : '',
+                    this.state.add === 'addBar' ? _react2.default.createElement(
+                        'div',
+                        { id: this.state.add },
+                        _react2.default.createElement('input', { type: 'text', name: 'add', placeholder: 'Add new contact by typing Email address', required: true, onChange: function onChange(el) {
+                                return _this2.setState({ addEmail: el.target.value.toLowerCase() });
                             } })
                     ) : '',
                     _react2.default.createElement(
@@ -552,7 +565,7 @@ var Sidebar = function (_Component) {
                         ),
                         _react2.default.createElement(
                             'div',
-                            { id: 'add' },
+                            { id: 'add', onClick: this.add },
                             _react2.default.createElement('img', { src: './img/plus.png', className: 'sign' })
                         ),
                         _react2.default.createElement(
