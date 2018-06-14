@@ -277,7 +277,6 @@ a {
 .confirmText {
     position: relative;
     top: 10px;
-    /* font-family: sans-serif; */
     color: #BCBEC0;
     font-size: 18px
 }
@@ -289,19 +288,34 @@ a {
     height: 30px;
 }
 
-.confirmButton > span:hover {
-    opacity: 0.3;
-    cursor: pointer
+.confirmRemove {
+    cursor: pointer;
+    background: url('./img/yes.png') no-repeat;
+    background-position: 4px;
+    background-size: 28px;
+    width: 35px;
+    margin-left: 10px
 }
 
-.confirmButton >span:nth-child(1) {
+.undoRemove {
+    cursor: pointer;
+    background: url('./img/no.png') no-repeat;
+    background-position: 4px;
+    background-size: 28px;
     width: 35px;
-    margin-left: 45px;
+    margin-left: 45px
 }
 
-.confirmButton >span:nth-child(2) {
-    width: 35px;
-    margin-left: 10px;
+.undoRemove:hover {
+    background: url('./img/no1.png') no-repeat;
+    background-position: 4px;
+    background-size: 28px;
+}
+
+.confirmRemove:hover {
+    background: url('./img/yes1.png') no-repeat;
+    background-position: 4px;
+    background-size: 28px;
 }
 
 .close {
@@ -610,7 +624,6 @@ a {
     bottom: 12%;
     margin-left: 25%; margin-right: 30%;
     height: 50px; width: 600px;
-    /* background-color: #66FF99 */
 }
 
 #controlButtons > span {

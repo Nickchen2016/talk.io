@@ -619,16 +619,8 @@ var Sidebar = function (_Component) {
                                         _react2.default.createElement(
                                             'div',
                                             { className: 'confirmButton' },
-                                            _react2.default.createElement(
-                                                'span',
-                                                { onClick: _this3.undo },
-                                                _react2.default.createElement('img', { src: './img/no.png', width: '28px' })
-                                            ),
-                                            _react2.default.createElement(
-                                                'span',
-                                                null,
-                                                _react2.default.createElement('img', { src: './img/yes.png', width: '28px' })
-                                            )
+                                            _react2.default.createElement('span', { className: 'undoRemove', onClick: _this3.undo }),
+                                            _react2.default.createElement('span', { className: 'confirmRemove' })
                                         )
                                     ) : '',
                                     _react2.default.createElement('span', { className: 'close', onClick: function onClick() {
@@ -982,9 +974,6 @@ var Talkpage = function (_Component) {
             return _react2.default.createElement(
                 'div',
                 { id: 'camera', className: this.props.active },
-                _react2.default.createElement(_reactWebcam2.default, {
-                    className: 'webcam'
-                }),
                 _react2.default.createElement(
                     'div',
                     { id: 'controlButtons' },

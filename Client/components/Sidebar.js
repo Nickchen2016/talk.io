@@ -131,8 +131,8 @@ searchNewContact(el){
                                             <div className={this.state.delete}>
                                                 <span className='confirmText'>Are you sure to<br/>delete?</span>
                                                 <div className='confirmButton'>
-                                                    <span onClick={this.undo}><img src='./img/no.png' width='28px'/></span>
-                                                    <span><img src='./img/yes.png' width='28px'/></span>
+                                                    <span className='undoRemove' onClick={this.undo}></span>
+                                                    <span className='confirmRemove'></span>
                                                 </div>
                                             </div>:''}
                                         <span className='close' onClick={()=>{this.setState({id: c.id});this.individualDelete()}}></span>
