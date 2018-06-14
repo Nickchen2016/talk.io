@@ -89,7 +89,8 @@ searchNewContact(el){
         // console.log('----------', this.state.newContact);
         return(
             <div id='talk-container'>
-            <div id='talk-menu' className={this.state.active}>
+
+            <div id='talk-menu'>
 
                 <div id='pointer' className={ this.state.active } onClick={ this.onClick } onMouseOver={ this.mouseOver } onMouseLeave={ this.mouseLeave }>
                      <div id='round'></div>
@@ -104,30 +105,6 @@ searchNewContact(el){
                                                                                     <span className='choiceOfStatus' onClick={()=>this.setState({currentStatus:'rgb(188,190,192)'})}><span className='status2' style={{backgroundColor:'rgb(188,190,192)'}}></span><p>Leave</p></span>
                                                                                 </span>
                                                                               </div>:''}
-
-                {this.state.search==='searchBar'?<div id={this.state.search}>
-                                                    <input type='text' name='search' placeholder='Search by name' required onChange={el=>this.setState({searchName:el.target.value.toLowerCase()})} />
-                                                </div>:''}
-
-                {this.state.add==='addBar'?<div id={this.state.add}>
-                                                <form id='addForm' onSubmit={this.searchNewContact}>
-                                                    <span><img src='img/add.png' width='28px'/></span>  
-                                                    <input type='email' name='email' placeholder='Add new contact by typing Email address' required />
-                                                    <button type='Search'>Search</button>
-                                                </form>
-                                                
-                                                {this.state.newContact.name?
-                                                    <div id='newContact'>
-                                                        <span style={{backgroundColor:`${this.state.newContact.color}`}}>
-                                                            <span id='newCap'>{this.state.newContact.name[0].toUpperCase()}</span>
-                                                        </span>
-                                                        <span>{this.state.newContact.name}</span>
-                                                        <span>{this.state.newContact.email}</span>
-                                                        <span ><img src='./img/plus.png' width='18px'/></span>
-                                                    </div>:''}
-                                                {this.state.newContact.err?<div id='newContact'><p>{this.state.newContact.err}</p></div>:''}
-
-                                           </div>:''}
             
                 <div id='sidebar' className={ this.state.active }>
                 
@@ -143,7 +120,6 @@ searchNewContact(el){
                    </div> 
 
                    <div id='contactList'>
-
                     
                     { this.props.loggedUser.contacts&&this.props.loggedUser.contacts.sort((a,b)=>{
                                 return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
@@ -173,6 +149,31 @@ searchNewContact(el){
 
                 </div>
 
+            </div>
+
+            <div id={this.state.active}>
+                {this.state.search==='searchBar'?<div id={this.state.search}>
+                                                    <input type='text' name='search' placeholder='Search by name' required onChange={el=>this.setState({searchName:el.target.value.toLowerCase()})} />
+                                                 </div>:''}
+                {this.state.add==='addBar'?<div id={this.state.add}>
+                                                <form id='addForm' onSubmit={this.searchNewContact}>
+                                                    <span><img src='img/add.png' width='28px'/></span>  
+                                                    <input type='email' name='email' placeholder='Add new contact by typing Email address' required />
+                                                    <button type='Search'>Search</button>
+                                                </form>
+                                                
+                                                {this.state.newContact.name?
+                                                    <div id='newContact'>
+                                                        <span style={{backgroundColor:`${this.state.newContact.color}`}}>
+                                                            <span id='newCap'>{this.state.newContact.name[0].toUpperCase()}</span>
+                                                        </span>
+                                                        <span>{this.state.newContact.name}</span>
+                                                        <span>{this.state.newContact.email}</span>
+                                                        <span ><img src='./img/plus.png' width='18px'/></span>
+                                                    </div>:''}
+                                                {this.state.newContact.err?<div id='newContact'><p>{this.state.newContact.err}</p></div>:''}
+
+                                           </div>:''}
             </div>
 
             <Talkpage active={this.state.active}/>

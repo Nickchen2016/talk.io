@@ -510,7 +510,7 @@ var Sidebar = function (_Component) {
                 { id: 'talk-container' },
                 _react2.default.createElement(
                     'div',
-                    { id: 'talk-menu', className: this.state.active },
+                    { id: 'talk-menu' },
                     _react2.default.createElement(
                         'div',
                         { id: 'pointer', className: this.state.active, onClick: this.onClick, onMouseOver: this.mouseOver, onMouseLeave: this.mouseLeave },
@@ -565,69 +565,6 @@ var Sidebar = function (_Component) {
                                 )
                             )
                         )
-                    ) : '',
-                    this.state.search === 'searchBar' ? _react2.default.createElement(
-                        'div',
-                        { id: this.state.search },
-                        _react2.default.createElement('input', { type: 'text', name: 'search', placeholder: 'Search by name', required: true, onChange: function onChange(el) {
-                                return _this3.setState({ searchName: el.target.value.toLowerCase() });
-                            } })
-                    ) : '',
-                    this.state.add === 'addBar' ? _react2.default.createElement(
-                        'div',
-                        { id: this.state.add },
-                        _react2.default.createElement(
-                            'form',
-                            { id: 'addForm', onSubmit: this.searchNewContact },
-                            _react2.default.createElement(
-                                'span',
-                                null,
-                                _react2.default.createElement('img', { src: 'img/add.png', width: '28px' })
-                            ),
-                            _react2.default.createElement('input', { type: 'email', name: 'email', placeholder: 'Add new contact by typing Email address', required: true }),
-                            _react2.default.createElement(
-                                'button',
-                                { type: 'Search' },
-                                'Search'
-                            )
-                        ),
-                        this.state.newContact.name ? _react2.default.createElement(
-                            'div',
-                            { id: 'newContact' },
-                            _react2.default.createElement(
-                                'span',
-                                { style: { backgroundColor: '' + this.state.newContact.color } },
-                                _react2.default.createElement(
-                                    'span',
-                                    { id: 'newCap' },
-                                    this.state.newContact.name[0].toUpperCase()
-                                )
-                            ),
-                            _react2.default.createElement(
-                                'span',
-                                null,
-                                this.state.newContact.name
-                            ),
-                            _react2.default.createElement(
-                                'span',
-                                null,
-                                this.state.newContact.email
-                            ),
-                            _react2.default.createElement(
-                                'span',
-                                null,
-                                _react2.default.createElement('img', { src: './img/plus.png', width: '18px' })
-                            )
-                        ) : '',
-                        this.state.newContact.err ? _react2.default.createElement(
-                            'div',
-                            { id: 'newContact' },
-                            _react2.default.createElement(
-                                'p',
-                                null,
-                                this.state.newContact.err
-                            )
-                        ) : ''
                     ) : '',
                     _react2.default.createElement(
                         'div',
@@ -713,6 +650,73 @@ var Sidebar = function (_Component) {
                             })
                         )
                     )
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { id: this.state.active },
+                    this.state.search === 'searchBar' ? _react2.default.createElement(
+                        'div',
+                        { id: this.state.search },
+                        _react2.default.createElement('input', { type: 'text', name: 'search', placeholder: 'Search by name', required: true, onChange: function onChange(el) {
+                                return _this3.setState({ searchName: el.target.value.toLowerCase() });
+                            } })
+                    ) : '',
+                    this.state.add === 'addBar' ? _react2.default.createElement(
+                        'div',
+                        { id: this.state.add },
+                        _react2.default.createElement(
+                            'form',
+                            { id: 'addForm', onSubmit: this.searchNewContact },
+                            _react2.default.createElement(
+                                'span',
+                                null,
+                                _react2.default.createElement('img', { src: 'img/add.png', width: '28px' })
+                            ),
+                            _react2.default.createElement('input', { type: 'email', name: 'email', placeholder: 'Add new contact by typing Email address', required: true }),
+                            _react2.default.createElement(
+                                'button',
+                                { type: 'Search' },
+                                'Search'
+                            )
+                        ),
+                        this.state.newContact.name ? _react2.default.createElement(
+                            'div',
+                            { id: 'newContact' },
+                            _react2.default.createElement(
+                                'span',
+                                { style: { backgroundColor: '' + this.state.newContact.color } },
+                                _react2.default.createElement(
+                                    'span',
+                                    { id: 'newCap' },
+                                    this.state.newContact.name[0].toUpperCase()
+                                )
+                            ),
+                            _react2.default.createElement(
+                                'span',
+                                null,
+                                this.state.newContact.name
+                            ),
+                            _react2.default.createElement(
+                                'span',
+                                null,
+                                this.state.newContact.email
+                            ),
+                            _react2.default.createElement(
+                                'span',
+                                null,
+                                _react2.default.createElement('img', { src: './img/plus.png', width: '18px' })
+                            )
+                        ) : '',
+                        this.state.newContact.err ? _react2.default.createElement(
+                            'div',
+                            { id: 'newContact' },
+                            _react2.default.createElement(
+                                'p',
+                                null,
+                                this.state.newContact.err
+                            )
+                        ) : ''
+                    ) : ''
                 ),
                 _react2.default.createElement(_Talkpage2.default, { active: this.state.active })
             );
@@ -975,7 +979,32 @@ var Talkpage = function (_Component) {
         key: 'render',
         value: function render() {
             // console.log('----------', this.props.active);
-            return _react2.default.createElement('div', { id: 'camera', className: this.props.active });
+            return _react2.default.createElement(
+                'div',
+                { id: 'camera', className: this.props.active },
+                _react2.default.createElement(_reactWebcam2.default, {
+                    className: 'webcam'
+                }),
+                _react2.default.createElement(
+                    'div',
+                    { id: 'controlButtons' },
+                    _react2.default.createElement(
+                        'span',
+                        null,
+                        _react2.default.createElement('img', { src: './img/mute.png' })
+                    ),
+                    _react2.default.createElement(
+                        'span',
+                        null,
+                        _react2.default.createElement('img', { src: './img/screenshoot.png' })
+                    ),
+                    _react2.default.createElement(
+                        'span',
+                        null,
+                        _react2.default.createElement('img', { src: './img/stop.png' })
+                    )
+                )
+            );
         }
     }]);
 

@@ -8,22 +8,16 @@
 
 #talk-container {
     position: relative;
-    
+    font-family: sans-serif
 }
 
 #talk-menu {
     display:flex;
     position: fixed;
+    z-index: 1;
+    height: 100%; width: 175px;
     top: 0; right: 0; bottom: 0; left: 0;
     align-content: center;
-    font-family: sans-serif;
-    background-color: rgba(0,0,0,0);
-    transition: background-color 1s;
-}
-
-#talk-menu.active {
-    background-color: rgba(0,0,0,0.4);
-    transition: background-color 1s;
 }
 
 .item1, .item3 {
@@ -508,6 +502,7 @@ a {
     height: 100%; 
     z-index: -1;
     position: fixed;
+    align-content: center;
     background-color: #BCBEC0;
     top: 0; right: 0; bottom: 0; left: 0;
     align-content: center;
@@ -527,7 +522,7 @@ a {
 #searchBar, #addBar{
     position: absolute;
     width: 420px;
-    margin: 200px 38%;
+    margin: 220px 40%;
 }
 
 #searchBar input {
@@ -566,7 +561,7 @@ a {
 #newCap {
     position: relative;
     font-size: 20px; color: white;
-    top: 16.5%
+    top: 20%
 }
 
 #newContact > span:nth-child(2) {
@@ -606,6 +601,44 @@ a {
 #addForm button {
     margin-left: 10px;
     width: 70px; height: 35px
+}
+
+#controlButtons {
+    display: flex;
+    position: absolute;
+    align-content: center;
+    bottom: 12%;
+    margin-left: 25%; margin-right: 30%;
+    height: 50px; width: 600px;
+    /* background-color: #66FF99 */
+}
+
+#controlButtons > span {
+    width: 70px; height: 70px;
+    text-align: center;
+    border-radius: 50%;
+    margin: 0 65px; 
+    cursor: pointer;
+}
+
+#controlButtons > span:hover {
+    background-color: rgba(0,0,0,0.1);
+}
+
+#controlButtons > span > img {
+    position: relative;
+    margin-top: 14%;
+    width: 50px;
+}
+
+#active {
+    background-color: black;
+    position: fixed;
+    z-index: 0;
+    height: 100%; width: 100%;
+    top: 0; right: 0; bottom: 0; left: 0;
+    background-color: rgba(0,0,0,0.5);
+    transition: background-color 1s;
 }
 
 @keyframes dotFlow {

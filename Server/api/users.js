@@ -18,10 +18,7 @@ apiRouter.put('/', (req,res,next)=>{
         where: req.body
     })
     .then((result)=>{
-        req.login(result, (err)=>{
-            if(err) next(err);
-            else res.json(result);
-            })
+        res.status(201).json(result)
     })
     .catch(next)
 })
