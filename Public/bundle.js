@@ -501,7 +501,7 @@ var Sidebar = function (_Component) {
         value: function render() {
             var _this3 = this;
 
-            console.log('----------', this.state.newContact);
+            // console.log('----------', this.state.newContact);
             return _react2.default.createElement(
                 'div',
                 { id: 'talk-container' },
@@ -576,6 +576,11 @@ var Sidebar = function (_Component) {
                         _react2.default.createElement(
                             'form',
                             { id: 'addForm', onSubmit: this.searchNewContact },
+                            _react2.default.createElement(
+                                'span',
+                                null,
+                                _react2.default.createElement('img', { src: 'img/add.png', width: '28px' })
+                            ),
                             _react2.default.createElement('input', { type: 'email', name: 'email', placeholder: 'Add new contact by typing Email address', required: true }),
                             _react2.default.createElement(
                                 'button',

@@ -530,6 +530,11 @@ a {
     margin: 200px 38%;
 }
 
+#addBar span {
+    position: absolute;
+    margin: 7px 0 0 6px
+}
+
 #searchBar input {
     padding-left: 40px;
     width: 420px;
@@ -540,10 +545,6 @@ a {
 
 #addForm input {
     padding-left: 40px;
-    /* width: 420px; */
-    background: white url(./img/add.png) left no-repeat;
-    background-size: 25px;
-    background-position: 8px
 }
 
 #newContact {
@@ -571,21 +572,21 @@ a {
 #newContact > span:nth-child(2) {
     position: absolute;
     font-size: 20px; color: white;
-    margin: 5% 0 0 7.2%
+    margin: 4.8% 0 0 7.2%
 }
 
 #newContact > span:nth-child(3) {
-    margin: 5% 1% 0 3%;
+    margin: 5% 1% 0 16%;
     width: 90px; height: 100%;
 }
 
 #newContact > span:nth-child(4) {
-    margin-top: 5%;
+    margin-top: 5%; margin-left: 35%;
     width: 250px; height: 40%;
 }
 
 #newContact > span:nth-child(5) {
-    margin: 4% 2%;
+    margin-top: 4%; margin-left: 100%;
     width: 30px; height: 50%;
     cursor: pointer;
 }

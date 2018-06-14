@@ -84,7 +84,7 @@ searchNewContact(el){
 
 
     render() {
-        console.log('----------', this.state.newContact);
+        // console.log('----------', this.state.newContact);
         return(
             <div id='talk-container'>
             <div id='talk-menu' className={this.state.active}>
@@ -108,8 +108,11 @@ searchNewContact(el){
                                                 </div>:''}
 
                 {this.state.add==='addBar'?<div id={this.state.add}>
-                                                <form id='addForm' onSubmit={this.searchNewContact}><input type='email' name='email' placeholder='Add new contact by typing Email address' required />
-                                                      <button type='Search'>Search</button>
+                                                {/* <span><img src='img/add.png' width='28px'/></span> */}
+                                                <form id='addForm' onSubmit={this.searchNewContact}>
+                                                    <span><img src='img/add.png' width='28px'/></span>  
+                                                    <input type='email' name='email' placeholder='Add new contact by typing Email address' required />
+                                                    <button type='Search'>Search</button>
                                                 </form>
                                                 
                                                 {this.state.newContact.name?
