@@ -119,8 +119,8 @@ searchNewContact(el){
                                                 
                                                 {this.state.newContact.name?
                                                     <div id='newContact'>
-                                                        <span style={{backgroundColor:`${this.state.newContact.color}`}}></span>
-                                                        <span>{this.state.newContact.name[0].toUpperCase()}</span>
+                                                        <span style={{backgroundColor:`${this.state.newContact.color}`}}><span id='newCap'>{this.state.newContact.name[0].toUpperCase()}</span></span>
+                                                        {/* <span>{this.state.newContact.name[0].toUpperCase()}</span> */}
                                                         <span>{this.state.newContact.name}</span>
                                                         <span>{this.state.newContact.email}</span>
                                                         <span ><img src='./img/plus.png' width='18px'/></span>

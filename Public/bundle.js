@@ -594,11 +594,14 @@ var Sidebar = function (_Component) {
                         this.state.newContact.name ? _react2.default.createElement(
                             'div',
                             { id: 'newContact' },
-                            _react2.default.createElement('span', { style: { backgroundColor: '' + this.state.newContact.color } }),
                             _react2.default.createElement(
                                 'span',
-                                null,
-                                this.state.newContact.name[0].toUpperCase()
+                                { style: { backgroundColor: '' + this.state.newContact.color } },
+                                _react2.default.createElement(
+                                    'span',
+                                    { id: 'newCap' },
+                                    this.state.newContact.name[0].toUpperCase()
+                                )
                             ),
                             _react2.default.createElement(
                                 'span',

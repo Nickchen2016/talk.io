@@ -559,26 +559,27 @@ a {
 #newContact > span:first-child {
     width: 35px; height: 35px;
     margin: 3% 0 0 14px;
-    border-radius: 50%
+    border-radius: 50%;
+    text-align: center
+}
+
+#newCap {
+    position: relative;
+    font-size: 20px; color: white;
+    top: 16.5%
 }
 
 #newContact > span:nth-child(2) {
-    position: absolute;
-    font-size: 20px; color: white;
-    margin: 4.8% 0 0 5.8%
-}
-
-#newContact > span:nth-child(3) {
-    margin: 5% 0 0 12px;
+    margin: 5% 0 0 11px;
     width: 90px; height: 40%
 }
 
-#newContact > span:nth-child(4) {
+#newContact > span:nth-child(3) {
     margin-top: 5%; margin-left: 8px;
     width: 255px; height: 40%
 }
 
-#newContact > span:nth-child(5) {
+#newContact > span:nth-child(4) {
     margin-top: 3.5%; margin-left: 8px;
     width: 35px; height: 50%;
     cursor: pointer
