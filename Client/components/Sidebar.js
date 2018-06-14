@@ -138,7 +138,7 @@ searchNewContact(el){
                    <div id='me'>
                         <span id='profile' style={{backgroundColor:'rgb(255,204,51)'}}></span>
                         <span id='capital' key={this.props.loggedUser.id}>{this.props.loggedUser.name&&this.props.loggedUser.name[0].toUpperCase()}</span>
-                        <span id='username'>{ this.props.loggedUser.name }</span>
+                        <span id='username'>{ this.props.loggedUser.name&&this.props.loggedUser.name }</span>
                         <span className='status' onClick={this.showStatusBar} style={{backgroundColor:`${this.state.currentStatus}`}}></span>
                    </div> 
 

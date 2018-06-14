@@ -16,7 +16,7 @@ class Signup extends Component {
         // console.log(this.props.history.push('/min'),colorConfig(),'=======', event.target.email.value);
         this.props.signup({
             color: colorConfig(),
-            name: event.target.name.value,
+            name: event.target.name.value.replace(/^\s|\s$/g, '').split(' ').map(name=> name=name[0].toUpperCase()+name.slice(1)).join(' '),
             email: event.target.email.value,
             password: event.target.password.value
         });

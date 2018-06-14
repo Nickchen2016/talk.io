@@ -654,7 +654,7 @@ var Sidebar = function (_Component) {
                             _react2.default.createElement(
                                 'span',
                                 { id: 'username' },
-                                this.props.loggedUser.name
+                                this.props.loggedUser.name && this.props.loggedUser.name
                             ),
                             _react2.default.createElement('span', { className: 'status', onClick: this.showStatusBar, style: { backgroundColor: '' + this.state.currentStatus } })
                         ),
@@ -787,7 +787,9 @@ var Signup = function (_Component) {
             // console.log(this.props.history.push('/min'),colorConfig(),'=======', event.target.email.value);
             this.props.signup({
                 color: (0, _color2.default)(),
-                name: event.target.name.value,
+                name: event.target.name.value.replace(/^\s|\s$/g, '').split(' ').map(function (name) {
+                    return name = name[0].toUpperCase() + name.slice(1);
+                }).join(' '),
                 email: event.target.email.value,
                 password: event.target.password.value
             });
