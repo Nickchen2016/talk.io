@@ -424,12 +424,9 @@ var Sidebar = function (_Component) {
         _this.mouseLeave = _this.mouseLeave.bind(_this);
         _this.individualDelete = _this.individualDelete.bind(_this);
         _this.undo = _this.undo.bind(_this);
+        // this.addNewContact= this.addNewContact.bind(this);
         return _this;
     }
-
-    // componentDidMount(){
-    //     axios.put('/api/users', {email: `${this.state.addEmail}`}).then(res=>{console.log('=========',res.data)})
-    // }
 
     _createClass(Sidebar, [{
         key: 'showStatusBar',
@@ -496,6 +493,12 @@ var Sidebar = function (_Component) {
                 return console.error('======', err);
             }, this.setState({ newContact: { err: 'Contact not exist' } }));
         }
+
+        // addNewContact(){
+
+        // }
+
+
     }, {
         key: 'render',
         value: function render() {

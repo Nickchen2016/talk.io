@@ -29,11 +29,9 @@ class Sidebar extends Component{
         this.mouseLeave= this.mouseLeave.bind(this);
         this.individualDelete= this.individualDelete.bind(this);
         this.undo= this.undo.bind(this);
+        // this.addNewContact= this.addNewContact.bind(this);
     }
 
-// componentDidMount(){
-//     axios.put('/api/users', {email: `${this.state.addEmail}`}).then(res=>{console.log('=========',res.data)})
-// }
 
 showStatusBar(){
     if(this.state.statusBar===''){
@@ -81,6 +79,10 @@ searchNewContact(el){
     axios.put('api/users', {email: el.target.email.value}).then(res=> this.setState({newContact: res.data})).catch(err=> console.error('======',err),this.setState({newContact: {err: 'Contact not exist'}}))
 }
 
+// addNewContact(){
+
+// }
+
 
 
     render() {
@@ -117,12 +119,12 @@ searchNewContact(el){
                                                 
                                                 {this.state.newContact.name?
                                                     <div id='newContact'>
-                                                    <span style={{backgroundColor:`${this.state.newContact.color}`}}></span>
-                                                    <span>{this.state.newContact.name[0].toUpperCase()}</span>
-                                                    <span>{this.state.newContact.name}</span>
-                                                    <span>{this.state.newContact.email}</span>
-                                                    <span><img src='./img/plus.png' width='18px'/></span>
-                                                </div>:''}
+                                                        <span style={{backgroundColor:`${this.state.newContact.color}`}}></span>
+                                                        <span>{this.state.newContact.name[0].toUpperCase()}</span>
+                                                        <span>{this.state.newContact.name}</span>
+                                                        <span>{this.state.newContact.email}</span>
+                                                        <span ><img src='./img/plus.png' width='18px'/></span>
+                                                    </div>:''}
                                                 {this.state.newContact.err?<div id='newContact'><p>{this.state.newContact.err}</p></div>:''}
 
                                            </div>:''}
