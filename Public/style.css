@@ -580,17 +580,17 @@ a {
 }
 
 #newContact > span:nth-child(4) {
-    margin-top: 3.5%; margin-left: 8px;
-    width: 35px; height: 50%;
+    margin-top: 3%; margin-left: 8px;
+    width: 35px; height: 60%;
     cursor: pointer
 }
 
-#newContact > span:nth-child(5):hover {
+#newContact > span:nth-child(4):hover {
     opacity: 0.5
 }
 
-#newContact > span:nth-child(5) > img {
-    margin-left: 18%
+#newContact > span:nth-child(4) > img {
+    margin-left: 18%; margin-top: 8%
 }
 
 #addForm {

@@ -110,7 +110,6 @@ searchNewContact(el){
                                                 </div>:''}
 
                 {this.state.add==='addBar'?<div id={this.state.add}>
-                                                {/* <span><img src='img/add.png' width='28px'/></span> */}
                                                 <form id='addForm' onSubmit={this.searchNewContact}>
                                                     <span><img src='img/add.png' width='28px'/></span>  
                                                     <input type='email' name='email' placeholder='Add new contact by typing Email address' required />
@@ -119,8 +118,9 @@ searchNewContact(el){
                                                 
                                                 {this.state.newContact.name?
                                                     <div id='newContact'>
-                                                        <span style={{backgroundColor:`${this.state.newContact.color}`}}><span id='newCap'>{this.state.newContact.name[0].toUpperCase()}</span></span>
-                                                        {/* <span>{this.state.newContact.name[0].toUpperCase()}</span> */}
+                                                        <span style={{backgroundColor:`${this.state.newContact.color}`}}>
+                                                            <span id='newCap'>{this.state.newContact.name[0].toUpperCase()}</span>
+                                                        </span>
                                                         <span>{this.state.newContact.name}</span>
                                                         <span>{this.state.newContact.email}</span>
                                                         <span ><img src='./img/plus.png' width='18px'/></span>
