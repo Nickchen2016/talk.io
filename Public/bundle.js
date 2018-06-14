@@ -964,27 +964,69 @@ var Talkpage = function (_Component) {
     function Talkpage(props) {
         _classCallCheck(this, Talkpage);
 
-        return _possibleConstructorReturn(this, (Talkpage.__proto__ || Object.getPrototypeOf(Talkpage)).call(this, props));
+        var _this = _possibleConstructorReturn(this, (Talkpage.__proto__ || Object.getPrototypeOf(Talkpage)).call(this, props));
+
+        _this.setRef = function (webcam) {
+            _this.webcam = webcam;
+        };
+
+        _this.capture = function () {
+            var imageSrc = _this.webcam.getScreenshot();
+            _this.state.screenshot === '' ? _this.setState({ img: imageSrc, screenshot: 'screenshot' }) : _this.setState({ img: imageSrc, screenshot: 'screenshot' });
+        };
+
+        _this.state = {
+            audio: true,
+            screenshot: '',
+            img: ''
+        };
+        _this.audio = _this.audio.bind(_this);
+        _this.removePhoto = _this.removePhoto.bind(_this);
+        return _this;
     }
 
     _createClass(Talkpage, [{
+        key: 'audio',
+        value: function audio() {
+            {
+                this.state.audio === true ? this.setState({ audio: false }) : this.setState({ audio: true });
+            }
+        }
+    }, {
+        key: 'removePhoto',
+        value: function removePhoto() {
+            this.setState({ screenshot: '' });
+        }
+    }, {
         key: 'render',
         value: function render() {
-            // console.log('----------', this.props.active);
+            // console.log('----------', this.state.img);
             return _react2.default.createElement(
                 'div',
                 { id: 'camera', className: this.props.active },
+                _react2.default.createElement(_reactWebcam2.default, {
+                    className: 'webcam',
+                    ref: this.setRef,
+                    audio: this.state.audio,
+                    screenshotFormat: 'image/jpeg'
+                }),
+                this.state.screenshot === 'screenshot' ? _react2.default.createElement(
+                    'div',
+                    { id: this.state.screenshot },
+                    _react2.default.createElement('img', { src: this.state.img }),
+                    _react2.default.createElement('span', { className: 'close', onClick: this.removePhoto })
+                ) : '',
                 _react2.default.createElement(
                     'div',
                     { id: 'controlButtons' },
                     _react2.default.createElement(
                         'span',
-                        null,
+                        { onClick: this.audio },
                         _react2.default.createElement('img', { src: './img/mute.png' })
                     ),
                     _react2.default.createElement(
                         'span',
-                        null,
+                        { onClick: this.capture },
                         _react2.default.createElement('img', { src: './img/screenshoot.png' })
                     ),
                     _react2.default.createElement(
