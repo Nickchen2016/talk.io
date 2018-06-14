@@ -13,6 +13,19 @@ apiRouter.get('/', (req,res,next)=>{
     .catch(next)
 })
 
+apiRouter.put('/', (req,res,next)=>{
+    Users.findOne({
+        where: req.body
+    })
+    .then((result)=>{
+        req.login(result, (err)=>{
+            if(err) next(err);
+            else res.json(result);
+            })
+    })
+    .catch(next)
+})
+
 // apiRouter.post('/', (req,res,next)=>{
 //     Users.create(req.body)
 //     .then(result => res.status(201).json(result))

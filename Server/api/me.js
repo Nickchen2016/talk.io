@@ -8,7 +8,8 @@ apiRouter.get('/', (req,res,next)=>{
 
 apiRouter.put('/', (req,res,next)=>{
     Users.findOne({
-        where: req.body
+        where: req.body,
+        include:[{model: Contact}]
     })
     .then((result)=>{
         req.login(result, (err)=>{
@@ -20,7 +21,7 @@ apiRouter.put('/', (req,res,next)=>{
 })
 
 apiRouter.post('/', (req,res,next)=>{
-    Users.create(req.body)
+    Users.create(req.body, {include:[{model: Contact}]})
     .then(result => {
         req.login(result, (err)=>{
             if(err) next(err);

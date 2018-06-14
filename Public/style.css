@@ -113,6 +113,12 @@ button {
     cursor: pointer;
 }
 
+button:focus, button:active {
+    outline: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
 button:hover {
     background-color: #00CC99; 
 }
@@ -532,9 +538,9 @@ a {
     background-position: 8px
 }
 
-#addBar input {
+#addForm input {
     padding-left: 40px;
-    width: 420px;
+    /* width: 420px; */
     background: white url(./img/add.png) left no-repeat;
     background-size: 25px;
     background-position: 8px
@@ -542,12 +548,18 @@ a {
 
 #newContact {
     display: flex;
+    /* align-content: center;
+    text-align: center; */
     border-radius: 6px;
     margin-top: 30px;
     width: 460px; height: 60px;
     background-color:white;
     font-size: 15px;
     color: #BCBEC0
+}
+
+#newContact p {
+    margin: auto auto;
 }
 
 #newContact > span:first-child {
@@ -584,6 +596,16 @@ a {
 
 #newContact > span:nth-child(5) > img {
     margin-left: 18%
+}
+
+#addForm {
+    display: flex;
+    width: 460px
+}
+
+#addForm button {
+    margin-left: 10px;
+    width: 70px; height: 35px
 }
 
 @keyframes dotFlow {

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Talkpage from './Talkpage';
+import axios from 'axios';
 
 
 class Sidebar extends Component{
@@ -16,11 +17,12 @@ class Sidebar extends Component{
             id:'',
             statusBar:'',
             searchName:'',
-            addEmail:'',
+            newContact:{},
             currentStatus: 'rgb(102,255,153)'
         }
         this.search= this.search.bind(this);
         this.add= this.add.bind(this);
+        this.searchNewContact= this.searchNewContact.bind(this);
         this.showStatusBar= this.showStatusBar.bind(this);
         this.onClick= this.onCLick.bind(this);
         this.mouseOver= this.mouseOver.bind(this);
@@ -28,6 +30,10 @@ class Sidebar extends Component{
         this.individualDelete= this.individualDelete.bind(this);
         this.undo= this.undo.bind(this);
     }
+
+// componentDidMount(){
+//     axios.put('/api/users', {email: `${this.state.addEmail}`}).then(res=>{console.log('=========',res.data)})
+// }
 
 showStatusBar(){
     if(this.state.statusBar===''){
@@ -69,8 +75,16 @@ add(){
     this.state.add===''?this.setState({add:'addBar',search:'',statusBar:''}):this.setState({add:'',search:'',statusBar:''})
 }
 
+searchNewContact(el){
+    el.preventDefault();
+
+    axios.put('api/users', {email: el.target.email.value}).then(res=> this.setState({newContact: res.data})).catch(err=> console.error('======',err),this.setState({newContact: {err: 'Contact not exist'}}))
+}
+
+
+
     render() {
-        // console.log('----------', this.state.searchName);
+        console.log('----------', this.state.newContact);
         return(
             <div id='talk-container'>
             <div id='talk-menu' className={this.state.active}>
@@ -90,23 +104,24 @@ add(){
                                                                               </div>:''}
 
                 {this.state.search==='searchBar'?<div id={this.state.search}>
-                                                    <input type='text' name='search' placeholder='Search by name' required onChange={el=>this.setState({searchName:el.target.value.toLowerCase()})}></input>
+                                                    <input type='text' name='search' placeholder='Search by name' required onChange={el=>this.setState({searchName:el.target.value.toLowerCase()})} />
                                                 </div>:''}
 
                 {this.state.add==='addBar'?<div id={this.state.add}>
-                                                <input type='text' name='add' placeholder='Add new contact by typing Email address' required onChange={el=>this.setState({addEmail:el.target.value.toLowerCase()})}></input>
+                                                <form id='addForm' onSubmit={this.searchNewContact}><input type='email' name='email' placeholder='Add new contact by typing Email address' required />
+                                                      <button type='Search'>Search</button>
+                                                </form>
                                                 
-                                                {/* {this.props.users.map(user=>{
-                                                    {user.email===this.state.addEmail?<div id='newContact'>{user.name}</div>:''}
-                                                })} */}
-                                                
-                                                {/* <div id='newContact'>
-                                                    <span style={{backgroundColor:'rgb(255,204,51)'}}></span>
-                                                    <span>N</span>
-                                                    <span>Nick Chen</span>
-                                                    <span>chenyahua2012@hotmail.com</span>
+                                                {this.state.newContact.name?
+                                                    <div id='newContact'>
+                                                    <span style={{backgroundColor:`${this.state.newContact.color}`}}></span>
+                                                    <span>{this.state.newContact.name[0].toUpperCase()}</span>
+                                                    <span>{this.state.newContact.name}</span>
+                                                    <span>{this.state.newContact.email}</span>
                                                     <span><img src='./img/plus.png' width='18px'/></span>
-                                                </div> */}
+                                                </div>:''}
+                                                {this.state.newContact.err?<div id='newContact'><p>{this.state.newContact.err}</p></div>:''}
+
                                            </div>:''}
             
                 <div id='sidebar' className={ this.state.active }>
@@ -124,9 +139,8 @@ add(){
 
                    <div id='contactList'>
 
-                    { this.props.users.map(user=>{
-                        if(user.id===this.props.loggedUser.id){
-                            return user.contacts.sort((a,b)=>{
+                    
+                    { this.props.loggedUser.contacts&&this.props.loggedUser.contacts.sort((a,b)=>{
                                 return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
                             }).filter(el=>el.name.toLowerCase().includes(this.state.searchName))
                             .map(c=>{
@@ -148,8 +162,7 @@ add(){
                                     </div>
                                 )
                             })
-                        }
-                    }) }
+                    }
                     
                    </div>
 
@@ -163,6 +176,6 @@ add(){
     }
 }
 
-const mapState =(state)=>({loggedUser:state.currentUser,users:state.users})
+const mapState =(state)=>({loggedUser:state.currentUser})
 
 export default connect(mapState)(Sidebar);

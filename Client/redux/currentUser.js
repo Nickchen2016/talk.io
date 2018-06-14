@@ -23,7 +23,7 @@ export const login = (credentials) => dispatch => {
 
   export const fetchCurrentUser = ()=> dispatch=> {
     axios.get('/api/me')
-      .then(res => dispatch(setCurrentUser(res.data)));
+      .then(res=> dispatch(setCurrentUser(res.data)))
   }
 
   export const logout = ()=> dispatch =>{

@@ -382,6 +382,10 @@ var _Talkpage = __webpack_require__(/*! ./Talkpage */ "./Client/components/Talkp
 
 var _Talkpage2 = _interopRequireDefault(_Talkpage);
 
+var _axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+
+var _axios2 = _interopRequireDefault(_axios);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -408,11 +412,12 @@ var Sidebar = function (_Component) {
             id: '',
             statusBar: '',
             searchName: '',
-            addEmail: '',
+            newContact: {},
             currentStatus: 'rgb(102,255,153)'
         };
         _this.search = _this.search.bind(_this);
         _this.add = _this.add.bind(_this);
+        _this.searchNewContact = _this.searchNewContact.bind(_this);
         _this.showStatusBar = _this.showStatusBar.bind(_this);
         _this.onClick = _this.onCLick.bind(_this);
         _this.mouseOver = _this.mouseOver.bind(_this);
@@ -421,6 +426,10 @@ var Sidebar = function (_Component) {
         _this.undo = _this.undo.bind(_this);
         return _this;
     }
+
+    // componentDidMount(){
+    //     axios.put('/api/users', {email: `${this.state.addEmail}`}).then(res=>{console.log('=========',res.data)})
+    // }
 
     _createClass(Sidebar, [{
         key: 'showStatusBar',
@@ -475,11 +484,24 @@ var Sidebar = function (_Component) {
             this.state.add === '' ? this.setState({ add: 'addBar', search: '', statusBar: '' }) : this.setState({ add: '', search: '', statusBar: '' });
         }
     }, {
-        key: 'render',
-        value: function render() {
+        key: 'searchNewContact',
+        value: function searchNewContact(el) {
             var _this2 = this;
 
-            // console.log('----------', this.state.searchName);
+            el.preventDefault();
+
+            _axios2.default.put('api/users', { email: el.target.email.value }).then(function (res) {
+                return _this2.setState({ newContact: res.data });
+            }).catch(function (err) {
+                return console.error('======', err);
+            }, this.setState({ newContact: { err: 'Contact not exist' } }));
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _this3 = this;
+
+            console.log('----------', this.state.newContact);
             return _react2.default.createElement(
                 'div',
                 { id: 'talk-container' },
@@ -506,7 +528,7 @@ var Sidebar = function (_Component) {
                             _react2.default.createElement(
                                 'span',
                                 { className: 'choiceOfStatus', onClick: function onClick() {
-                                        return _this2.setState({ currentStatus: 'rgb(102,255,153)' });
+                                        return _this3.setState({ currentStatus: 'rgb(102,255,153)' });
                                     } },
                                 _react2.default.createElement('span', { className: 'status2', style: { backgroundColor: 'rgb(102,255,153)' } }),
                                 _react2.default.createElement(
@@ -518,7 +540,7 @@ var Sidebar = function (_Component) {
                             _react2.default.createElement(
                                 'span',
                                 { className: 'choiceOfStatus', onClick: function onClick() {
-                                        return _this2.setState({ currentStatus: 'rgb(239,65,54)' });
+                                        return _this3.setState({ currentStatus: 'rgb(239,65,54)' });
                                     } },
                                 _react2.default.createElement('span', { className: 'status2', style: { backgroundColor: 'rgb(239,65,54)' } }),
                                 _react2.default.createElement(
@@ -530,7 +552,7 @@ var Sidebar = function (_Component) {
                             _react2.default.createElement(
                                 'span',
                                 { className: 'choiceOfStatus', onClick: function onClick() {
-                                        return _this2.setState({ currentStatus: 'rgb(188,190,192)' });
+                                        return _this3.setState({ currentStatus: 'rgb(188,190,192)' });
                                     } },
                                 _react2.default.createElement('span', { className: 'status2', style: { backgroundColor: 'rgb(188,190,192)' } }),
                                 _react2.default.createElement(
@@ -545,15 +567,56 @@ var Sidebar = function (_Component) {
                         'div',
                         { id: this.state.search },
                         _react2.default.createElement('input', { type: 'text', name: 'search', placeholder: 'Search by name', required: true, onChange: function onChange(el) {
-                                return _this2.setState({ searchName: el.target.value.toLowerCase() });
+                                return _this3.setState({ searchName: el.target.value.toLowerCase() });
                             } })
                     ) : '',
                     this.state.add === 'addBar' ? _react2.default.createElement(
                         'div',
                         { id: this.state.add },
-                        _react2.default.createElement('input', { type: 'text', name: 'add', placeholder: 'Add new contact by typing Email address', required: true, onChange: function onChange(el) {
-                                return _this2.setState({ addEmail: el.target.value.toLowerCase() });
-                            } })
+                        _react2.default.createElement(
+                            'form',
+                            { id: 'addForm', onSubmit: this.searchNewContact },
+                            _react2.default.createElement('input', { type: 'email', name: 'email', placeholder: 'Add new contact by typing Email address', required: true }),
+                            _react2.default.createElement(
+                                'button',
+                                { type: 'Search' },
+                                'Search'
+                            )
+                        ),
+                        this.state.newContact.name ? _react2.default.createElement(
+                            'div',
+                            { id: 'newContact' },
+                            _react2.default.createElement('span', { style: { backgroundColor: '' + this.state.newContact.color } }),
+                            _react2.default.createElement(
+                                'span',
+                                null,
+                                this.state.newContact.name[0].toUpperCase()
+                            ),
+                            _react2.default.createElement(
+                                'span',
+                                null,
+                                this.state.newContact.name
+                            ),
+                            _react2.default.createElement(
+                                'span',
+                                null,
+                                this.state.newContact.email
+                            ),
+                            _react2.default.createElement(
+                                'span',
+                                null,
+                                _react2.default.createElement('img', { src: './img/plus.png', width: '18px' })
+                            )
+                        ) : '',
+                        this.state.newContact.err ? _react2.default.createElement(
+                            'div',
+                            { id: 'newContact' },
+                            _react2.default.createElement(
+                                'p',
+                                null,
+                                this.state.newContact.err
+                            )
+                        ) : ''
                     ) : '',
                     _react2.default.createElement(
                         'div',
@@ -587,59 +650,55 @@ var Sidebar = function (_Component) {
                         _react2.default.createElement(
                             'div',
                             { id: 'contactList' },
-                            this.props.users.map(function (user) {
-                                if (user.id === _this2.props.loggedUser.id) {
-                                    return user.contacts.sort(function (a, b) {
-                                        return a.name > b.name ? 1 : b.name > a.name ? -1 : 0;
-                                    }).filter(function (el) {
-                                        return el.name.toLowerCase().includes(_this2.state.searchName);
-                                    }).map(function (c) {
-                                        return _react2.default.createElement(
+                            this.props.loggedUser.contacts && this.props.loggedUser.contacts.sort(function (a, b) {
+                                return a.name > b.name ? 1 : b.name > a.name ? -1 : 0;
+                            }).filter(function (el) {
+                                return el.name.toLowerCase().includes(_this3.state.searchName);
+                            }).map(function (c) {
+                                return _react2.default.createElement(
+                                    'div',
+                                    { className: 'individualContact', key: c.id },
+                                    _this3.state.id === c.id && _this3.state.delete === 'delete' ? _react2.default.createElement(
+                                        'div',
+                                        { className: _this3.state.delete },
+                                        _react2.default.createElement(
+                                            'span',
+                                            { className: 'confirmText' },
+                                            'Are you sure to',
+                                            _react2.default.createElement('br', null),
+                                            'delete?'
+                                        ),
+                                        _react2.default.createElement(
                                             'div',
-                                            { className: 'individualContact', key: c.id },
-                                            _this2.state.id === c.id && _this2.state.delete === 'delete' ? _react2.default.createElement(
-                                                'div',
-                                                { className: _this2.state.delete },
-                                                _react2.default.createElement(
-                                                    'span',
-                                                    { className: 'confirmText' },
-                                                    'Are you sure to',
-                                                    _react2.default.createElement('br', null),
-                                                    'delete?'
-                                                ),
-                                                _react2.default.createElement(
-                                                    'div',
-                                                    { className: 'confirmButton' },
-                                                    _react2.default.createElement(
-                                                        'span',
-                                                        { onClick: _this2.undo },
-                                                        _react2.default.createElement('img', { src: './img/no.png', width: '28px' })
-                                                    ),
-                                                    _react2.default.createElement(
-                                                        'span',
-                                                        null,
-                                                        _react2.default.createElement('img', { src: './img/yes.png', width: '28px' })
-                                                    )
-                                                )
-                                            ) : '',
-                                            _react2.default.createElement('span', { className: 'close', onClick: function onClick() {
-                                                    _this2.setState({ id: c.id });_this2.individualDelete();
-                                                } }),
-                                            _react2.default.createElement('span', { className: 'individualProfile', style: { backgroundColor: '' + c.color } }),
+                                            { className: 'confirmButton' },
                                             _react2.default.createElement(
                                                 'span',
-                                                { className: 'individualCapital' },
-                                                c.name[0].toUpperCase()
+                                                { onClick: _this3.undo },
+                                                _react2.default.createElement('img', { src: './img/no.png', width: '28px' })
                                             ),
-                                            _react2.default.createElement('span', { className: 'individualStatus', style: { backgroundColor: 'rgb(102,255,153)' } }),
                                             _react2.default.createElement(
                                                 'span',
-                                                { className: 'individualName' },
-                                                c.name
+                                                null,
+                                                _react2.default.createElement('img', { src: './img/yes.png', width: '28px' })
                                             )
-                                        );
-                                    });
-                                }
+                                        )
+                                    ) : '',
+                                    _react2.default.createElement('span', { className: 'close', onClick: function onClick() {
+                                            _this3.setState({ id: c.id });_this3.individualDelete();
+                                        } }),
+                                    _react2.default.createElement('span', { className: 'individualProfile', style: { backgroundColor: '' + c.color } }),
+                                    _react2.default.createElement(
+                                        'span',
+                                        { className: 'individualCapital' },
+                                        c.name[0].toUpperCase()
+                                    ),
+                                    _react2.default.createElement('span', { className: 'individualStatus', style: { backgroundColor: 'rgb(102,255,153)' } }),
+                                    _react2.default.createElement(
+                                        'span',
+                                        { className: 'individualName' },
+                                        c.name
+                                    )
+                                );
                             })
                         )
                     )
@@ -653,7 +712,7 @@ var Sidebar = function (_Component) {
 }(_react.Component);
 
 var mapState = function mapState(state) {
-    return { loggedUser: state.currentUser, users: state.users };
+    return { loggedUser: state.currentUser };
 };
 
 exports.default = (0, _reactRedux.connect)(mapState)(Sidebar);
