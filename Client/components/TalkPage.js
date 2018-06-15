@@ -48,20 +48,25 @@ class Talkpage extends Component{
         const dragHandlers = {onStart: this.onStart, onStop: this.onStop};
         return(
             <div id='camera' className={this.props.active}>
-                <Webcam
+                {/* <Webcam
                     className='webcam'
                     ref={this.setRef}
                     audio={this.state.audio} 
                     screenshotFormat="image/jpeg" 
-                />
+                /> */}
 
-                <Draggable {...dragHandlers}>
+                <Draggable bounds="parent" {...dragHandlers}>
                     <div className="box">
                         <div id='contactToChat'>
                             <span style={{backgroundColor:'black'}}>
                                 <span id='newCap'>N</span>
                             </span>
                             <span>Nick Chen</span>
+                        </div>
+                        <div id='loadingDots'>
+                            <span></span>
+                            <span></span>
+                            <span></span>
                         </div>
                     </div>
                 </Draggable>
@@ -81,6 +86,6 @@ class Talkpage extends Component{
     }
 }
 
-const mapState =(state)=>({loggedUser:state.currentUser,users:state.users})
+const mapState =(state)=>({loggedUser:state.currentUser})
 
 export default connect(mapState)(Talkpage);

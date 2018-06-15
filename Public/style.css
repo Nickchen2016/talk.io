@@ -641,16 +641,6 @@ a {
     width: 50px;
 }
 
-/* #active {
-    background-color: black;
-    position: fixed;
-    z-index: 0;
-    height: 100%; width: 100%;
-    top: 0; right: 0; bottom: 0; left: 0;
-    background-color: rgba(0,0,0,0.5);
-    transition: background-color 1s;
-} */
-
 #screenshot {
     position: absolute;
     display: flex;
@@ -683,7 +673,6 @@ a {
     display: flex;
     width: 300px; height: 40px;
     font-size: 15px;
-    /* background-color: #66FF99; */
     color: white
   }
 
@@ -697,6 +686,41 @@ a {
   #contactToChat > span:nth-child(2) {
     margin: 4% 0 0 11px;
     width: 90px; height: 40%
+  }
+
+  #loadingDots {
+      margin: 55px auto 0 auto;
+      width:85px; height: 30px;
+      display: flex;
+      align-content: center; 
+      /* background-color:#66FF99; */
+  }
+
+  #loadingDots > span {
+    display: inline-block;
+    font-size: 0;
+    margin: 8px;
+    height: 12px; width: 12px;
+    border-radius: 50%;
+    background-color: white;
+    animation: loading-dots 0.6s alternate infinite;
+  }
+  
+  #loadingDots > span:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+
+  #loadingDots > span:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+  
+@keyframes loading-dots {
+    0% {
+      -webkit-transform: scale(0,0)
+    }
+    100% {
+      -webkit-transform: scale(1,1)
+    }
   }
 
 
