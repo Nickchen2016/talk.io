@@ -11,7 +11,7 @@ class Talkpage extends Component{
             audio: true,
             screenshot:'',
             img:'',
-            activeDrags:0
+            activeDrags: 0
         }
         this.audio= this.audio.bind(this);
         this.removePhoto= this.removePhoto.bind(this);
@@ -48,15 +48,22 @@ class Talkpage extends Component{
         const dragHandlers = {onStart: this.onStart, onStop: this.onStop};
         return(
             <div id='camera' className={this.props.active}>
-                 {/* <Webcam
+                <Webcam
                     className='webcam'
                     ref={this.setRef}
                     audio={this.state.audio} 
                     screenshotFormat="image/jpeg" 
-                /> */}
+                />
 
                 <Draggable {...dragHandlers}>
-                    <div className="box">I can be dragged anywhere</div>
+                    <div className="box">
+                        <div id='contactToChat'>
+                            <span style={{backgroundColor:'black'}}>
+                                <span id='newCap'>N</span>
+                            </span>
+                            <span>Nick Chen</span>
+                        </div>
+                    </div>
                 </Draggable>
 
                 {this.state.screenshot==='screenshot'?

@@ -1022,13 +1022,36 @@ var Talkpage = function (_Component) {
             return _react2.default.createElement(
                 'div',
                 { id: 'camera', className: this.props.active },
+                _react2.default.createElement(_reactWebcam2.default, {
+                    className: 'webcam',
+                    ref: this.setRef,
+                    audio: this.state.audio,
+                    screenshotFormat: 'image/jpeg'
+                }),
                 _react2.default.createElement(
                     _reactDraggable2.default,
                     dragHandlers,
                     _react2.default.createElement(
                         'div',
                         { className: 'box' },
-                        'I can be dragged anywhere'
+                        _react2.default.createElement(
+                            'div',
+                            { id: 'contactToChat' },
+                            _react2.default.createElement(
+                                'span',
+                                { style: { backgroundColor: 'black' } },
+                                _react2.default.createElement(
+                                    'span',
+                                    { id: 'newCap' },
+                                    'N'
+                                )
+                            ),
+                            _react2.default.createElement(
+                                'span',
+                                null,
+                                'Nick Chen'
+                            )
+                        )
                     )
                 ),
                 this.state.screenshot === 'screenshot' ? _react2.default.createElement(

@@ -18,6 +18,7 @@
     height: 100%; width: 175px;
     top: 0; right: 0; bottom: 0; left: 0;
     align-content: center;
+    /* background-color: #00CC99 */
 }
 
 .item1, .item3 {
@@ -379,7 +380,6 @@ a {
     margin-top: 40%;
     color: #BCBEC0;
     font-size: 15px;
-    /* font-family: sans-serif; */
 }
 
 #pointer {
@@ -411,8 +411,7 @@ a {
     margin-top: 40%;
     margin-left: 20px;
     border-radius: 50%;
-    box-shadow: 0 0 28px 8px rgba(0,0,0,0.1);
-    /* cursor: pointer */
+    box-shadow: 0 0 28px 8px rgba(0,0,0,0.1)
 }
 
 #words {
@@ -421,7 +420,6 @@ a {
     margin-left: 55px;
     white-space: nowrap;
     color: #D1D3D4;
-    /* font-family: sans-serif; */
     opacity: 0;
     transition: opacity 1s ease-in-out;
 }
@@ -440,7 +438,6 @@ a {
 
 #capital {
     color: white;
-    /* font-family: sans-serif; */
     font-size: 20px;
     margin-left: -35px;
     margin-top: 17px
@@ -449,7 +446,6 @@ a {
 #username {
     width:55%;
     color: white;
-    /* font-family: sans-serif; */
     font-size: 18px;
     margin-top: 17px;
     margin-left: 20px
@@ -528,6 +524,8 @@ a {
 }
 
 .webcam {
+    position: absolute;
+    z-index: -2;
     min-width:100%; min-height:100%; 
     width:auto; height:auto;
 }
@@ -643,7 +641,7 @@ a {
     width: 50px;
 }
 
-#active {
+/* #active {
     background-color: black;
     position: fixed;
     z-index: 0;
@@ -651,7 +649,7 @@ a {
     top: 0; right: 0; bottom: 0; left: 0;
     background-color: rgba(0,0,0,0.5);
     transition: background-color 1s;
-}
+} */
 
 #screenshot {
     position: absolute;
@@ -666,6 +664,8 @@ a {
 }
 
 .box {
+    position: absolute;
+    z-index:0;
     background: #D1D3D4;
     border-radius: 6px;
     width: 320px;
@@ -678,6 +678,28 @@ a {
   .react-draggable, .cursor {
     cursor: move;
   }
+
+  #contactToChat {
+    display: flex;
+    width: 300px; height: 40px;
+    font-size: 15px;
+    /* background-color: #66FF99; */
+    color: white
+  }
+
+  #contactToChat > span:first-child {
+    width: 35px; height: 35px;
+    margin: 1% 0 0 4px;
+    border-radius: 50%;
+    text-align: center
+  }
+
+  #contactToChat > span:nth-child(2) {
+    margin: 4% 0 0 11px;
+    width: 90px; height: 40%
+  }
+
+
 
 @keyframes dotFlow {
     0%, 100% {
