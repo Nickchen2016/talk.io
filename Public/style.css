@@ -1,9 +1,19 @@
+@font-face {
+    font-family: 'Avenir Bold';
+    src: url('./fonts/AvenirBold.ttf')
+}
+
+@font-face {
+    font-family: 'Avenir DemiBold';
+    src: url('./fonts/AvenirDemiBold.ttf')
+}
+
 .container {
     position: fixed;
     top: 0; right: 0; bottom: 0; left: 0;
     align-content: center;
     background-color: #BCBEC0;
-    font-family: sans-serif
+    font-family: 'Avenir DemiBold'
 }
 
 #talk-container {
@@ -18,7 +28,6 @@
     height: 100%; width: 175px;
     top: 0; right: 0; bottom: 0; left: 0;
     align-content: center;
-    /* background-color: #00CC99 */
 }
 
 .item1, .item3 {
@@ -357,11 +366,11 @@ a {
 .individualCapital {
     position: absolute;
     color: white;
-    font-size: 23px;
-    /* font-family: sans-serif; */
+    font-family: 'Avenir Bold';
+    font-size: 22px;
     text-align: center;
     width: 100%;
-    margin-top: 15.5%
+    margin-top: 15%
 }
 
 .individualStatus {
@@ -430,32 +439,34 @@ a {
 }
 
 #profile {
-    margin: 10px;
+    margin: 10px 6px 10px 8px;
     border-radius: 50%;
     border: 1px solid rgb(0,0,255);
+    text-align: center;
     height:33px; width:33px;
 }
 
 #capital {
+    position: relative;
+    font-family: 'Avenir Bold';
     color: white;
     font-size: 20px;
-    margin-left: -35px;
-    margin-top: 17px
+    top: 4px
 }
 
 #username {
-    width:55%;
+    width:56%; height: 25px;
     color: white;
     font-size: 18px;
-    margin-top: 17px;
-    margin-left: 20px
+    margin-top: 17px
 }
 
 .status {
     border-radius: 50%;
     height: 12px;
     width: 12px;
-    margin-top: 23px
+    margin-top: 23px;
+    margin-left: 3%;
 }
 
 .status:hover{
@@ -570,8 +581,9 @@ a {
 
 #newCap {
     position: relative;
+    font-family: 'Avenir Bold';
     font-size: 20px; color: white;
-    top: 20%
+    top: 15%
 }
 
 #newContact > span:nth-child(2) {

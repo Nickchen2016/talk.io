@@ -582,11 +582,14 @@ var Sidebar = function (_Component) {
                         _react2.default.createElement(
                             'div',
                             { id: 'me' },
-                            _react2.default.createElement('span', { id: 'profile', style: { backgroundColor: 'rgb(255,204,51)' } }),
                             _react2.default.createElement(
                                 'span',
-                                { id: 'capital', key: this.props.loggedUser.id },
-                                this.props.loggedUser.name && this.props.loggedUser.name[0].toUpperCase()
+                                { id: 'profile', style: { backgroundColor: 'rgb(255,204,51)' } },
+                                _react2.default.createElement(
+                                    'span',
+                                    { id: 'capital', key: this.props.loggedUser.id },
+                                    this.props.loggedUser.name && this.props.loggedUser.name[0].toUpperCase()
+                                )
                             ),
                             _react2.default.createElement(
                                 'span',
@@ -1022,12 +1025,6 @@ var Talkpage = function (_Component) {
             return _react2.default.createElement(
                 'div',
                 { id: 'camera', className: this.props.active },
-                _react2.default.createElement(_reactWebcam2.default, {
-                    className: 'webcam',
-                    ref: this.setRef,
-                    audio: this.state.audio,
-                    screenshotFormat: 'image/jpeg'
-                }),
                 _react2.default.createElement(
                     _reactDraggable2.default,
                     { bounds: 'parent' },
