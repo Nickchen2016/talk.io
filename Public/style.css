@@ -535,7 +535,7 @@ a {
 #searchBar, #addBar{
     position: absolute;
     width: 420px;
-    margin: 220px 40%;
+    margin: 220px 36%;
 }
 
 #searchBar input {
@@ -664,6 +664,20 @@ a {
     height:180px;
     border-radius: 6px;
 }
+
+.box {
+    background: #D1D3D4;
+    border-radius: 6px;
+    width: 320px;
+    height: 200px;
+    margin: 20px;
+    padding: 10px;
+    float: right;
+  }
+
+  .react-draggable, .cursor {
+    cursor: move;
+  }
 
 @keyframes dotFlow {
     0%, 100% {
