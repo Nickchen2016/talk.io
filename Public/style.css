@@ -514,7 +514,6 @@ a {
     position: fixed;
     background-color: #BCBEC0;
     top: 0; right: 0; bottom: 0; left: 0;
-    align-content: center;
     transition: filter .4s;
 }
 
@@ -619,7 +618,7 @@ a {
     position: absolute;
     align-content: center;
     bottom: 12%;
-    margin-left: 25%; margin-right: 30%;
+    margin-left: 30%; margin-right: 30%;
     height: 50px; width: 600px;
 }
 
@@ -653,9 +652,16 @@ a {
     border-radius: 6px;
 }
 
+#active {		
+    background-color: black;		
+    position: fixed;		
+    z-index: 0;		
+    height: 100%; width: 100%;		
+    top: 0; right: 0; bottom: 0; left: 0;		
+    background-color: rgba(0,0,0,0.5);
+}
+
 .box {
-    position: absolute;
-    z-index:0;
     background: #D1D3D4;
     border-radius: 6px;
     width: 320px;

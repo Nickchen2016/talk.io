@@ -938,8 +938,6 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
@@ -1024,9 +1022,15 @@ var Talkpage = function (_Component) {
             return _react2.default.createElement(
                 'div',
                 { id: 'camera', className: this.props.active },
+                _react2.default.createElement(_reactWebcam2.default, {
+                    className: 'webcam',
+                    ref: this.setRef,
+                    audio: this.state.audio,
+                    screenshotFormat: 'image/jpeg'
+                }),
                 _react2.default.createElement(
                     _reactDraggable2.default,
-                    _extends({ bounds: 'parent' }, dragHandlers),
+                    { bounds: 'parent' },
                     _react2.default.createElement(
                         'div',
                         { className: 'box' },
