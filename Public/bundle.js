@@ -1068,12 +1068,6 @@ var Talkpage = function (_Component) {
             return _react2.default.createElement(
                 'div',
                 { id: 'camera', className: this.props.active },
-                _react2.default.createElement(_reactWebcam2.default, {
-                    className: 'webcam',
-                    ref: this.setRef,
-                    audio: this.state.audio,
-                    screenshotFormat: 'image/jpeg'
-                }),
                 _react2.default.createElement(
                     _reactDraggable2.default,
                     { bounds: 'parent' },
@@ -1118,17 +1112,17 @@ var Talkpage = function (_Component) {
                     { id: 'controlButtons' },
                     _react2.default.createElement(
                         'span',
-                        { onClick: this.audio },
+                        { onClick: this.audio, value: 'Mute' },
                         _react2.default.createElement('img', { src: './img/mute.png' })
                     ),
                     _react2.default.createElement(
                         'span',
-                        { onClick: this.capture },
+                        { onClick: this.capture, value: 'Screenshot' },
                         _react2.default.createElement('img', { src: './img/screenshoot.png' })
                     ),
                     _react2.default.createElement(
                         'span',
-                        null,
+                        { value: 'End' },
                         _react2.default.createElement('img', { src: './img/stop.png' })
                     )
                 )

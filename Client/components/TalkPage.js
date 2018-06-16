@@ -48,12 +48,12 @@ class Talkpage extends Component{
         const dragHandlers = {onStart: this.onStart, onStop: this.onStop};
         return(
             <div id='camera' className={this.props.active}>
-                <Webcam
+                {/* <Webcam
                     className='webcam'
                     ref={this.setRef}
                     audio={this.state.audio} 
                     screenshotFormat="image/jpeg" 
-                />
+                /> */}
 
                 <Draggable bounds="parent" >
                     <div className="box">
@@ -77,9 +77,9 @@ class Talkpage extends Component{
                                 <span className='close' onClick={this.removePhoto}></span>
                             </div>:''}
                 <div id='controlButtons'>
-                    <span onClick={this.audio}><img src='./img/mute.png'/></span>
-                    <span onClick={this.capture}><img src='./img/screenshoot.png'/></span>
-                    <span><img src='./img/stop.png'/></span>
+                    <span onClick={this.audio} value='Mute'><img src='./img/mute.png'/></span>
+                    <span onClick={this.capture} value='Screenshot'><img src='./img/screenshoot.png'/></span>
+                    <span  value='End'><img src='./img/stop.png'/></span>
                 </div>
             </div>
         )
