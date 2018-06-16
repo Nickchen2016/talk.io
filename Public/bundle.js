@@ -244,7 +244,7 @@ var Login = function (_Component) {
 }(_react.Component);
 
 var mapState = function mapState(state) {
-    return { message: 'login' };
+    return { message: 'Login' };
 };
 var mapDispatch = function mapDispatch(dispatch) {
     return {
@@ -413,8 +413,10 @@ var Sidebar = function (_Component) {
             statusBar: '',
             searchName: '',
             newContact: {},
+            loggedInfo: 'loggedInfo',
             currentStatus: 'rgb(102,255,153)'
         };
+        _this.loggedInfo = _this.loggedInfo.bind(_this);
         _this.search = _this.search.bind(_this);
         _this.add = _this.add.bind(_this);
         _this.searchNewContact = _this.searchNewContact.bind(_this);
@@ -429,6 +431,11 @@ var Sidebar = function (_Component) {
     }
 
     _createClass(Sidebar, [{
+        key: 'loggedInfo',
+        value: function loggedInfo() {
+            this.setState({ loggedInfo: 'loggedInfo', search: '', add: '' });
+        }
+    }, {
         key: 'showStatusBar',
         value: function showStatusBar() {
             if (this.state.statusBar === '') {
@@ -473,12 +480,12 @@ var Sidebar = function (_Component) {
     }, {
         key: 'search',
         value: function search() {
-            this.state.search === '' ? this.setState({ search: 'searchBar', add: '', statusBar: '' }) : this.setState({ search: '', add: '', statusBar: '' });
+            this.state.search === '' ? this.setState({ search: 'searchBar', add: '', statusBar: '', loggedInfo: '' }) : this.setState({ search: '', add: '', statusBar: '', loggedInfo: '' });
         }
     }, {
         key: 'add',
         value: function add() {
-            this.state.add === '' ? this.setState({ add: 'addBar', search: '', statusBar: '' }) : this.setState({ add: '', search: '', statusBar: '' });
+            this.state.add === '' ? this.setState({ add: 'addBar', search: '', statusBar: '', loggedInfo: '' }) : this.setState({ add: '', search: '', statusBar: '', loggedInfo: '' });
         }
     }, {
         key: 'searchNewContact',
@@ -581,7 +588,7 @@ var Sidebar = function (_Component) {
                         ),
                         _react2.default.createElement(
                             'div',
-                            { id: 'me' },
+                            { id: 'me', onClick: this.loggedInfo },
                             _react2.default.createElement(
                                 'span',
                                 { id: 'profile', style: { backgroundColor: 'rgb(255,204,51)' } },
@@ -646,9 +653,45 @@ var Sidebar = function (_Component) {
                         )
                     )
                 ),
-                _react2.default.createElement(
+                this.state.active === 'active' ? _react2.default.createElement(
                     'div',
                     { id: this.state.active },
+                    this.state.loggedInfo === 'loggedInfo' ? _react2.default.createElement(
+                        'div',
+                        { id: this.state.loggedInfo },
+                        _react2.default.createElement(
+                            'div',
+                            { id: 'loggedDetail' },
+                            _react2.default.createElement(
+                                'div',
+                                { id: 'profileDetail', style: { backgroundColor: 'rgb(196,154,108)' } },
+                                _react2.default.createElement(
+                                    'span',
+                                    null,
+                                    'N'
+                                )
+                            ),
+                            _react2.default.createElement(
+                                'div',
+                                { id: 'infoDetail' },
+                                _react2.default.createElement(
+                                    'span',
+                                    { value: 'Nick Chen' },
+                                    'Name'
+                                ),
+                                _react2.default.createElement(
+                                    'span',
+                                    { value: 'chenyahua2012@hotmail.com' },
+                                    'Email'
+                                )
+                            )
+                        ),
+                        _react2.default.createElement(
+                            'button',
+                            { id: 'signoutButton' },
+                            'Sign out'
+                        )
+                    ) : '',
                     this.state.search === 'searchBar' ? _react2.default.createElement(
                         'div',
                         { id: this.state.search },
@@ -712,7 +755,7 @@ var Sidebar = function (_Component) {
                             )
                         ) : ''
                     ) : ''
-                ),
+                ) : '',
                 _react2.default.createElement(_Talkpage2.default, { active: this.state.active })
             );
         }
@@ -1025,6 +1068,12 @@ var Talkpage = function (_Component) {
             return _react2.default.createElement(
                 'div',
                 { id: 'camera', className: this.props.active },
+                _react2.default.createElement(_reactWebcam2.default, {
+                    className: 'webcam',
+                    ref: this.setRef,
+                    audio: this.state.audio,
+                    screenshotFormat: 'image/jpeg'
+                }),
                 _react2.default.createElement(
                     _reactDraggable2.default,
                     { bounds: 'parent' },

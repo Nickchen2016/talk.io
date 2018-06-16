@@ -84,7 +84,7 @@ class Login extends Component {
     }
 }
 
-const mapState = (state)=>({message:'login'});
+const mapState = (state)=>({message:'Login'});
 const mapDispatch = (dispatch)=>({
     login: credentials => dispatch(login(credentials))
 });

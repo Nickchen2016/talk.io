@@ -18,8 +18,10 @@ class Sidebar extends Component{
             statusBar:'',
             searchName:'',
             newContact:{},
+            loggedInfo: 'loggedInfo',
             currentStatus: 'rgb(102,255,153)'
         }
+        this.loggedInfo= this.loggedInfo.bind(this);
         this.search= this.search.bind(this);
         this.add= this.add.bind(this);
         this.searchNewContact= this.searchNewContact.bind(this);
@@ -32,6 +34,9 @@ class Sidebar extends Component{
         // this.addNewContact= this.addNewContact.bind(this);
     }
 
+loggedInfo() {
+    this.setState({loggedInfo:'loggedInfo',search:'',add:''})
+}    
 
 showStatusBar(){
     if(this.state.statusBar===''){
@@ -66,11 +71,11 @@ undo(){
 }
 
 search(){
-    this.state.search===''?this.setState({search:'searchBar',add:'',statusBar:''}):this.setState({search:'',add:'',statusBar:''})
+    this.state.search===''?this.setState({search:'searchBar',add:'',statusBar:'',loggedInfo:''}):this.setState({search:'',add:'',statusBar:'',loggedInfo:''})
 }
 
 add(){
-    this.state.add===''?this.setState({add:'addBar',search:'',statusBar:''}):this.setState({add:'',search:'',statusBar:''})
+    this.state.add===''?this.setState({add:'addBar',search:'',statusBar:'',loggedInfo:''}):this.setState({add:'',search:'',statusBar:'',loggedInfo:''})
 }
 
 searchNewContact(el){
@@ -112,11 +117,10 @@ searchNewContact(el){
                    
                    <div id='add' onClick={this.add}><img src='./img/plus.png' className='sign'/></div> 
                    
-                   <div id='me'>
+                   <div id='me' onClick={this.loggedInfo}>
                         <span id='profile' style={{backgroundColor:'rgb(255,204,51)'}}>
                             <span id='capital' key={this.props.loggedUser.id}>{this.props.loggedUser.name&&this.props.loggedUser.name[0].toUpperCase()}</span>
                         </span>
-                        {/* <span id='capital' key={this.props.loggedUser.id}>{this.props.loggedUser.name&&this.props.loggedUser.name[0].toUpperCase()}</span> */}
                         <span id='username'>{ this.props.loggedUser.name&&this.props.loggedUser.name }</span>
                         <span className='status' onClick={this.showStatusBar} style={{backgroundColor:`${this.state.currentStatus}`}}></span>
                    </div> 
@@ -153,7 +157,19 @@ searchNewContact(el){
 
             </div>
 
-            <div id={this.state.active}>
+            {this.state.active==='active'?<div id={this.state.active}>
+
+                {this.state.loggedInfo==='loggedInfo'?<div id={this.state.loggedInfo}>
+                    <div id='loggedDetail'>
+                        <div id='profileDetail' style={{backgroundColor:'rgb(196,154,108)'}}><span>N</span></div>
+                        <div id='infoDetail'>
+                            <span value='Nick Chen'>Name</span>
+                            <span value='chenyahua2012@hotmail.com'>Email</span>
+                        </div>
+                    </div>
+                    <button id='signoutButton'>Sign out</button>
+                </div>:''}
+
                 {this.state.search==='searchBar'?<div id={this.state.search}>
                                                     <input type='text' name='search' placeholder='Search by name' required onChange={el=>this.setState({searchName:el.target.value.toLowerCase()})} />
                                                  </div>:''}
@@ -176,7 +192,7 @@ searchNewContact(el){
                                                 {this.state.newContact.err?<div id='newContact'><p>{this.state.newContact.err}</p></div>:''}
 
                                            </div>:''}
-            </div>
+            </div>:''}
 
             <Talkpage active={this.state.active}/>
             </div>

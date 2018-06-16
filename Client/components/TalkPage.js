@@ -48,12 +48,12 @@ class Talkpage extends Component{
         const dragHandlers = {onStart: this.onStart, onStop: this.onStop};
         return(
             <div id='camera' className={this.props.active}>
-                {/* <Webcam
+                <Webcam
                     className='webcam'
                     ref={this.setRef}
                     audio={this.state.audio} 
                     screenshotFormat="image/jpeg" 
-                /> */}
+                />
 
                 <Draggable bounds="parent" >
                     <div className="box">
