@@ -453,9 +453,9 @@ var Sidebar = function (_Component) {
         key: 'onCLick',
         value: function onCLick() {
             if (this.state.active === '') {
-                this.setState({ active: 'active', statusBar: '', search: '', add: '' });
+                this.setState({ active: 'active', statusBar: '', search: '', add: '', loggedInfo: 'loggedInfo' });
             } else {
-                this.setState({ active: '', statusBar: '', search: '', add: '' });
+                this.setState({ active: '', statusBar: '', search: '', add: '', loggedInfo: 'loggedInfo' });
             }
         }
     }, {
@@ -480,12 +480,12 @@ var Sidebar = function (_Component) {
     }, {
         key: 'search',
         value: function search() {
-            this.state.search === '' ? this.setState({ search: 'searchBar', add: '', statusBar: '', loggedInfo: '' }) : this.setState({ search: '', add: '', statusBar: '', loggedInfo: '' });
+            this.setState({ search: 'searchBar', add: '', statusBar: '', loggedInfo: '' });
         }
     }, {
         key: 'add',
         value: function add() {
-            this.state.add === '' ? this.setState({ add: 'addBar', search: '', statusBar: '', loggedInfo: '' }) : this.setState({ add: '', search: '', statusBar: '', loggedInfo: '' });
+            this.setState({ add: 'addBar', search: '', statusBar: '', loggedInfo: '' });
         }
     }, {
         key: 'searchNewContact',
@@ -594,7 +594,7 @@ var Sidebar = function (_Component) {
                                 { id: 'loggedUserTab', onClick: this.loggedInfo },
                                 _react2.default.createElement(
                                     'span',
-                                    { id: 'profile', style: { backgroundColor: 'rgb(255,204,51)' } },
+                                    { id: 'profile', style: { backgroundColor: '' + this.props.loggedUser.color } },
                                     _react2.default.createElement(
                                         'span',
                                         { id: 'capital', key: this.props.loggedUser.id },
@@ -668,11 +668,11 @@ var Sidebar = function (_Component) {
                             { id: 'loggedDetail' },
                             _react2.default.createElement(
                                 'div',
-                                { id: 'profileDetail', style: { backgroundColor: 'rgb(196,154,108)' } },
+                                { id: 'profileDetail', style: { backgroundColor: '' + (this.props.loggedUser && this.props.loggedUser.color) } },
                                 _react2.default.createElement(
                                     'span',
                                     null,
-                                    'N'
+                                    this.props.loggedUser.name && this.props.loggedUser.name[0].toUpperCase()
                                 )
                             ),
                             _react2.default.createElement(
@@ -680,12 +680,12 @@ var Sidebar = function (_Component) {
                                 { id: 'infoDetail' },
                                 _react2.default.createElement(
                                     'span',
-                                    { value: 'Nick Chen' },
+                                    { value: this.props.loggedUser.name },
                                     'Name'
                                 ),
                                 _react2.default.createElement(
                                     'span',
-                                    { value: 'chenyahua2012@hotmail.com' },
+                                    { value: this.props.loggedUser.email },
                                     'Email'
                                 )
                             )

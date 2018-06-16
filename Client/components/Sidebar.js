@@ -52,9 +52,9 @@ individualDelete() {
 
 onCLick(){
     if(this.state.active===''){
-        this.setState({active:'active', statusBar:'',search:'',add:''})
+        this.setState({active:'active', statusBar:'',search:'',add:'', loggedInfo:'loggedInfo'})
     }else{
-        this.setState({active:'', statusBar:'',search:'',add:''})
+        this.setState({active:'', statusBar:'',search:'',add:'', loggedInfo:'loggedInfo'})
     }
 }
 
@@ -71,11 +71,11 @@ undo(){
 }
 
 search(){
-    this.state.search===''?this.setState({search:'searchBar',add:'',statusBar:'',loggedInfo:''}):this.setState({search:'',add:'',statusBar:'',loggedInfo:''})
+    this.setState({search:'searchBar',add:'',statusBar:'',loggedInfo:''})
 }
 
 add(){
-    this.state.add===''?this.setState({add:'addBar',search:'',statusBar:'',loggedInfo:''}):this.setState({add:'',search:'',statusBar:'',loggedInfo:''})
+    this.setState({add:'addBar',search:'',statusBar:'',loggedInfo:''})
 }
 
 searchNewContact(el){
@@ -119,7 +119,7 @@ searchNewContact(el){
                    
                    <div id='me'>
                     <span id='loggedUserTab' onClick={this.loggedInfo}>
-                        <span id='profile' style={{backgroundColor:'rgb(255,204,51)'}}>
+                        <span id='profile' style={{backgroundColor:`${this.props.loggedUser.color}`}}>
                             <span id='capital' key={this.props.loggedUser.id}>{this.props.loggedUser.name&&this.props.loggedUser.name[0].toUpperCase()}</span>
                         </span>
                         <span id='username'>{ this.props.loggedUser.name&&this.props.loggedUser.name }</span>
@@ -163,10 +163,10 @@ searchNewContact(el){
 
                 {this.state.loggedInfo==='loggedInfo'?<div id={this.state.loggedInfo}>
                     <div id='loggedDetail'>
-                        <div id='profileDetail' style={{backgroundColor:'rgb(196,154,108)'}}><span>N</span></div>
+                        <div id='profileDetail' style={{backgroundColor:`${this.props.loggedUser&&this.props.loggedUser.color}`}}><span>{this.props.loggedUser.name&&this.props.loggedUser.name[0].toUpperCase()}</span></div>
                         <div id='infoDetail'>
-                            <span value='Nick Chen'>Name</span>
-                            <span value='chenyahua2012@hotmail.com'>Email</span>
+                            <span value={this.props.loggedUser.name}>Name</span>
+                            <span value={this.props.loggedUser.email}>Email</span>
                         </div>
                     </div>
                     <button id='signoutButton'>Sign out</button>

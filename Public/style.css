@@ -295,7 +295,7 @@ a {
 .confirmButton {
     position: relative;
     display: flex;
-    top: 18px;
+    top: 12px;
     height: 30px;
 }
 
@@ -414,7 +414,6 @@ a {
 }
 
 #round {
-    /* position: absolute; */
     border: 3px solid white;
     height: 6px;
     width: 6px;
@@ -426,7 +425,11 @@ a {
 
 #words {
     position: absolute;
-    margin-top: -15px;
+    text-align: center;
+    width: 180px; height: 24px;
+    border-radius: 15px;
+    background-color: rgba(0,0,0,0);
+    margin-top: -16px;
     margin-left: 55px;
     white-space: nowrap;
     color: #D1D3D4;
@@ -435,7 +438,8 @@ a {
 }
 
 #words.isActive {
-    opacity: 100;
+    background-color: rgba(0,0,0,0.1);
+    opacity: 1;
     transition: opacity 1s ease-in-out;
 }
 
@@ -534,12 +538,13 @@ a {
     position: fixed;
     background-color: #BCBEC0;
     top: 0; right: 0; bottom: 0; left: 0;
-    transition: filter .4s;
+    filter: blur(0);
+    transition: filter .3s linear;
 }
 
 #camera.active {
-    filter: blur(1.5rem);
-    transition: filter .4s;
+    filter: blur(30px);
+    transition: filter .4s linear;
 }
 
 .webcam {
@@ -639,7 +644,7 @@ a {
     position: absolute;
     align-content: center;
     bottom: 12%;
-    margin-left: 30%; margin-right: 30%;
+    margin-left: 26%; margin-right: 30%;
     height: 50px; width: 600px;
 }
 
@@ -699,7 +704,7 @@ a {
 }
 
 .box {
-    background: #D1D3D4;
+    background: rgba(255,255,255,0.6);
     border-radius: 6px;
     width: 320px;
     height: 200px;
@@ -798,13 +803,13 @@ a {
   #infoDetail > span:nth-child(1)::after {
     content: attr(value);
     white-space: nowrap;
-    margin-left: 21%;
+    margin-left: 46%;
   } 
 
   #infoDetail > span:nth-child(2)::after {
     content: attr(value);
     white-space: nowrap;
-    margin-left: 12%;
+    margin-left: 22%;
   } 
 
   #signoutButton {
@@ -816,7 +821,7 @@ a {
   }
 
   #signoutButton:hover {
-      background-color: rgb(204,0,51);
+      background-color: #BE1E2D;
   }
 
 @keyframes loading-dots {
@@ -827,8 +832,6 @@ a {
       -webkit-transform: scale(1,1)
     }
   }
-
-
 
 @keyframes dotFlow {
     0%, 100% {
