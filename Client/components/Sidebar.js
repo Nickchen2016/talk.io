@@ -35,7 +35,7 @@ class Sidebar extends Component{
     }
 
 loggedInfo() {
-    this.setState({loggedInfo:'loggedInfo',search:'',add:''})
+    this.setState({loggedInfo:'loggedInfo',search:'',add:'', statusBar:''})
 }    
 
 showStatusBar(){
@@ -117,11 +117,13 @@ searchNewContact(el){
                    
                    <div id='add' onClick={this.add}><img src='./img/plus.png' className='sign'/></div> 
                    
-                   <div id='me' onClick={this.loggedInfo}>
+                   <div id='me'>
+                    <span id='loggedUserTab' onClick={this.loggedInfo}>
                         <span id='profile' style={{backgroundColor:'rgb(255,204,51)'}}>
                             <span id='capital' key={this.props.loggedUser.id}>{this.props.loggedUser.name&&this.props.loggedUser.name[0].toUpperCase()}</span>
                         </span>
                         <span id='username'>{ this.props.loggedUser.name&&this.props.loggedUser.name }</span>
+                    </span>    
                         <span className='status' onClick={this.showStatusBar} style={{backgroundColor:`${this.state.currentStatus}`}}></span>
                    </div> 
 

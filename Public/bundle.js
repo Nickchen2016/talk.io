@@ -433,7 +433,7 @@ var Sidebar = function (_Component) {
     _createClass(Sidebar, [{
         key: 'loggedInfo',
         value: function loggedInfo() {
-            this.setState({ loggedInfo: 'loggedInfo', search: '', add: '' });
+            this.setState({ loggedInfo: 'loggedInfo', search: '', add: '', statusBar: '' });
         }
     }, {
         key: 'showStatusBar',
@@ -588,20 +588,24 @@ var Sidebar = function (_Component) {
                         ),
                         _react2.default.createElement(
                             'div',
-                            { id: 'me', onClick: this.loggedInfo },
+                            { id: 'me' },
                             _react2.default.createElement(
                                 'span',
-                                { id: 'profile', style: { backgroundColor: 'rgb(255,204,51)' } },
+                                { id: 'loggedUserTab', onClick: this.loggedInfo },
                                 _react2.default.createElement(
                                     'span',
-                                    { id: 'capital', key: this.props.loggedUser.id },
-                                    this.props.loggedUser.name && this.props.loggedUser.name[0].toUpperCase()
+                                    { id: 'profile', style: { backgroundColor: 'rgb(255,204,51)' } },
+                                    _react2.default.createElement(
+                                        'span',
+                                        { id: 'capital', key: this.props.loggedUser.id },
+                                        this.props.loggedUser.name && this.props.loggedUser.name[0].toUpperCase()
+                                    )
+                                ),
+                                _react2.default.createElement(
+                                    'span',
+                                    { id: 'username' },
+                                    this.props.loggedUser.name && this.props.loggedUser.name
                                 )
-                            ),
-                            _react2.default.createElement(
-                                'span',
-                                { id: 'username' },
-                                this.props.loggedUser.name && this.props.loggedUser.name
                             ),
                             _react2.default.createElement('span', { className: 'status', onClick: this.showStatusBar, style: { backgroundColor: '' + this.state.currentStatus } })
                         ),
@@ -1068,6 +1072,12 @@ var Talkpage = function (_Component) {
             return _react2.default.createElement(
                 'div',
                 { id: 'camera', className: this.props.active },
+                _react2.default.createElement(_reactWebcam2.default, {
+                    className: 'webcam',
+                    ref: this.setRef,
+                    audio: this.state.audio,
+                    screenshotFormat: 'image/jpeg'
+                }),
                 _react2.default.createElement(
                     _reactDraggable2.default,
                     { bounds: 'parent' },

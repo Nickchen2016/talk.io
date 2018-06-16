@@ -223,7 +223,7 @@ a {
 
 #search {
     height:55px;
-    border-bottom: 2.5px solid #BCBEC0;
+    border-bottom: 2px solid #BCBEC0;
     cursor: pointer  
 }
 
@@ -439,8 +439,13 @@ a {
     transition: opacity 1s ease-in-out;
 }
 
+#loggedUserTab {
+    display: flex;
+    height: 55px; width: 160px
+}
+
 #profile {
-    margin: 10px 6px 10px 8px;
+    margin: 10px 4px 10px 8px;
     border-radius: 50%;
     border: 1px solid rgb(0,0,255);
     text-align: center;
@@ -456,18 +461,20 @@ a {
 }
 
 #username {
-    width:56%; height: 25px;
+    width:61%; height: 25px;
     color: white;
-    font-size: 18px;
+    text-align: center;
+    font-size: 17px;
     margin-top: 17px
 }
 
 .status {
+    position: absolute;
     border-radius: 50%;
     height: 12px;
     width: 12px;
     margin-top: 23px;
-    margin-left: 3%;
+    margin-left: 88%;
 }
 
 .status:hover{
@@ -492,7 +499,7 @@ a {
 #statusBar {
     display: flex;
     position: absolute;
-    width:230px; height: 38px;
+    width:235px; height: 38px;
     margin-top: 123px;
     margin-left: 200px;
 }
