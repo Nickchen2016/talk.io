@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Talkpage from './Talkpage';
+import { logout } from '../redux/currentUser'; 
 import axios from 'axios';
 
 
@@ -91,7 +92,7 @@ searchNewContact(el){
 
 
     render() {
-        // console.log('----------', this.state.newContact);
+        // console.log('----------', this.props);
         return(
             <div id='talk-container'>
 
@@ -169,7 +170,7 @@ searchNewContact(el){
                             <span value={this.props.loggedUser.email}>Email</span>
                         </div>
                     </div>
-                    <button id='signoutButton'>Sign out</button>
+                    <button id='signoutButton' onClick={this.props.logout}>Log out</button>
                 </div>:''}
 
                 {this.state.search==='searchBar'?<div id={this.state.search}>
@@ -204,4 +205,10 @@ searchNewContact(el){
 
 const mapState =(state)=>({loggedUser:state.currentUser})
 
-export default connect(mapState)(Sidebar);
+const mapDispatch = (dispatch, ownProps)=>({
+    logout: () => {dispatch(logout());
+    ownProps.history.push('/')
+    } 
+});
+
+export default connect(mapState, mapDispatch)(Sidebar);

@@ -31,4 +31,10 @@ apiRouter.post('/', (req,res,next)=>{
     .catch(next);
 })
 
+apiRouter.delete('/', (req,res,next)=>{
+    req.logout();
+    console.log('I am here')
+    res.sendStatus(204);
+})
+
 module.exports = apiRouter;

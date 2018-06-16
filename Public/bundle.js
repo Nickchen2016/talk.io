@@ -382,6 +382,8 @@ var _Talkpage = __webpack_require__(/*! ./Talkpage */ "./Client/components/Talkp
 
 var _Talkpage2 = _interopRequireDefault(_Talkpage);
 
+var _currentUser = __webpack_require__(/*! ../redux/currentUser */ "./Client/redux/currentUser.js");
+
 var _axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 
 var _axios2 = _interopRequireDefault(_axios);
@@ -511,7 +513,7 @@ var Sidebar = function (_Component) {
         value: function render() {
             var _this3 = this;
 
-            // console.log('----------', this.state.newContact);
+            // console.log('----------', this.props);
             return _react2.default.createElement(
                 'div',
                 { id: 'talk-container' },
@@ -692,8 +694,8 @@ var Sidebar = function (_Component) {
                         ),
                         _react2.default.createElement(
                             'button',
-                            { id: 'signoutButton' },
-                            'Sign out'
+                            { id: 'signoutButton', onClick: this.props.logout },
+                            'Log out'
                         )
                     ) : '',
                     this.state.search === 'searchBar' ? _react2.default.createElement(
@@ -772,7 +774,16 @@ var mapState = function mapState(state) {
     return { loggedUser: state.currentUser };
 };
 
-exports.default = (0, _reactRedux.connect)(mapState)(Sidebar);
+var mapDispatch = function mapDispatch(dispatch, ownProps) {
+    return {
+        logout: function logout() {
+            dispatch((0, _currentUser.logout)());
+            ownProps.history.push('/');
+        }
+    };
+};
+
+exports.default = (0, _reactRedux.connect)(mapState, mapDispatch)(Sidebar);
 
 /***/ }),
 
