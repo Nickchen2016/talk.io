@@ -269,10 +269,35 @@ a {
     margin-bottom: 110%
 }
 
+.individualContactInfo {
+    float: right;
+    display: flex;
+    height: 100px;
+}
+
 .individualContact {
     position: relative;
-    height: 100px;
+    height: 100px; width: 175px;
+    text-align: center;
     /* border-style: groove */
+}
+
+.chatSign {
+    color: white;
+    text-align: center;
+    align-content: center;
+    background-color: #66FF99;
+    height: 100px; width: 90px;
+    cursor: pointer
+}
+
+.chatSign > span:first-child {
+    margin-top: 20px
+}
+
+.chatSign > span {
+    float: left; clear: left;
+    width: 90px; height: 22px
 }
 
 .delete {
@@ -330,13 +355,13 @@ a {
 }
 
 .close {
-    position: absolute;
-    margin-top: 4%;
-    margin-left: 89%;
-    width: 15px;
-    height: 15px;
+    position: relative;
+    float: left; clear: left;
+    top: 4%;
+    left: 88%;
+    width: 16px;
+    height: 16px;
     opacity: 0.4;
-    /* background-color: black; */
     cursor: pointer
   }
   .close:hover {
@@ -344,11 +369,10 @@ a {
   }
   .close:before, .close:after {
     position: absolute;
-    margin-left: 40%;
     content: ' ';
     height: 12px;
     width: 2px;
-    background-color: #BCBEC0;
+    background-color:#BCBEC0;
   }
   .close:before {
     transform: rotate(45deg);
@@ -358,36 +382,38 @@ a {
   }
 
 .individualProfile {
-    position: absolute;
-    margin: 10% 0 0 37.5%;
+    position: relative;
+    float: left; clear: left;
+    left: 37.5%;
     border-radius: 50%;
-    height:44px; width:44px;   
+    height:44px; width:44px; 
+    align-content: center  
 }
 
 .individualCapital {
-    position: absolute;
+    position: relative;
     color: white;
     font-family: 'Avenir Bold';
     font-size: 22px;
     text-align: center;
-    width: 100%;
-    margin-top: 15%
+    width: 100%; top: 17%
 }
 
 .individualStatus {
-    position: absolute;
+    position: relative;
     border-radius: 50%;
     height: 10px;
     width: 10px;
     border: 3px solid white;
-    margin: 28% 0 0 54%
+    float: left; clear: left;
+    top: -12%; left: 54%
 }
 
 .individualName {
-    position: absolute;
+    position: relative;
     text-align: center;
-    width: 100%;
-    margin-top: 40%;
+    width: 100%; top: -7%;
+    float: left; clear: left;
     color: #BCBEC0;
     font-size: 15px;
 }
@@ -395,6 +421,7 @@ a {
 #pointer {
     position: absolute;
     z-index:10;
+
     bottom: 50%;
     height: 50px;
     width: 50px;
@@ -694,17 +721,16 @@ a {
     border-radius: 6px;
 }
 
-#active {		
-    background-color: black;		
+#active {				
     position: fixed;		
     z-index: 0;	
     height: 100%; width: 100%;		
     top: 0; right: 0; bottom: 0; left: 0;		
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgba(0,0,0,0.5)
 }
 
 .box {
-    background: rgba(255,255,255,0.6);
+    background: #D1D3D4;
     border-radius: 6px;
     width: 320px;
     height: 200px;

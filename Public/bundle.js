@@ -435,7 +435,7 @@ var Sidebar = function (_Component) {
     _createClass(Sidebar, [{
         key: 'loggedInfo',
         value: function loggedInfo() {
-            this.setState({ loggedInfo: 'loggedInfo', search: '', add: '', statusBar: '' });
+            this.setState({ loggedInfo: 'loggedInfo', search: '', add: '', statusBar: '', searchName: '' });
         }
     }, {
         key: 'showStatusBar',
@@ -455,9 +455,9 @@ var Sidebar = function (_Component) {
         key: 'onCLick',
         value: function onCLick() {
             if (this.state.active === '') {
-                this.setState({ active: 'active', statusBar: '', search: '', add: '', loggedInfo: 'loggedInfo' });
+                this.setState({ active: 'active', statusBar: '', search: '', add: '', searchName: '', loggedInfo: 'loggedInfo', newContact: {} });
             } else {
-                this.setState({ active: '', statusBar: '', search: '', add: '', loggedInfo: 'loggedInfo' });
+                this.setState({ active: '', statusBar: '', search: '', add: '', searchName: '', loggedInfo: 'loggedInfo', newContact: {} });
             }
         }
     }, {
@@ -487,7 +487,7 @@ var Sidebar = function (_Component) {
     }, {
         key: 'add',
         value: function add() {
-            this.setState({ add: 'addBar', search: '', statusBar: '', loggedInfo: '' });
+            this.setState({ add: 'addBar', search: '', statusBar: '', loggedInfo: '', searchName: '' });
         }
     }, {
         key: 'searchNewContact',
@@ -497,10 +497,16 @@ var Sidebar = function (_Component) {
             el.preventDefault();
 
             _axios2.default.put('api/users', { email: el.target.email.value }).then(function (res) {
-                return _this2.setState({ newContact: res.data });
+                res.data ? _this2.props.loggedUser.contacts.filter(function (c) {
+                    return c.email === res.data.email;
+                })[0] && _this2.props.loggedUser.contacts.filter(function (c) {
+                    return c.email === res.data.email;
+                })[0].hasOwnProperty('userId') ? _this2.setState({ newContact: _this2.props.loggedUser.contacts.filter(function (c) {
+                        return c.email === res.data.email;
+                    })[0] }) : _this2.setState({ newContact: res.data }) : _this2.setState({ newContact: 'Contact not exist' });
             }).catch(function (err) {
-                return console.error('======', err);
-            }, this.setState({ newContact: { err: 'Contact not exist' } }));
+                return console.error('=======', err);
+            });
         }
 
         // addNewContact(){
@@ -513,7 +519,7 @@ var Sidebar = function (_Component) {
         value: function render() {
             var _this3 = this;
 
-            // console.log('----------', this.props);
+            console.log('----------', this.state.newContact);
             return _react2.default.createElement(
                 'div',
                 { id: 'talk-container' },
@@ -621,38 +627,45 @@ var Sidebar = function (_Component) {
                             }).map(function (c) {
                                 return _react2.default.createElement(
                                     'div',
-                                    { className: 'individualContact', key: c.id },
-                                    _this3.state.id === c.id && _this3.state.delete === 'delete' ? _react2.default.createElement(
+                                    { className: 'individualContactInfo', key: c.id },
+                                    _react2.default.createElement(
                                         'div',
-                                        { className: _this3.state.delete },
+                                        { className: 'individualContact' },
+                                        _this3.state.id === c.id && _this3.state.delete === 'delete' ? _react2.default.createElement(
+                                            'div',
+                                            { className: _this3.state.delete },
+                                            _react2.default.createElement(
+                                                'span',
+                                                { className: 'confirmText' },
+                                                'Are you sure to',
+                                                _react2.default.createElement('br', null),
+                                                'delete?'
+                                            ),
+                                            _react2.default.createElement(
+                                                'div',
+                                                { className: 'confirmButton' },
+                                                _react2.default.createElement('span', { className: 'undoRemove', onClick: _this3.undo }),
+                                                _react2.default.createElement('span', { className: 'confirmRemove' })
+                                            )
+                                        ) : '',
+                                        _react2.default.createElement('span', { className: 'close', onClick: function onClick() {
+                                                _this3.setState({ id: c.id });_this3.individualDelete();
+                                            } }),
                                         _react2.default.createElement(
                                             'span',
-                                            { className: 'confirmText' },
-                                            'Are you sure to',
-                                            _react2.default.createElement('br', null),
-                                            'delete?'
+                                            { className: 'individualProfile', style: { backgroundColor: '' + c.color } },
+                                            _react2.default.createElement(
+                                                'span',
+                                                { className: 'individualCapital' },
+                                                c.name[0].toUpperCase()
+                                            )
                                         ),
+                                        _react2.default.createElement('span', { className: 'individualStatus', style: { backgroundColor: 'rgb(102,255,153)' } }),
                                         _react2.default.createElement(
-                                            'div',
-                                            { className: 'confirmButton' },
-                                            _react2.default.createElement('span', { className: 'undoRemove', onClick: _this3.undo }),
-                                            _react2.default.createElement('span', { className: 'confirmRemove' })
+                                            'span',
+                                            { className: 'individualName' },
+                                            c.name
                                         )
-                                    ) : '',
-                                    _react2.default.createElement('span', { className: 'close', onClick: function onClick() {
-                                            _this3.setState({ id: c.id });_this3.individualDelete();
-                                        } }),
-                                    _react2.default.createElement('span', { className: 'individualProfile', style: { backgroundColor: '' + c.color } }),
-                                    _react2.default.createElement(
-                                        'span',
-                                        { className: 'individualCapital' },
-                                        c.name[0].toUpperCase()
-                                    ),
-                                    _react2.default.createElement('span', { className: 'individualStatus', style: { backgroundColor: 'rgb(102,255,153)' } }),
-                                    _react2.default.createElement(
-                                        'span',
-                                        { className: 'individualName' },
-                                        c.name
                                     )
                                 );
                             })
@@ -701,7 +714,7 @@ var Sidebar = function (_Component) {
                     this.state.search === 'searchBar' ? _react2.default.createElement(
                         'div',
                         { id: this.state.search },
-                        _react2.default.createElement('input', { type: 'text', name: 'search', placeholder: 'Search by name', required: true, onChange: function onChange(el) {
+                        _react2.default.createElement('input', { type: 'text', name: 'search', placeholder: 'Search contacts by name', required: true, onChange: function onChange(el) {
                                 return _this3.setState({ searchName: el.target.value.toLowerCase() });
                             } })
                     ) : '',
@@ -723,7 +736,15 @@ var Sidebar = function (_Component) {
                                 'Search'
                             )
                         ),
-                        this.state.newContact.name ? _react2.default.createElement(
+                        this.state.newContact !== 'Contact not exist' && !Object.keys(this.state.newContact).length ? '' : this.state.newContact === 'Contact not exist' ? _react2.default.createElement(
+                            'div',
+                            { id: 'newContact' },
+                            _react2.default.createElement(
+                                'p',
+                                null,
+                                this.state.newContact
+                            )
+                        ) : this.state.newContact.hasOwnProperty('userId') ? _react2.default.createElement(
                             'div',
                             { id: 'newContact' },
                             _react2.default.createElement(
@@ -748,18 +769,58 @@ var Sidebar = function (_Component) {
                             _react2.default.createElement(
                                 'span',
                                 null,
-                                _react2.default.createElement('img', { src: './img/plus.png', width: '18px' })
+                                _react2.default.createElement('img', { src: 'img/add.png', width: '28px' })
                             )
-                        ) : '',
-                        this.state.newContact.err ? _react2.default.createElement(
+                        ) : this.state.newContact.id === this.props.loggedUser.id ? _react2.default.createElement(
                             'div',
                             { id: 'newContact' },
                             _react2.default.createElement(
-                                'p',
+                                'span',
+                                { style: { backgroundColor: '' + this.state.newContact.color } },
+                                _react2.default.createElement(
+                                    'span',
+                                    { id: 'newCap' },
+                                    this.state.newContact.name[0].toUpperCase()
+                                )
+                            ),
+                            _react2.default.createElement(
+                                'span',
                                 null,
-                                this.state.newContact.err
+                                this.state.newContact.name
+                            ),
+                            _react2.default.createElement(
+                                'span',
+                                null,
+                                'You are the owner of this acount'
                             )
-                        ) : ''
+                        ) : _react2.default.createElement(
+                            'div',
+                            { id: 'newContact' },
+                            _react2.default.createElement(
+                                'span',
+                                { style: { backgroundColor: '' + this.state.newContact.color } },
+                                _react2.default.createElement(
+                                    'span',
+                                    { id: 'newCap' },
+                                    this.state.newContact.name && this.state.newContact.name[0].toUpperCase()
+                                )
+                            ),
+                            _react2.default.createElement(
+                                'span',
+                                null,
+                                this.state.newContact.name
+                            ),
+                            _react2.default.createElement(
+                                'span',
+                                null,
+                                this.state.newContact.email
+                            ),
+                            _react2.default.createElement(
+                                'span',
+                                null,
+                                _react2.default.createElement('img', { src: './img/plus.png', width: '18px' })
+                            )
+                        )
                     ) : ''
                 ) : '',
                 _react2.default.createElement(_Talkpage2.default, { active: this.state.active })
@@ -1083,12 +1144,6 @@ var Talkpage = function (_Component) {
             return _react2.default.createElement(
                 'div',
                 { id: 'camera', className: this.props.active },
-                _react2.default.createElement(_reactWebcam2.default, {
-                    className: 'webcam',
-                    ref: this.setRef,
-                    audio: this.state.audio,
-                    screenshotFormat: 'image/jpeg'
-                }),
                 _react2.default.createElement(
                     _reactDraggable2.default,
                     { bounds: 'parent' },

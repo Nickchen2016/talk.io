@@ -5,6 +5,7 @@ const Contact = require('../db').Contact;
 
 apiRouter.get('/', (req,res,next)=>{
     Users.findAll({
+        attributes:['id','name','email','color'],
         include:[{model: Contact}]
     })
     .then((result)=>{
@@ -15,6 +16,7 @@ apiRouter.get('/', (req,res,next)=>{
 
 apiRouter.put('/', (req,res,next)=>{
     Users.findOne({
+        attributes:['id','name','email','color'],
         where: req.body
     })
     .then((result)=>{

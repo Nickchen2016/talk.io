@@ -36,7 +36,7 @@ class Sidebar extends Component{
     }
 
 loggedInfo() {
-    this.setState({loggedInfo:'loggedInfo',search:'',add:'', statusBar:''})
+    this.setState({loggedInfo:'loggedInfo',search:'',add:'', statusBar:'',searchName:''})
 }    
 
 showStatusBar(){
@@ -53,9 +53,9 @@ individualDelete() {
 
 onCLick(){
     if(this.state.active===''){
-        this.setState({active:'active', statusBar:'',search:'',add:'', loggedInfo:'loggedInfo'})
+        this.setState({active:'active', statusBar:'',search:'',add:'',searchName:'',loggedInfo:'loggedInfo',newContact: {}})
     }else{
-        this.setState({active:'', statusBar:'',search:'',add:'', loggedInfo:'loggedInfo'})
+        this.setState({active:'', statusBar:'',search:'',add:'',searchName:'', loggedInfo:'loggedInfo',newContact: {}})
     }
 }
 
@@ -76,13 +76,20 @@ search(){
 }
 
 add(){
-    this.setState({add:'addBar',search:'',statusBar:'',loggedInfo:''})
+    this.setState({add:'addBar',search:'',statusBar:'',loggedInfo:'',searchName:''})
 }
 
 searchNewContact(el){
     el.preventDefault();
 
-    axios.put('api/users', {email: el.target.email.value}).then(res=> this.setState({newContact: res.data})).catch(err=> console.error('======',err),this.setState({newContact: {err: 'Contact not exist'}}))
+    axios.put('api/users', {email: el.target.email.value})
+         .then(res=> { res.data?
+            this.props.loggedUser.contacts.filter(c=> c.email===res.data.email)[0]&&this.props.loggedUser.contacts.filter(c=> c.email===res.data.email)[0].hasOwnProperty('userId')?
+                this.setState({newContact: this.props.loggedUser.contacts.filter(c=> c.email===res.data.email)[0]})
+                :this.setState({newContact: res.data})
+            :this.setState({newContact: 'Contact not exist'})
+        })
+         .catch(err=> console.error('=======',err))
 }
 
 // addNewContact(){
@@ -92,7 +99,7 @@ searchNewContact(el){
 
 
     render() {
-        // console.log('----------', this.props);
+        console.log('----------', this.state.newContact);
         return(
             <div id='talk-container'>
 
@@ -135,8 +142,10 @@ searchNewContact(el){
                             }).filter(el=>el.name.toLowerCase().includes(this.state.searchName))
                             .map(c=>{
                                 return (
-                                    <div className='individualContact' key={c.id}>
-                                        {this.state.id===c.id&&this.state.delete==='delete'?
+                                    <div className='individualContactInfo' key={c.id}>
+                                        <div className='individualContact'>
+
+                                            {this.state.id===c.id&&this.state.delete==='delete'?
                                             <div className={this.state.delete}>
                                                 <span className='confirmText'>Are you sure to<br/>delete?</span>
                                                 <div className='confirmButton'>
@@ -144,11 +153,19 @@ searchNewContact(el){
                                                     <span className='confirmRemove'></span>
                                                 </div>
                                             </div>:''}
-                                        <span className='close' onClick={()=>{this.setState({id: c.id});this.individualDelete()}}></span>
-                                        <span className='individualProfile' style={{backgroundColor:`${c.color}`}}></span>
-                                        <span className='individualCapital'>{ c.name[0].toUpperCase() }</span>
-                                        <span className='individualStatus' style={{backgroundColor:'rgb(102,255,153)'}}></span>
-                                        <span className='individualName'>{ c.name }</span>
+
+                                            <span className='close' onClick={()=>{this.setState({id: c.id});this.individualDelete()}}></span>
+                                            <span className='individualProfile' style={{backgroundColor:`${c.color}`}}>
+                                                <span className='individualCapital'>{ c.name[0].toUpperCase() }</span>
+                                            </span>
+                                            <span className='individualStatus' style={{backgroundColor:'rgb(102,255,153)'}}></span>
+                                            <span className='individualName'>{ c.name }</span>
+                                        </div>
+
+                                        {/* <div className='chatSign'>
+                                            <span><img src='./img/chat.png' width='35px' /></span>
+                                            <span>Start<br/>Chat</span>
+                                        </div> */}
                                     </div>
                                 )
                             })
@@ -174,7 +191,7 @@ searchNewContact(el){
                 </div>:''}
 
                 {this.state.search==='searchBar'?<div id={this.state.search}>
-                                                    <input type='text' name='search' placeholder='Search by name' required onChange={el=>this.setState({searchName:el.target.value.toLowerCase()})} />
+                                                    <input type='text' name='search' placeholder='Search contacts by name' required onChange={el=>this.setState({searchName:el.target.value.toLowerCase()})} />
                                                  </div>:''}
                 {this.state.add==='addBar'?<div id={this.state.add}>
                                                 <form id='addForm' onSubmit={this.searchNewContact}>
@@ -182,19 +199,40 @@ searchNewContact(el){
                                                     <input type='email' name='email' placeholder='Add new contact by typing Email address' required />
                                                     <button type='Search'>Search</button>
                                                 </form>
-                                                
-                                                {this.state.newContact.name?
-                                                    <div id='newContact'>
-                                                        <span style={{backgroundColor:`${this.state.newContact.color}`}}>
-                                                            <span id='newCap'>{this.state.newContact.name[0].toUpperCase()}</span>
-                                                        </span>
-                                                        <span>{this.state.newContact.name}</span>
-                                                        <span>{this.state.newContact.email}</span>
-                                                        <span ><img src='./img/plus.png' width='18px'/></span>
-                                                    </div>:''}
-                                                {this.state.newContact.err?<div id='newContact'><p>{this.state.newContact.err}</p></div>:''}
 
-                                           </div>:''}
+
+                {this.state.newContact!=='Contact not exist'&&!Object.keys(this.state.newContact).length?
+                    ''
+                    :this.state.newContact==='Contact not exist'?
+                        <div id='newContact'><p>{this.state.newContact}</p></div>
+                    :this.state.newContact.hasOwnProperty('userId')?
+                        <div id='newContact'>
+                            <span style={{backgroundColor:`${this.state.newContact.color}`}}>
+                                <span id='newCap'>{this.state.newContact.name[0].toUpperCase()}</span>
+                            </span>
+                            <span>{this.state.newContact.name}</span>
+                            <span>{this.state.newContact.email}</span>
+                            <span><img src='img/add.png' width='28px'/></span>
+                        </div>
+                    :this.state.newContact.id===this.props.loggedUser.id?
+                        <div id='newContact'>
+                            <span style={{backgroundColor:`${this.state.newContact.color}`}}>
+                                <span id='newCap'>{this.state.newContact.name[0].toUpperCase()}</span>
+                            </span>
+                            <span>{this.state.newContact.name}</span>
+                            <span>You are the owner of this acount</span>
+                        </div>
+                    :<div id='newContact'>
+                        <span style={{backgroundColor:`${this.state.newContact.color}`}}>
+                            <span id='newCap'>{this.state.newContact.name&&this.state.newContact.name[0].toUpperCase()}</span>
+                        </span>
+                        <span>{this.state.newContact.name}</span>
+                        <span>{this.state.newContact.email}</span>
+                        <span ><img src='./img/plus.png' width='18px'/></span>
+                    </div>
+                    }
+
+                    </div>:''}
             </div>:''}
 
             <Talkpage active={this.state.active}/>
@@ -203,7 +241,7 @@ searchNewContact(el){
     }
 }
 
-const mapState =(state)=>({loggedUser:state.currentUser})
+const mapState =(state)=>({loggedUser:state.currentUser});
 
 const mapDispatch = (dispatch, ownProps)=>({
     logout: () => {dispatch(logout());
