@@ -116,6 +116,9 @@ var Login = function (_Component) {
         var _this = _possibleConstructorReturn(this, (Login.__proto__ || Object.getPrototypeOf(Login)).call(this, props));
 
         _this.onLoginSubmit = _this.onLoginSubmit.bind(_this);
+        _this.state = {
+            errMsg: ''
+        };
         return _this;
     }
 
@@ -136,11 +139,19 @@ var Login = function (_Component) {
                 email: event.target.email.value,
                 password: event.target.password.value
             });
+
             this.props.history.push('/sidebar');
         }
+
+        // componentWillReceiveProps(){
+        //     this.props.loggedUser&&this.props.loggedUser.hasOwnProperty('id')?this.props.history.push('/sidebar'):this.setState({errMsg:'Fuck that not a user like that!'});
+        // }
+
     }, {
         key: 'render',
         value: function render() {
+
+            // console.log('=========', this.state.errMsg)        
             return _react2.default.createElement(
                 'div',
                 { className: 'container' },
@@ -244,7 +255,7 @@ var Login = function (_Component) {
 }(_react.Component);
 
 var mapState = function mapState(state) {
-    return { message: 'Login' };
+    return { message: 'Login', loggedUser: state.currentUser };
 };
 var mapDispatch = function mapDispatch(dispatch) {
     return {
@@ -294,7 +305,7 @@ var _Sidebar = __webpack_require__(/*! ./Sidebar */ "./Client/components/Sidebar
 
 var _Sidebar2 = _interopRequireDefault(_Sidebar);
 
-var _users = __webpack_require__(/*! ../redux/users */ "./Client/redux/users.js");
+var _user = __webpack_require__(/*! ../redux/user */ "./Client/redux/user.js");
 
 var _currentUser = __webpack_require__(/*! ../redux/currentUser */ "./Client/redux/currentUser.js");
 
@@ -346,7 +357,7 @@ var mapState = null;
 var mapDispatch = function mapDispatch(dispatch) {
     return {
         fetchInitialData: function fetchInitialData() {
-            dispatch((0, _users.fetchUsers)());
+            dispatch((0, _user.fetchUser)());
             dispatch((0, _currentUser.fetchCurrentUser)());
         }
     };
@@ -383,6 +394,8 @@ var _Talkpage = __webpack_require__(/*! ./Talkpage */ "./Client/components/Talkp
 var _Talkpage2 = _interopRequireDefault(_Talkpage);
 
 var _currentUser = __webpack_require__(/*! ../redux/currentUser */ "./Client/redux/currentUser.js");
+
+var _status = __webpack_require__(/*! ../redux/status */ "./Client/redux/status.js");
 
 var _axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 
@@ -508,18 +521,12 @@ var Sidebar = function (_Component) {
                 return console.error('=======', err);
             });
         }
-
-        // addNewContact(){
-
-        // }
-
-
     }, {
         key: 'render',
         value: function render() {
             var _this3 = this;
 
-            console.log('----------', this.state.newContact);
+            // console.log('----------', this.props.status);
             return _react2.default.createElement(
                 'div',
                 { id: 'talk-container' },
@@ -546,7 +553,7 @@ var Sidebar = function (_Component) {
                             _react2.default.createElement(
                                 'span',
                                 { className: 'choiceOfStatus', onClick: function onClick() {
-                                        return _this3.setState({ currentStatus: 'rgb(102,255,153)' });
+                                        return _this3.props.fetchStatus('rgb(102,255,153)');
                                     } },
                                 _react2.default.createElement('span', { className: 'status2', style: { backgroundColor: 'rgb(102,255,153)' } }),
                                 _react2.default.createElement(
@@ -558,7 +565,7 @@ var Sidebar = function (_Component) {
                             _react2.default.createElement(
                                 'span',
                                 { className: 'choiceOfStatus', onClick: function onClick() {
-                                        return _this3.setState({ currentStatus: 'rgb(239,65,54)' });
+                                        return _this3.props.fetchStatus('rgb(239,65,54)');
                                     } },
                                 _react2.default.createElement('span', { className: 'status2', style: { backgroundColor: 'rgb(239,65,54)' } }),
                                 _react2.default.createElement(
@@ -570,7 +577,7 @@ var Sidebar = function (_Component) {
                             _react2.default.createElement(
                                 'span',
                                 { className: 'choiceOfStatus', onClick: function onClick() {
-                                        return _this3.setState({ currentStatus: 'rgb(188,190,192)' });
+                                        return _this3.props.fetchStatus('rgb(188,190,192)');
                                     } },
                                 _react2.default.createElement('span', { className: 'status2', style: { backgroundColor: 'rgb(188,190,192)' } }),
                                 _react2.default.createElement(
@@ -660,7 +667,7 @@ var Sidebar = function (_Component) {
                                                 c.name[0].toUpperCase()
                                             )
                                         ),
-                                        _react2.default.createElement('span', { className: 'individualStatus', style: { backgroundColor: 'rgb(102,255,153)' } }),
+                                        _react2.default.createElement('span', { className: 'individualStatus', style: { backgroundColor: 'rgb(188,190,192)' } }),
                                         _react2.default.createElement(
                                             'span',
                                             { className: 'individualName' },
@@ -764,12 +771,7 @@ var Sidebar = function (_Component) {
                             _react2.default.createElement(
                                 'span',
                                 null,
-                                this.state.newContact.email
-                            ),
-                            _react2.default.createElement(
-                                'span',
-                                null,
-                                _react2.default.createElement('img', { src: 'img/add.png', width: '28px' })
+                                'is in your contacts'
                             )
                         ) : this.state.newContact.id === this.props.loggedUser.id ? _react2.default.createElement(
                             'div',
@@ -840,6 +842,9 @@ var mapDispatch = function mapDispatch(dispatch, ownProps) {
         logout: function logout() {
             dispatch((0, _currentUser.logout)());
             ownProps.history.push('/');
+        },
+        fetchStatus: function fetchStatus(status) {
+            dispatch((0, _status.fetchStatus)(status));
         }
     };
 };
@@ -912,6 +917,7 @@ var Signup = function (_Component) {
                 password: event.target.password.value
             });
             this.props.history.push('/sidebar');
+
             // axios.post('/api/me', {
             //     color: colorConfig(),
             //     name: event.target.name.value,
@@ -1294,14 +1300,14 @@ var removeCurrentUser = function removeCurrentUser() {
 var login = exports.login = function login(credentials) {
   return function (dispatch) {
     _axios2.default.put('/api/me', credentials).then(function (res) {
-      return dispatch(setCurrentUser(res.data));
+      dispatch(setCurrentUser(res.data));
     });
   };
 };
 var signup = exports.signup = function signup(credentials) {
   return function (dispatch) {
     _axios2.default.post('/api/me', credentials).then(function (res) {
-      return dispatch(setCurrentUser(res.data));
+      dispatch(setCurrentUser(res.data));
     });
   };
 };
@@ -1316,7 +1322,7 @@ var fetchCurrentUser = exports.fetchCurrentUser = function fetchCurrentUser() {
 
 var logout = exports.logout = function logout() {
   return function (dispatch) {
-    _axios2.default.delete('/api/me').then(function (res) {
+    _axios2.default.delete('/api/me').then(function () {
       return dispatch(removeCurrentUser());
     });
   };
@@ -1340,10 +1346,10 @@ function reducer() {
 
 /***/ }),
 
-/***/ "./Client/redux/users.js":
-/*!*******************************!*\
-  !*** ./Client/redux/users.js ***!
-  \*******************************/
+/***/ "./Client/redux/status.js":
+/*!********************************!*\
+  !*** ./Client/redux/status.js ***!
+  \********************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1353,7 +1359,50 @@ function reducer() {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.fetchUsers = undefined;
+exports.fetchStatus = fetchStatus;
+exports.default = reducer;
+
+// action types
+
+var FETCH_STATUS = 'FETCH_STATUS';
+
+// action creators
+
+function fetchStatus(status) {
+  var action = { type: FETCH_STATUS, status: status };
+  return action;
+}
+
+// Reducer
+
+function reducer() {
+  var initialStatus = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'rgb(102,255,153)';
+  var action = arguments[1];
+
+  switch (action.type) {
+    case FETCH_STATUS:
+      return action.status;
+    default:
+      return initialStatus;
+  }
+}
+
+/***/ }),
+
+/***/ "./Client/redux/user.js":
+/*!******************************!*\
+  !*** ./Client/redux/user.js ***!
+  \******************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.fetchUser = undefined;
 exports.default = reducer;
 
 var _axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
@@ -1364,21 +1413,21 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 // action types
 
-var GET_USERS = 'GET_USERS';
+var GET_USER = 'GET_USER';
 
 // action creators
 
-var getUsers = function getUsers(users) {
-  return { type: GET_USERS, users: users };
+var getUser = function getUser(user) {
+  return { type: GET_USER, user: user };
 };
 // const removeCurrentUser = () =>({ type: REMOVE_CURRENT_USER });
 
 // Thunk creators
 
-var fetchUsers = exports.fetchUsers = function fetchUsers() {
+var fetchUser = exports.fetchUser = function fetchUser(credentials) {
   return function (dispatch) {
-    _axios2.default.get('/api/users').then(function (res) {
-      return dispatch(getUsers(res.data));
+    _axios2.default.put('/api/users', credentials).then(function (res) {
+      return dispatch(getUser(res.data));
     });
   };
 };
@@ -1386,14 +1435,14 @@ var fetchUsers = exports.fetchUsers = function fetchUsers() {
 // Reducer
 
 function reducer() {
-  var allUsers = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+  var user = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
   var action = arguments[1];
 
   switch (action.type) {
-    case GET_USERS:
-      return action.users;
+    case GET_USER:
+      return action.user;
     default:
-      return allUsers;
+      return user;
   }
 }
 
@@ -1429,13 +1478,17 @@ var _currentUser = __webpack_require__(/*! ./redux/currentUser */ "./Client/redu
 
 var _currentUser2 = _interopRequireDefault(_currentUser);
 
-var _users = __webpack_require__(/*! ./redux/users */ "./Client/redux/users.js");
+var _user = __webpack_require__(/*! ./redux/user */ "./Client/redux/user.js");
 
-var _users2 = _interopRequireDefault(_users);
+var _user2 = _interopRequireDefault(_user);
+
+var _status = __webpack_require__(/*! ./redux/status */ "./Client/redux/status.js");
+
+var _status2 = _interopRequireDefault(_status);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var reducer = (0, _redux.combineReducers)({ currentUser: _currentUser2.default, users: _users2.default });
+var reducer = (0, _redux.combineReducers)({ currentUser: _currentUser2.default, user: _user2.default, status: _status2.default });
 
 var store = (0, _redux.createStore)(reducer, (0, _reduxDevtoolsExtension.composeWithDevTools)((0, _redux.applyMiddleware)(_reduxThunk2.default, _reduxLogger2.default)));
 

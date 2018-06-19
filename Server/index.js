@@ -12,6 +12,8 @@ const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const rgb = ['rgb(255,102,102)','rgb(237,28,36)','rgb(255,242,0)','rgb(255,204,51)','rgb(255,102,255)','rgb(0,102,255)','rgb(0,0,204)','rgb(102,255,0)','rgb(102,255,153)','rgb(196,154,108)','rgb(153,102,255)','rgb(102,51,255)','rgb(102,0,153)','rgb(139,94,60)','rgb(188,190,192)'];
 const index = Math.floor(Math.random()*15);
 
+const socketio = require('socket.io');
+
 const PORT = 8080;
 
 
@@ -24,18 +26,18 @@ app.use(bodyParser.urlencoded({extended: true}));
 //session
 app.use(session({
     secret: 'talk.io',
-    resave: true,
-    saveUninitialized: true
+    resave: false,
+    saveUninitialized: false
 }));
 //assign req.session to any downstream middleware 
-app.get('/', (req,res,next)=>{
-    if(req.session.counter === undefined){
-        req.session.counter = 0;
-    }else{
-        req.session.counter++;
-    }
-    next();
-})
+// app.get('/', (req,res,next)=>{
+//     if(req.session.counter === undefined){
+//         req.session.counter = 0;
+//     }else{
+//         req.session.counter++;
+//     }
+//     next();
+// })
 
 //==========//
 // Passport //
@@ -120,6 +122,9 @@ db.sync({force: false})
     app.listen(PORT, ()=>{
         console.log(`Listening on port ${PORT}`);
     });
+
+    const io = socketio(server);
+    require('./socket')(io);
 })
 .catch(err=>{
     console.log(err);

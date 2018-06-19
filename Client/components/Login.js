@@ -8,6 +8,9 @@ class Login extends Component {
     constructor(props){
         super(props)
         this.onLoginSubmit=this.onLoginSubmit.bind(this);
+        this.state={
+            errMsg: ''
+        }
     }
 
     onLoginSubmit(event) {
@@ -25,11 +28,17 @@ class Login extends Component {
                 email: event.target.email.value,
                 password: event.target.password.value
         });
+        
         this.props.history.push('/sidebar');
     }
 
+    // componentWillReceiveProps(){
+    //     this.props.loggedUser&&this.props.loggedUser.hasOwnProperty('id')?this.props.history.push('/sidebar'):this.setState({errMsg:'Fuck that not a user like that!'});
+    // }
     
     render() {
+
+        // console.log('=========', this.state.errMsg)        
         return(
 
             <div className="container">
@@ -84,7 +93,7 @@ class Login extends Component {
     }
 }
 
-const mapState = (state)=>({message:'Login'});
+const mapState = (state)=>({message:'Login', loggedUser: state.currentUser});
 const mapDispatch = (dispatch)=>({
     login: credentials => dispatch(login(credentials))
 });

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Talkpage from './Talkpage';
-import { logout } from '../redux/currentUser'; 
+import { logout } from '../redux/currentUser';
+import { fetchStatus } from '../redux/status'; 
 import axios from 'axios';
 
 
@@ -92,14 +93,9 @@ searchNewContact(el){
          .catch(err=> console.error('=======',err))
 }
 
-// addNewContact(){
-
-// }
-
-
 
     render() {
-        console.log('----------', this.state.newContact);
+        // console.log('----------', this.props.status);
         return(
             <div id='talk-container'>
 
@@ -113,9 +109,9 @@ searchNewContact(el){
                 {this.props.loggedUser.id&&this.state.statusBar==='statusBar'?<div id={this.state.statusBar}>
                                                                                 <span id='triangle'></span>
                                                                                 <span id='bar'>
-                                                                                    <span className='choiceOfStatus' onClick={()=>this.setState({currentStatus:'rgb(102,255,153)'})}><span className='status2' style={{backgroundColor:'rgb(102,255,153)'}}></span><p>Online</p></span>
-                                                                                    <span className='choiceOfStatus' onClick={()=>this.setState({currentStatus:'rgb(239,65,54)'})}><span className='status2' style={{backgroundColor:'rgb(239,65,54)'}}></span><p>Busy</p></span>
-                                                                                    <span className='choiceOfStatus' onClick={()=>this.setState({currentStatus:'rgb(188,190,192)'})}><span className='status2' style={{backgroundColor:'rgb(188,190,192)'}}></span><p>Leave</p></span>
+                                                                                    <span className='choiceOfStatus' onClick={()=>this.props.fetchStatus('rgb(102,255,153)')}><span className='status2' style={{backgroundColor:'rgb(102,255,153)'}}></span><p>Online</p></span>
+                                                                                    <span className='choiceOfStatus' onClick={()=>this.props.fetchStatus('rgb(239,65,54)')}><span className='status2' style={{backgroundColor:'rgb(239,65,54)'}}></span><p>Busy</p></span>
+                                                                                    <span className='choiceOfStatus' onClick={()=>this.props.fetchStatus('rgb(188,190,192)')}><span className='status2' style={{backgroundColor:'rgb(188,190,192)'}}></span><p>Leave</p></span>
                                                                                 </span>
                                                                               </div>:''}
             
@@ -158,7 +154,7 @@ searchNewContact(el){
                                             <span className='individualProfile' style={{backgroundColor:`${c.color}`}}>
                                                 <span className='individualCapital'>{ c.name[0].toUpperCase() }</span>
                                             </span>
-                                            <span className='individualStatus' style={{backgroundColor:'rgb(102,255,153)'}}></span>
+                                            <span className='individualStatus' style={{backgroundColor:'rgb(188,190,192)'}}></span>
                                             <span className='individualName'>{ c.name }</span>
                                         </div>
 
@@ -211,8 +207,7 @@ searchNewContact(el){
                                 <span id='newCap'>{this.state.newContact.name[0].toUpperCase()}</span>
                             </span>
                             <span>{this.state.newContact.name}</span>
-                            <span>{this.state.newContact.email}</span>
-                            <span><img src='img/add.png' width='28px'/></span>
+                            <span>is in your contacts</span>
                         </div>
                     :this.state.newContact.id===this.props.loggedUser.id?
                         <div id='newContact'>
@@ -246,7 +241,10 @@ const mapState =(state)=>({loggedUser:state.currentUser});
 const mapDispatch = (dispatch, ownProps)=>({
     logout: () => {dispatch(logout());
     ownProps.history.push('/')
-    } 
+    },
+    fetchStatus: (status)=> {
+        dispatch(fetchStatus(status));
+    }
 });
 
 export default connect(mapState, mapDispatch)(Sidebar);

@@ -14,11 +14,15 @@ const removeCurrentUser = () =>({ type: REMOVE_CURRENT_USER });
 
 export const login = (credentials) => dispatch => {
     axios.put('/api/me', credentials)
-         .then(res => dispatch(setCurrentUser(res.data)));
+         .then(res => { 
+               dispatch(setCurrentUser(res.data))
+          });
   };
   export const signup = (credentials) => dispatch => {
     axios.post('/api/me', credentials)
-         .then(res => dispatch(setCurrentUser(res.data)));
+         .then(res => {
+               dispatch(setCurrentUser(res.data))
+          });
   };
 
   export const fetchCurrentUser = ()=> dispatch=> {
@@ -28,7 +32,7 @@ export const login = (credentials) => dispatch => {
 
   export const logout = ()=> dispatch =>{
     axios.delete('/api/me')
-    .then(res=> dispatch(removeCurrentUser()));
+    .then(()=> dispatch(removeCurrentUser()));
   }
 
 // Reducer

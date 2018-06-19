@@ -21,6 +21,7 @@ class Signup extends Component {
             password: event.target.password.value
         });
         this.props.history.push('/sidebar');
+
         // axios.post('/api/me', {
         //     color: colorConfig(),
         //     name: event.target.name.value,

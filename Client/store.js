@@ -4,9 +4,10 @@ import thunkMiddleware from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
 import currentUser from './redux/currentUser';
-import users from './redux/users';
+import user from './redux/user';
+import status from './redux/status';
 
-const reducer = combineReducers({ currentUser,users });
+const reducer = combineReducers({ currentUser,user, status });
 
 const store = createStore(
     reducer,
