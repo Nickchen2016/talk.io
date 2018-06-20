@@ -119,7 +119,7 @@ app.use((err,req,res,next)=>{
 db.sync({force: false})
 .then(()=>{
     console.log('db is connected');
-    app.listen(PORT, ()=>{
+    const server = app.listen(PORT, ()=>{
         console.log(`Listening on port ${PORT}`);
     });
 

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import socket from '../socket';
 
 // action types
 
@@ -15,13 +16,15 @@ const removeCurrentUser = () =>({ type: REMOVE_CURRENT_USER });
 export const login = (credentials) => dispatch => {
     axios.put('/api/me', credentials)
          .then(res => { 
-               dispatch(setCurrentUser(res.data))
+               dispatch(setCurrentUser(res.data));
+               socket.emit({email: res.data.email, status: 'rgb(102,255,153)'})
           });
   };
   export const signup = (credentials) => dispatch => {
     axios.post('/api/me', credentials)
          .then(res => {
-               dispatch(setCurrentUser(res.data))
+               dispatch(setCurrentUser(res.data));
+               socket.emit({email: res.data.email, status: 'rgb(102,255,153)'})
           });
   };
 

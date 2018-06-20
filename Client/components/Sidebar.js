@@ -2,8 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Talkpage from './Talkpage';
 import { logout } from '../redux/currentUser';
-import { fetchStatus } from '../redux/status'; 
 import axios from 'axios';
+// import store from '../store';
+// import { fetchStatus } from '../redux/status';
+// import io from 'socket.io-client';
+import socket from '../socket';
 
 
 class Sidebar extends Component{
@@ -33,8 +36,35 @@ class Sidebar extends Component{
         this.mouseLeave= this.mouseLeave.bind(this);
         this.individualDelete= this.individualDelete.bind(this);
         this.undo= this.undo.bind(this);
+        this.changeStatus= this.changeStatus.bind(this);
         // this.addNewContact= this.addNewContact.bind(this);
     }
+
+// componentWillReceiveProps(){
+//     socketIo({email: this.props.loggedUser.email, status: this.state.currentStatus})
+// }
+
+changeStatus(status){
+    // this.props.fetchStatus(status);
+    this.setState({currentStatus: status})
+    socket.emit('my status',{email: this.props.loggedUser.email, status});
+    // const socket = io(window.location.origin);
+
+    // socket.on('connect', ()=> {
+    //     console.log('connected to the server!')
+
+    //     socket.on('contact status', status => {
+        // console.log('got ' + status + 'back!!!!!!');
+        // store.dispatch(fetchStatus(status));
+        // })
+
+        // socket.emit('my status', {email: this.props.loggedUser.email, status});
+        // })
+
+    // socket.on('disconnect', function(socket){
+    //     console.log('sad it cut off:(')
+    // })
+}
 
 loggedInfo() {
     this.setState({loggedInfo:'loggedInfo',search:'',add:'', statusBar:'',searchName:''})
@@ -95,7 +125,12 @@ searchNewContact(el){
 
 
     render() {
-        // console.log('----------', this.props.status);
+        let contactStatus= [];
+        contactStatus.length===0?contactStatus.push(this.props.socketStatus):contactStatus.map(c=>{
+            c.email===this.props.socketStatus.email?c.status===this.props.socketStatus.status:contactStatus.push(this.props.socketStatus.status)
+        })
+
+        console.log('----66666----', contactStatus);
         return(
             <div id='talk-container'>
 
@@ -109,9 +144,9 @@ searchNewContact(el){
                 {this.props.loggedUser.id&&this.state.statusBar==='statusBar'?<div id={this.state.statusBar}>
                                                                                 <span id='triangle'></span>
                                                                                 <span id='bar'>
-                                                                                    <span className='choiceOfStatus' onClick={()=>this.props.fetchStatus('rgb(102,255,153)')}><span className='status2' style={{backgroundColor:'rgb(102,255,153)'}}></span><p>Online</p></span>
-                                                                                    <span className='choiceOfStatus' onClick={()=>this.props.fetchStatus('rgb(239,65,54)')}><span className='status2' style={{backgroundColor:'rgb(239,65,54)'}}></span><p>Busy</p></span>
-                                                                                    <span className='choiceOfStatus' onClick={()=>this.props.fetchStatus('rgb(188,190,192)')}><span className='status2' style={{backgroundColor:'rgb(188,190,192)'}}></span><p>Leave</p></span>
+                                                                                    <span className='choiceOfStatus' onClick={()=>this.changeStatus('rgb(102,255,153)')}><span className='status2' style={{backgroundColor:'rgb(102,255,153)'}}></span><p>Online</p></span>
+                                                                                    <span className='choiceOfStatus' onClick={()=>this.changeStatus('rgb(239,65,54)')}><span className='status2' style={{backgroundColor:'rgb(239,65,54)'}}></span><p>Busy</p></span>
+                                                                                    <span className='choiceOfStatus' onClick={()=>this.changeStatus('rgb(188,190,192)')}><span className='status2' style={{backgroundColor:'rgb(188,190,192)'}}></span><p>Leave</p></span>
                                                                                 </span>
                                                                               </div>:''}
             
@@ -236,14 +271,11 @@ searchNewContact(el){
     }
 }
 
-const mapState =(state)=>({loggedUser:state.currentUser});
+const mapState =(state)=>({loggedUser:state.currentUser, socketStatus: state.status});
 
 const mapDispatch = (dispatch, ownProps)=>({
     logout: () => {dispatch(logout());
     ownProps.history.push('/')
-    },
-    fetchStatus: (status)=> {
-        dispatch(fetchStatus(status));
     }
 });
 

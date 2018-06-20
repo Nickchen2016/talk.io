@@ -13,7 +13,7 @@ export function fetchStatus(status) {
 
 // Reducer
 
-export default function reducer (initialStatus = 'rgb(102,255,153)', action) {
+export default function reducer (initialStatus = {}, action) {
     switch (action.type) {
       case FETCH_STATUS:
         return action.status;
