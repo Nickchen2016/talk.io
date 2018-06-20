@@ -706,7 +706,11 @@ var Sidebar = function (_Component) {
                                                 c.name[0].toUpperCase()
                                             )
                                         ),
-                                        _react2.default.createElement('span', { className: 'individualStatus', style: { backgroundColor: 'rgb(188,190,192)' } }),
+                                        _react2.default.createElement('span', { className: 'individualStatus', style: { backgroundColor: '' + (contactStatus.filter(function (contact) {
+                                                    return contact.email === c.email;
+                                                })[0] ? contactStatus.filter(function (contact) {
+                                                    return contact.email === c.email;
+                                                })[0].status : 'rgb(188,190,192)') } }),
                                         _react2.default.createElement(
                                             'span',
                                             { className: 'individualName' },

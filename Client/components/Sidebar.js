@@ -189,7 +189,11 @@ searchNewContact(el){
                                             <span className='individualProfile' style={{backgroundColor:`${c.color}`}}>
                                                 <span className='individualCapital'>{ c.name[0].toUpperCase() }</span>
                                             </span>
-                                            <span className='individualStatus' style={{backgroundColor:'rgb(188,190,192)'}}></span>
+                                            <span className='individualStatus' style={{backgroundColor:`${contactStatus.filter(contact=>
+                                                 contact.email===c.email)[0] ? 
+                                                 contactStatus.filter(contact=> 
+                                                    contact.email===c.email)[0].status
+                                                :'rgb(188,190,192)'}`}}></span>
                                             <span className='individualName'>{ c.name }</span>
                                         </div>
 
