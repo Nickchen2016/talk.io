@@ -9,7 +9,7 @@ import store from './store';
         console.log('connected to the server!');
 
         socket.on('contact status', status => {
-            // console.log('got ' + status + 'back!!!!!!');
+            // console.log('got ' + JSON.stringify(status) + ' back!!!!!!');
             store.dispatch(fetchStatus(status));
         })
 

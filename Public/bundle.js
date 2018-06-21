@@ -434,6 +434,7 @@ var Sidebar = function (_Component) {
             statusBar: '',
             searchName: '',
             newContact: {},
+            contactStatus: [],
             loggedInfo: 'loggedInfo',
             currentStatus: 'rgb(102,255,153)'
         };
@@ -452,32 +453,33 @@ var Sidebar = function (_Component) {
         return _this;
     }
 
-    // componentWillReceiveProps(){
-    //     socketIo({email: this.props.loggedUser.email, status: this.state.currentStatus})
-    // }
-
     _createClass(Sidebar, [{
+        key: 'componentDidUpdate',
+        value: function componentDidUpdate(previousProps) {
+
+            if (this.props.socketStatus.status !== previousProps.socketStatus.status) {
+                var temp = this.state.contactStatus;
+                var found = false;
+                for (var i = 0; i < temp.length; i++) {
+                    if (temp[i].email === this.props.socketStatus.email) {
+                        found = true;
+                        temp[i].status = this.props.socketStatus.status;
+                    }
+                }
+
+                if (found) this.setState({ contactStatus: temp });else {
+                    if (this.props.socketStatus.hasOwnProperty('email')) {
+                        temp.push(this.props.socketStatus);
+                        this.setState({ contactStatus: temp });
+                    }
+                }
+            }
+        }
+    }, {
         key: 'changeStatus',
         value: function changeStatus(status) {
-            // this.props.fetchStatus(status);
             this.setState({ currentStatus: status });
             _socket2.default.emit('my status', { email: this.props.loggedUser.email, status: status });
-            // const socket = io(window.location.origin);
-
-            // socket.on('connect', ()=> {
-            //     console.log('connected to the server!')
-
-            //     socket.on('contact status', status => {
-            // console.log('got ' + status + 'back!!!!!!');
-            // store.dispatch(fetchStatus(status));
-            // })
-
-            // socket.emit('my status', {email: this.props.loggedUser.email, status});
-            // })
-
-            // socket.on('disconnect', function(socket){
-            //     console.log('sad it cut off:(')
-            // })
         }
     }, {
         key: 'loggedInfo',
@@ -560,12 +562,12 @@ var Sidebar = function (_Component) {
         value: function render() {
             var _this3 = this;
 
-            var contactStatus = [];
-            contactStatus.length === 0 ? contactStatus.push(this.props.socketStatus) : contactStatus.map(function (c) {
-                c.email === _this3.props.socketStatus.email ? c.status === _this3.props.socketStatus.status : contactStatus.push(_this3.props.socketStatus.status);
-            });
+            // let contactStatus= [];
+            // contactStatus.length===0?contactStatus.push(this.props.socketStatus):contactStatus.map(c=>{
+            //     c.email===this.props.socketStatus.email?c.status===this.props.socketStatus.status:contactStatus.push(this.props.socketStatus.status)
+            // })
 
-            console.log('----66666----', contactStatus);
+            console.log('----66666----', this.state.contactStatus);
             return _react2.default.createElement(
                 'div',
                 { id: 'talk-container' },
@@ -706,9 +708,9 @@ var Sidebar = function (_Component) {
                                                 c.name[0].toUpperCase()
                                             )
                                         ),
-                                        _react2.default.createElement('span', { className: 'individualStatus', style: { backgroundColor: '' + (contactStatus.filter(function (contact) {
+                                        _react2.default.createElement('span', { className: 'individualStatus', style: { backgroundColor: '' + (_this3.state.contactStatus.filter(function (contact) {
                                                     return contact.email === c.email;
-                                                })[0] ? contactStatus.filter(function (contact) {
+                                                })[0] ? _this3.state.contactStatus.filter(function (contact) {
                                                     return contact.email === c.email;
                                                 })[0].status : 'rgb(188,190,192)') } }),
                                         _react2.default.createElement(
@@ -1527,7 +1529,7 @@ socket.on('connect', function () {
     console.log('connected to the server!');
 
     socket.on('contact status', function (status) {
-        // console.log('got ' + status + 'back!!!!!!');
+        // console.log('got ' + JSON.stringify(status) + ' back!!!!!!');
         _store2.default.dispatch((0, _status.fetchStatus)(status));
     });
 

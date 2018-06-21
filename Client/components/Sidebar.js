@@ -23,6 +23,7 @@ class Sidebar extends Component{
             statusBar:'',
             searchName:'',
             newContact:{},
+            contactStatus: [],
             loggedInfo: 'loggedInfo',
             currentStatus: 'rgb(102,255,153)'
         }
@@ -40,30 +41,32 @@ class Sidebar extends Component{
         // this.addNewContact= this.addNewContact.bind(this);
     }
 
-// componentWillReceiveProps(){
-//     socketIo({email: this.props.loggedUser.email, status: this.state.currentStatus})
-// }
+componentDidUpdate( previousProps ){
+
+    if(this.props.socketStatus.status !== previousProps.socketStatus.status){
+        let temp = this.state.contactStatus;
+        let found = false;
+        for(let i = 0; i < temp.length; i++) {
+            if(temp[i].email===this.props.socketStatus.email){
+                found = true;
+                temp[i].status = this.props.socketStatus.status;
+            }
+        }
+
+        if(found) this.setState({contactStatus: temp});
+        else {
+            if(this.props.socketStatus.hasOwnProperty('email')){
+            temp.push(this.props.socketStatus);
+            this.setState({contactStatus: temp});
+            }
+        }
+    }
+
+}
 
 changeStatus(status){
-    // this.props.fetchStatus(status);
     this.setState({currentStatus: status})
     socket.emit('my status',{email: this.props.loggedUser.email, status});
-    // const socket = io(window.location.origin);
-
-    // socket.on('connect', ()=> {
-    //     console.log('connected to the server!')
-
-    //     socket.on('contact status', status => {
-        // console.log('got ' + status + 'back!!!!!!');
-        // store.dispatch(fetchStatus(status));
-        // })
-
-        // socket.emit('my status', {email: this.props.loggedUser.email, status});
-        // })
-
-    // socket.on('disconnect', function(socket){
-    //     console.log('sad it cut off:(')
-    // })
 }
 
 loggedInfo() {
@@ -125,12 +128,12 @@ searchNewContact(el){
 
 
     render() {
-        let contactStatus= [];
-        contactStatus.length===0?contactStatus.push(this.props.socketStatus):contactStatus.map(c=>{
-            c.email===this.props.socketStatus.email?c.status===this.props.socketStatus.status:contactStatus.push(this.props.socketStatus.status)
-        })
+        // let contactStatus= [];
+        // contactStatus.length===0?contactStatus.push(this.props.socketStatus):contactStatus.map(c=>{
+        //     c.email===this.props.socketStatus.email?c.status===this.props.socketStatus.status:contactStatus.push(this.props.socketStatus.status)
+        // })
 
-        console.log('----66666----', contactStatus);
+        console.log('----66666----', this.state.contactStatus);
         return(
             <div id='talk-container'>
 
@@ -189,9 +192,9 @@ searchNewContact(el){
                                             <span className='individualProfile' style={{backgroundColor:`${c.color}`}}>
                                                 <span className='individualCapital'>{ c.name[0].toUpperCase() }</span>
                                             </span>
-                                            <span className='individualStatus' style={{backgroundColor:`${contactStatus.filter(contact=>
+                                            <span className='individualStatus' style={{backgroundColor:`${this.state.contactStatus.filter(contact=>
                                                  contact.email===c.email)[0] ? 
-                                                 contactStatus.filter(contact=> 
+                                                 this.state.contactStatus.filter(contact=> 
                                                     contact.email===c.email)[0].status
                                                 :'rgb(188,190,192)'}`}}></span>
                                             <span className='individualName'>{ c.name }</span>
