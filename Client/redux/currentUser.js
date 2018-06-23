@@ -17,25 +17,26 @@ export const login = (credentials) => dispatch => {
     axios.put('/api/me', credentials)
          .then(res => { 
                dispatch(setCurrentUser(res.data));
-               socket.emit({email: res.data.email, status: 'rgb(102,255,153)'})
+               socket.emit('my status',{email: res.data.email, status: 'rgb(102,255,153)'})
           });
   };
   export const signup = (credentials) => dispatch => {
     axios.post('/api/me', credentials)
          .then(res => {
                dispatch(setCurrentUser(res.data));
-               socket.emit({email: res.data.email, status: 'rgb(102,255,153)'})
+               socket.emit('my status', {email: res.data.email, status: 'rgb(102,255,153)'})
           });
   };
 
   export const fetchCurrentUser = ()=> dispatch=> {
     axios.get('/api/me')
-      .then(res=> dispatch(setCurrentUser(res.data)))
+      .then(res=> {dispatch(setCurrentUser(res.data))})
   }
 
-  export const logout = ()=> dispatch =>{
+  export const logout = (credential)=> dispatch =>{
     axios.delete('/api/me')
     .then(()=> dispatch(removeCurrentUser()));
+    socket.emit('my status', credential);
   }
 
 // Reducer

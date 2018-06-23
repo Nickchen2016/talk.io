@@ -28,6 +28,10 @@ const Users = db.define('user', {
             notEmpty: true
         }
     },
+    status: {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
     googleProfileId: Sequelize.STRING
 })
 

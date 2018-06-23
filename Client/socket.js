@@ -1,6 +1,7 @@
 import io from 'socket.io-client';
 import { fetchStatus } from './redux/status';
 import store from './store';
+// import axios from 'axios';
 
 // const socketIo = value => {
     const socket = io(window.location.origin);
@@ -11,7 +12,11 @@ import store from './store';
         socket.on('contact status', status => {
             // console.log('got ' + JSON.stringify(status) + ' back!!!!!!');
             store.dispatch(fetchStatus(status));
+            // axios.get('api/me').then(res=>{
+            //     console.log('***********', res.data)
+            //   });
         })
+
 
     // socket.emit('my status', value);
     })

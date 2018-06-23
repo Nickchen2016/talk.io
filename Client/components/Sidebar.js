@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Talkpage from './Talkpage';
+import { changeUserInfo } from '../redux/user';
 import { logout } from '../redux/currentUser';
 import axios from 'axios';
-// import store from '../store';
-// import { fetchStatus } from '../redux/status';
-// import io from 'socket.io-client';
 import socket from '../socket';
 
 
@@ -41,9 +39,9 @@ class Sidebar extends Component{
         // this.addNewContact= this.addNewContact.bind(this);
     }
 
-componentDidUpdate( previousProps ){
+componentDidUpdate( previousProps, previousState ){
 
-    if(this.props.socketStatus.status !== previousProps.socketStatus.status){
+    if(this.props.socketStatus.status !== previousProps.socketStatus.status || this.props.socketStatus.email !== previousProps.socketStatus.email){
         let temp = this.state.contactStatus;
         let found = false;
         for(let i = 0; i < temp.length; i++) {
@@ -61,11 +59,15 @@ componentDidUpdate( previousProps ){
             }
         }
     }
+    // if(this.state.contactStatus.length !== previousState.contactStatus.length){
+    //         socket.emit('my status', {email: this.props.loggedUser.email, status: this.props.loggedUser.status})
+    // }
 
 }
 
 changeStatus(status){
-    this.setState({currentStatus: status})
+    this.setState({currentStatus: status});
+    this.props.changeUserInfo({id:this.props.loggedUser.id, status});
     socket.emit('my status',{email: this.props.loggedUser.email, status});
 }
 
@@ -225,7 +227,7 @@ searchNewContact(el){
                             <span value={this.props.loggedUser.email}>Email</span>
                         </div>
                     </div>
-                    <button id='signoutButton' onClick={this.props.logout}>Log out</button>
+                    <button id='signoutButton' onClick={()=>this.props.logout({email: this.props.loggedUser.email, status: 'rgb(188,190,192)'})}>Log out</button>
                 </div>:''}
 
                 {this.state.search==='searchBar'?<div id={this.state.search}>
@@ -281,9 +283,10 @@ searchNewContact(el){
 const mapState =(state)=>({loggedUser:state.currentUser, socketStatus: state.status});
 
 const mapDispatch = (dispatch, ownProps)=>({
-    logout: () => {dispatch(logout());
+    logout: (credential) => {dispatch(logout(credential));
     ownProps.history.push('/')
-    }
+    },
+    changeUserInfo: (credentials) => {dispatch(changeUserInfo(credentials))}
 });
 
 export default connect(mapState, mapDispatch)(Sidebar);

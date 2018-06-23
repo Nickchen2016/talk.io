@@ -33,7 +33,6 @@ apiRouter.post('/', (req,res,next)=>{
 
 apiRouter.delete('/', (req,res,next)=>{
     req.logout();
-    // req.session.destroy();
     res.sendStatus(204);
 })
 

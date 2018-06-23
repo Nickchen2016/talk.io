@@ -5,7 +5,7 @@ const Contact = require('../db').Contact;
 
 apiRouter.get('/', (req,res,next)=>{
     Users.findAll({
-        attributes:['id','name','email','color'],
+        // attributes:['id','name','email','color','status'],
         include:[{model: Contact}]
     })
     .then((result)=>{
@@ -16,8 +16,8 @@ apiRouter.get('/', (req,res,next)=>{
 
 apiRouter.put('/', (req,res,next)=>{
     Users.findOne({
-        where: req.body,
-        attributes:['id','name','email','color']
+        where: req.body
+        // ,attributes:['id','name','email','color','status']
     })
     .then((result)=>{
         res.status(201).json(result)
@@ -25,10 +25,21 @@ apiRouter.put('/', (req,res,next)=>{
     .catch(next)
 })
 
-// apiRouter.post('/', (req,res,next)=>{
-//     Users.create(req.body)
-//     .then(result => res.status(201).json(result))
-//     .catch(next);
-// })
+apiRouter.put('/:id', (req,res,next)=>{
+    Users.findById(req.params.id)
+    .then(result => {
+        if(result){
+            result.update(req.body)
+                .then(result => res.status(201).send(result))
+                .catch(next)
+        }
+    })
+})
+
+apiRouter.post('/', (req,res,next)=>{
+    Users.create(req.body)
+    .then(result => res.status(201).json(result))
+    .catch(next);
+})
 
 module.exports = apiRouter;

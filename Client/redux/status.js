@@ -1,4 +1,5 @@
-
+import socket from '../socket';
+import axios from 'axios';
 // action types
 
 const FETCH_STATUS = 'FETCH_STATUS';
@@ -9,7 +10,6 @@ export function fetchStatus(status) {
     const action = { type: FETCH_STATUS, status };
     return action;
 }
-
 
 // Reducer
 

@@ -7,7 +7,7 @@ import currentUser from './redux/currentUser';
 import user from './redux/user';
 import status from './redux/status';
 
-const reducer = combineReducers({ currentUser,user, status });
+const reducer = combineReducers({ currentUser, user, status });
 
 const store = createStore(
     reducer,
