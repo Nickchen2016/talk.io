@@ -61,6 +61,7 @@ passport.use(new GoogleStrategy({
         color: rgb[index],
         name: profile.displayName,
         email:profile.emails[0].value,
+        status: 'rgb(102,255,153)',
         password: 'No Password for google client',
         googleProfileId: profile.id
       })
@@ -71,9 +72,9 @@ passport.use(new GoogleStrategy({
   }));
   
   //config user <=> session about passport
-  passport.serializeUser(((user, done)=>{
+  passport.serializeUser((user, done)=>{
     done(null, user.id)
-  }));
+  });
   passport.deserializeUser((id,done)=>{
     Users.findById(id, {include:[{model: Contact}]})
     .then(user=>{

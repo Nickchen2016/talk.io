@@ -18,7 +18,8 @@ class Signup extends Component {
             color: colorConfig(),
             name: event.target.name.value.replace(/^\s|\s$/g, '').split(' ').map(name=> name=name[0].toUpperCase()+name.slice(1)).join(' '),
             email: event.target.email.value,
-            password: event.target.password.value
+            password: event.target.password.value,
+            status: 'rgb(102,255,153)'
         });
         this.props.history.push('/sidebar');
 

@@ -2,22 +2,26 @@ import socket from '../socket';
 import axios from 'axios';
 // action types
 
-const FETCH_STATUS = 'FETCH_STATUS';
+const FETCH_VALUE = 'FETCH_VALUE';
 
 // action creators
 
-export function fetchStatus(status) {
-    const action = { type: FETCH_STATUS, status };
+export function fetchId(value) {
+    const action = { type: FETCH_VALUE, value };
     return action;
 }
 
+//Thunk
+
+
+
 // Reducer
 
-export default function reducer (initialStatus = {}, action) {
+export default function reducer (initialId = '', action) {
     switch (action.type) {
-      case FETCH_STATUS:
-        return action.status;
+      case FETCH_VALUE:
+        return action.value;
       default:
-        return initialStatus;
+        return initialId;
     }
   }

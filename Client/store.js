@@ -6,8 +6,10 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import currentUser from './redux/currentUser';
 import user from './redux/user';
 import status from './redux/status';
+import contact from './redux/contact';
 
-const reducer = combineReducers({ currentUser, user, status });
+
+const reducer = combineReducers({ currentUser, user, status, contact });
 
 const store = createStore(
     reducer,

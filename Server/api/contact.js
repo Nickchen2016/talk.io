@@ -15,4 +15,11 @@ apiRouter.post('/', (req,res,next)=>{
     .catch(next);
 })
 
+apiRouter.delete('/:id', (req,res,next)=>{
+    Contact.destroy({
+        where: {id: req.params.id}
+    }).then( result => res.json(result))
+    .catch(next)
+})
+
 module.exports = apiRouter;

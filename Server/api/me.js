@@ -11,7 +11,7 @@ apiRouter.put('/', (req,res,next)=>{
         where: req.body,
         include:[{model: Contact}]
     })
-    .then((result)=>{
+    .then(result=>{
         req.login(result, (err)=>{
             if(err) next(err);
             else res.json(result);

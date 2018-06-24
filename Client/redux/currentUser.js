@@ -17,14 +17,14 @@ export const login = (credentials) => dispatch => {
     axios.put('/api/me', credentials)
          .then(res => { 
                dispatch(setCurrentUser(res.data));
-               socket.emit('my status',{email: res.data.email, status: 'rgb(102,255,153)'})
+               socket.emit('my id',{id: res.data.id})
           });
   };
   export const signup = (credentials) => dispatch => {
     axios.post('/api/me', credentials)
          .then(res => {
                dispatch(setCurrentUser(res.data));
-               socket.emit('my status', {email: res.data.email, status: 'rgb(102,255,153)'})
+               socket.emit('my id', {id: res.data.id})
           });
   };
 
@@ -36,7 +36,7 @@ export const login = (credentials) => dispatch => {
   export const logout = (credential)=> dispatch =>{
     axios.delete('/api/me')
     .then(()=> dispatch(removeCurrentUser()));
-    socket.emit('my status', credential);
+    socket.emit('my id', credential);
   }
 
 // Reducer

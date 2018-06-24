@@ -5,7 +5,7 @@ const Contact = require('../db').Contact;
 
 apiRouter.get('/', (req,res,next)=>{
     Users.findAll({
-        // attributes:['id','name','email','color','status'],
+        attributes:['id','name','email','color','status'],
         include:[{model: Contact}]
     })
     .then((result)=>{
@@ -14,10 +14,21 @@ apiRouter.get('/', (req,res,next)=>{
     .catch(next)
 })
 
+apiRouter.get('/:id', (req,res,next)=>{
+    Users.findById(
+        req.params.id,
+        {attributes:['name','email','status']
+    })
+    .then(result=>{
+        res.status(201).json(result)
+    })
+    .catch(next)
+})
+
 apiRouter.put('/', (req,res,next)=>{
     Users.findOne({
-        where: req.body
-        // ,attributes:['id','name','email','color','status']
+        where: req.body,
+        attributes:['id','name','email','color']
     })
     .then((result)=>{
         res.status(201).json(result)

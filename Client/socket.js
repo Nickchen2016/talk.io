@@ -1,5 +1,5 @@
 import io from 'socket.io-client';
-import { fetchStatus } from './redux/status';
+import { fetchId } from './redux/status';
 import store from './store';
 // import axios from 'axios';
 
@@ -9,9 +9,9 @@ import store from './store';
     socket.on('connect', ()=> {
         console.log('connected to the server!');
 
-        socket.on('contact status', status => {
-            // console.log('got ' + JSON.stringify(status) + ' back!!!!!!');
-            store.dispatch(fetchStatus(status));
+        socket.on('contact ownId', value => {
+            console.log('***************', JSON.stringify(value));
+            store.dispatch(fetchId(value));
             // axios.get('api/me').then(res=>{
             //     console.log('***********', res.data)
             //   });

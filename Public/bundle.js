@@ -137,7 +137,8 @@ var Login = function (_Component) {
             //     .catch(console.error);
             this.props.login({
                 email: event.target.email.value,
-                password: event.target.password.value
+                password: event.target.password.value,
+                status: 'rgb(102,255,153)'
             });
 
             this.props.history.push('/sidebar');
@@ -314,7 +315,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-// import { fetchUser } from '../redux/user';
+// import { getUserInfo } from '../redux/user';
 
 
 var Root = function (_Component) {
@@ -357,7 +358,7 @@ var mapState = null;
 var mapDispatch = function mapDispatch(dispatch) {
     return {
         fetchInitialData: function fetchInitialData() {
-            // dispatch(fetchUser());
+            // dispatch(getUserInfo());
             dispatch((0, _currentUser.fetchCurrentUser)());
         }
     };
@@ -397,6 +398,8 @@ var _user = __webpack_require__(/*! ../redux/user */ "./Client/redux/user.js");
 
 var _currentUser = __webpack_require__(/*! ../redux/currentUser */ "./Client/redux/currentUser.js");
 
+var _contact = __webpack_require__(/*! ../redux/contact */ "./Client/redux/contact.js");
+
 var _axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 
 var _axios2 = _interopRequireDefault(_axios);
@@ -432,9 +435,9 @@ var Sidebar = function (_Component) {
             statusBar: '',
             searchName: '',
             newContact: {},
-            contactStatus: [],
-            loggedInfo: 'loggedInfo',
-            currentStatus: 'rgb(102,255,153)'
+            // contactStatus: [],
+            loggedInfo: 'loggedInfo'
+            // currentStatus: 'rgb(102,255,153)'
         };
         _this.loggedInfo = _this.loggedInfo.bind(_this);
         _this.search = _this.search.bind(_this);
@@ -451,37 +454,38 @@ var Sidebar = function (_Component) {
         return _this;
     }
 
+    // componentDidUpdate( previousProps,previousState ){
+
+    //     if(this.props.socketStatus.status !== previousProps.socketStatus.status || this.props.socketStatus.email !== previousProps.socketStatus.email){
+    //         let temp = this.state.contactStatus;
+    //         let found = false;
+    //         for(let i = 0; i < temp.length; i++) {
+    //             if(temp[i].email===this.props.socketStatus.email){
+    //                 found = true;
+    //                 temp[i].status = this.props.socketStatus.status;
+    //             }
+    //         }
+
+    //         if(found) this.setState({contactStatus: temp});
+    //         else {
+    //             if(this.props.socketStatus.hasOwnProperty('email')){
+    //             temp.push(this.props.socketStatus);
+    //             this.setState({contactStatus: temp});
+    //             }
+    //         }
+    //     }
+    //     // if(this.state.contactStatus.length > previousState.contactStatus.length){
+    //     //         socket.emit('my status', {email: this.props.loggedUser.email, status: this.props.loggedUser.status})
+    //     // }
+
+    // }
+
     _createClass(Sidebar, [{
-        key: 'componentDidUpdate',
-        value: function componentDidUpdate(previousProps, previousState) {
-
-            if (this.props.socketStatus.status !== previousProps.socketStatus.status || this.props.socketStatus.email !== previousProps.socketStatus.email) {
-                var temp = this.state.contactStatus;
-                var found = false;
-                for (var i = 0; i < temp.length; i++) {
-                    if (temp[i].email === this.props.socketStatus.email) {
-                        found = true;
-                        temp[i].status = this.props.socketStatus.status;
-                    }
-                }
-
-                if (found) this.setState({ contactStatus: temp });else {
-                    if (this.props.socketStatus.hasOwnProperty('email')) {
-                        temp.push(this.props.socketStatus);
-                        this.setState({ contactStatus: temp });
-                    }
-                }
-            }
-            // if(this.state.contactStatus.length !== previousState.contactStatus.length){
-            //         socket.emit('my status', {email: this.props.loggedUser.email, status: this.props.loggedUser.status})
-            // }
-        }
-    }, {
         key: 'changeStatus',
         value: function changeStatus(status) {
-            this.setState({ currentStatus: status });
+            // this.setState({currentStatus: status});
             this.props.changeUserInfo({ id: this.props.loggedUser.id, status: status });
-            _socket2.default.emit('my status', { email: this.props.loggedUser.email, status: status });
+            _socket2.default.emit('my id', { id: this.props.loggedUser.id });
         }
     }, {
         key: 'loggedInfo',
@@ -548,7 +552,7 @@ var Sidebar = function (_Component) {
             el.preventDefault();
 
             _axios2.default.put('api/users', { email: el.target.email.value }).then(function (res) {
-                res.data ? _this2.props.loggedUser.contacts.filter(function (c) {
+                res.data ? _this2.props.loggedUser.contacts && _this2.props.loggedUser.contacts.filter(function (c) {
                     return c.email === res.data.email;
                 })[0] && _this2.props.loggedUser.contacts.filter(function (c) {
                     return c.email === res.data.email;
@@ -569,7 +573,7 @@ var Sidebar = function (_Component) {
             //     c.email===this.props.socketStatus.email?c.status===this.props.socketStatus.status:contactStatus.push(this.props.socketStatus.status)
             // })
 
-            console.log('----66666----', this.state.contactStatus);
+            console.log('----66666----', this.props.getUserStatus);
             return _react2.default.createElement(
                 'div',
                 { id: 'talk-container' },
@@ -665,7 +669,7 @@ var Sidebar = function (_Component) {
                                     this.props.loggedUser.name && this.props.loggedUser.name
                                 )
                             ),
-                            _react2.default.createElement('span', { className: 'status', onClick: this.showStatusBar, style: { backgroundColor: '' + this.state.currentStatus } })
+                            _react2.default.createElement('span', { className: 'status', onClick: this.showStatusBar, style: { backgroundColor: this.props.loggedUser.status } })
                         ),
                         _react2.default.createElement(
                             'div',
@@ -695,7 +699,9 @@ var Sidebar = function (_Component) {
                                                 'div',
                                                 { className: 'confirmButton' },
                                                 _react2.default.createElement('span', { className: 'undoRemove', onClick: _this3.undo }),
-                                                _react2.default.createElement('span', { className: 'confirmRemove' })
+                                                _react2.default.createElement('span', { className: 'confirmRemove', onClick: function onClick() {
+                                                        return _this3.props.removeExistContact(c.id);
+                                                    } })
                                             )
                                         ) : '',
                                         _react2.default.createElement('span', { className: 'close', onClick: function onClick() {
@@ -710,11 +716,15 @@ var Sidebar = function (_Component) {
                                                 c.name[0].toUpperCase()
                                             )
                                         ),
-                                        _react2.default.createElement('span', { className: 'individualStatus', style: { backgroundColor: '' + (_this3.state.contactStatus.filter(function (contact) {
-                                                    return contact.email === c.email;
-                                                })[0] ? _this3.state.contactStatus.filter(function (contact) {
-                                                    return contact.email === c.email;
-                                                })[0].status : 'rgb(188,190,192)') } }),
+                                        _react2.default.createElement('span', { className: 'individualStatus', style: { backgroundColor:
+                                                // `${this.state.contactStatus.filter(contact=>
+                                                //      contact.email===c.email)[0] ? 
+                                                //      this.state.contactStatus.filter(contact=> 
+                                                //         contact.email===c.email)[0].status
+                                                //     :
+                                                'rgb(188,190,192)'
+                                                // }`
+                                            } }),
                                         _react2.default.createElement(
                                             'span',
                                             { className: 'individualName' },
@@ -762,7 +772,7 @@ var Sidebar = function (_Component) {
                         _react2.default.createElement(
                             'button',
                             { id: 'signoutButton', onClick: function onClick() {
-                                    return _this3.props.logout({ email: _this3.props.loggedUser.email, status: 'rgb(188,190,192)' });
+                                    return _this3.props.logout({ id: _this3.props.loggedUser.id });
                                 } },
                             'Log out'
                         )
@@ -868,7 +878,15 @@ var Sidebar = function (_Component) {
                             ),
                             _react2.default.createElement(
                                 'span',
-                                null,
+                                { onClick: function onClick() {
+                                        _this3.props.addNewContact({ ownId: _this3.state.newContact.id,
+                                            color: _this3.state.newContact.color,
+                                            name: _this3.state.newContact.name,
+                                            email: _this3.state.newContact.email,
+                                            userId: _this3.props.loggedUser.id
+                                        });
+                                        _this3.setState({ newContact: {} });
+                                    } },
                                 _react2.default.createElement('img', { src: './img/plus.png', width: '18px' })
                             )
                         )
@@ -883,7 +901,7 @@ var Sidebar = function (_Component) {
 }(_react.Component);
 
 var mapState = function mapState(state) {
-    return { loggedUser: state.currentUser, socketStatus: state.status };
+    return { loggedUser: state.currentUser, getUserStatus: state.user.getUserStatus };
 };
 
 var mapDispatch = function mapDispatch(dispatch, ownProps) {
@@ -894,6 +912,15 @@ var mapDispatch = function mapDispatch(dispatch, ownProps) {
         },
         changeUserInfo: function changeUserInfo(credentials) {
             dispatch((0, _user.changeUserInfo)(credentials));
+        },
+        addNewContact: function addNewContact(credentials) {
+            dispatch((0, _contact.addNewContact)(credentials));
+        },
+        getUserInfo: function getUserInfo(credential) {
+            dispatch((0, _user.getUserInfo)(credential));
+        },
+        removeExistContact: function removeExistContact(credential) {
+            dispatch((0, _contact.removeExistContact)(credential));
         }
     };
 };
@@ -963,7 +990,8 @@ var Signup = function (_Component) {
                     return name = name[0].toUpperCase() + name.slice(1);
                 }).join(' '),
                 email: event.target.email.value,
-                password: event.target.password.value
+                password: event.target.password.value,
+                status: 'rgb(102,255,153)'
             });
             this.props.history.push('/sidebar');
 
@@ -1308,6 +1336,80 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /***/ }),
 
+/***/ "./Client/redux/contact.js":
+/*!*********************************!*\
+  !*** ./Client/redux/contact.js ***!
+  \*********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.removeExistContact = exports.addNewContact = undefined;
+exports.default = reducer;
+
+var _axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+
+var _axios2 = _interopRequireDefault(_axios);
+
+var _currentUser = __webpack_require__(/*! ./currentUser */ "./Client/redux/currentUser.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// action types
+
+var ADD_CONTACT = 'ADD_CONTACT';
+var REMOVE_CONTACT = 'REMOVE_CONTACT';
+
+// action creators
+
+var addContact = function addContact(contact) {
+  return { type: ADD_CONTACT, contact: contact };
+};
+var removeContact = function removeContact(contact) {
+  return { type: REMOVE_CONTACT, contact: contact };
+};
+
+// Thunk creators
+
+var addNewContact = exports.addNewContact = function addNewContact(credentials) {
+  return function (dispatch) {
+    _axios2.default.post('/api/contact', credentials).then(function (res) {
+      dispatch(addContact(res.data));
+      dispatch((0, _currentUser.fetchCurrentUser)());
+    });
+  };
+};
+
+var removeExistContact = exports.removeExistContact = function removeExistContact(credential) {
+  return function (dispatch) {
+    _axios2.default.delete('/api/contact/' + credential).then(function (res) {
+      dispatch(removeContact(res.data));
+      dispatch((0, _currentUser.fetchCurrentUser)());
+    });
+  };
+};
+
+// Reducer
+
+function reducer() {
+  var contacts = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+  var action = arguments[1];
+
+  switch (action.type) {
+    case ADD_CONTACT:
+      return action.contact;
+    default:
+      return contacts;
+  }
+}
+
+/***/ }),
+
 /***/ "./Client/redux/currentUser.js":
 /*!*************************************!*\
   !*** ./Client/redux/currentUser.js ***!
@@ -1354,7 +1456,7 @@ var login = exports.login = function login(credentials) {
   return function (dispatch) {
     _axios2.default.put('/api/me', credentials).then(function (res) {
       dispatch(setCurrentUser(res.data));
-      _socket2.default.emit('my status', { email: res.data.email, status: 'rgb(102,255,153)' });
+      _socket2.default.emit('my id', { id: res.data.id });
     });
   };
 };
@@ -1362,7 +1464,7 @@ var signup = exports.signup = function signup(credentials) {
   return function (dispatch) {
     _axios2.default.post('/api/me', credentials).then(function (res) {
       dispatch(setCurrentUser(res.data));
-      _socket2.default.emit('my status', { email: res.data.email, status: 'rgb(102,255,153)' });
+      _socket2.default.emit('my id', { id: res.data.id });
     });
   };
 };
@@ -1380,7 +1482,7 @@ var logout = exports.logout = function logout(credential) {
     _axios2.default.delete('/api/me').then(function () {
       return dispatch(removeCurrentUser());
     });
-    _socket2.default.emit('my status', credential);
+    _socket2.default.emit('my id', credential);
   };
 };
 
@@ -1415,7 +1517,7 @@ function reducer() {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.fetchStatus = fetchStatus;
+exports.fetchId = fetchId;
 exports.default = reducer;
 
 var _socket = __webpack_require__(/*! ../socket */ "./Client/socket.js");
@@ -1430,26 +1532,29 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 // action types
 
-var FETCH_STATUS = 'FETCH_STATUS';
+var FETCH_VALUE = 'FETCH_VALUE';
 
 // action creators
 
-function fetchStatus(status) {
-  var action = { type: FETCH_STATUS, status: status };
+function fetchId(value) {
+  var action = { type: FETCH_VALUE, value: value };
   return action;
 }
+
+//Thunk
+
 
 // Reducer
 
 function reducer() {
-  var initialStatus = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var initialId = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
   var action = arguments[1];
 
   switch (action.type) {
-    case FETCH_STATUS:
-      return action.status;
+    case FETCH_VALUE:
+      return action.value;
     default:
-      return initialStatus;
+      return initialId;
   }
 }
 
@@ -1468,32 +1573,49 @@ function reducer() {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.changeUserInfo = undefined;
+exports.getUserInfo = exports.changeUserInfo = undefined;
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 exports.default = reducer;
 
 var _axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 
 var _axios2 = _interopRequireDefault(_axios);
 
+var _currentUser = __webpack_require__(/*! ./currentUser */ "./Client/redux/currentUser.js");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // action types
 
-var CHANGE_USER = 'CHANGE_USER';
+var CHANGE_USER_STATUS = 'CHANGE_USER_STATUS';
+var GET_USER = 'GET_USER';
 
 // action creators
 
 var changeUser = function changeUser(user) {
-  return { type: CHANGE_USER, user: user };
+  return { type: CHANGE_USER_STATUS, user: user };
 };
-// const removeCurrentUser = () =>({ type: REMOVE_CURRENT_USER });
+var getUser = function getUser(user) {
+  return { type: GET_USER, user: user };
+};
 
 // Thunk creators
 
 var changeUserInfo = exports.changeUserInfo = function changeUserInfo(credentials) {
   return function (dispatch) {
     _axios2.default.put('/api/users/' + credentials.id, { status: credentials.status }).then(function (res) {
-      return dispatch(changeUser(res.data));
+      dispatch(changeUser(res.data.status));
+      dispatch((0, _currentUser.fetchCurrentUser)());
+    });
+  };
+};
+
+var getUserInfo = exports.getUserInfo = function getUserInfo(credential) {
+  return function (dispatch) {
+    _axios2.default.get('/api/users/' + credential).then(function (res) {
+      return dispatch(getUser(res.data.status));
     });
   };
 };
@@ -1501,12 +1623,16 @@ var changeUserInfo = exports.changeUserInfo = function changeUserInfo(credential
 // Reducer
 
 function reducer() {
-  var user = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+  var user = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { changeUserStatus: '', getUserStatus: '' };
   var action = arguments[1];
 
   switch (action.type) {
-    case CHANGE_USER:
-      return action.user;
+    case CHANGE_USER_STATUS:
+      return _extends({}, user, {
+        changeUserStatus: action.user });
+    case GET_USER:
+      return _extends({}, user, {
+        getUserStatus: action.user });
     default:
       return user;
   }
@@ -1548,9 +1674,9 @@ var socket = (0, _socket2.default)(window.location.origin);
 socket.on('connect', function () {
     console.log('connected to the server!');
 
-    socket.on('contact status', function (status) {
-        // console.log('got ' + JSON.stringify(status) + ' back!!!!!!');
-        _store2.default.dispatch((0, _status.fetchStatus)(status));
+    socket.on('contact ownId', function (value) {
+        console.log('***************', JSON.stringify(value));
+        _store2.default.dispatch((0, _status.fetchId)(value));
         // axios.get('api/me').then(res=>{
         //     console.log('***********', res.data)
         //   });
@@ -1606,9 +1732,13 @@ var _status = __webpack_require__(/*! ./redux/status */ "./Client/redux/status.j
 
 var _status2 = _interopRequireDefault(_status);
 
+var _contact = __webpack_require__(/*! ./redux/contact */ "./Client/redux/contact.js");
+
+var _contact2 = _interopRequireDefault(_contact);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var reducer = (0, _redux.combineReducers)({ currentUser: _currentUser2.default, user: _user2.default, status: _status2.default });
+var reducer = (0, _redux.combineReducers)({ currentUser: _currentUser2.default, user: _user2.default, status: _status2.default, contact: _contact2.default });
 
 var store = (0, _redux.createStore)(reducer, (0, _reduxDevtoolsExtension.composeWithDevTools)((0, _redux.applyMiddleware)(_reduxThunk2.default, _reduxLogger2.default)));
 

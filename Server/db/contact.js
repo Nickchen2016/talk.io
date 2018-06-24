@@ -2,6 +2,10 @@ const Sequelize = require('sequelize');
 const db = require('./just-the-db');
 
 const Contact = db.define('contact', {
+    ownId: {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
     color: {
         type: Sequelize.STRING,
         allowNull: false
@@ -21,6 +25,7 @@ const Contact = db.define('contact', {
             isEmail: true
         }
     }
+
 })
 
 module.exports = Contact;
