@@ -436,8 +436,8 @@ var Sidebar = function (_Component) {
             searchName: '',
             newContact: {},
             // contactStatus: [],
-            loggedInfo: 'loggedInfo'
-            // currentStatus: 'rgb(102,255,153)'
+            loggedInfo: 'loggedInfo',
+            currentStatus: 'rgb(102,255,153)'
         };
         _this.loggedInfo = _this.loggedInfo.bind(_this);
         _this.search = _this.search.bind(_this);
@@ -483,8 +483,9 @@ var Sidebar = function (_Component) {
     _createClass(Sidebar, [{
         key: 'changeStatus',
         value: function changeStatus(status) {
-            // this.setState({currentStatus: status});
-            this.props.changeUserInfo({ id: this.props.loggedUser.id, status: status });
+            this.setState({ currentStatus: status });
+            this.props.changeUserInfo({ id: this.props.loggedUser.id.toString(), status: status });
+            this.props.updateContactStatus({ ownId: this.props.loggedUser.id.toString(), status: status });
             _socket2.default.emit('my id', { id: this.props.loggedUser.id });
         }
     }, {
@@ -573,7 +574,7 @@ var Sidebar = function (_Component) {
             //     c.email===this.props.socketStatus.email?c.status===this.props.socketStatus.status:contactStatus.push(this.props.socketStatus.status)
             // })
 
-            console.log('----66666----', this.props.getUserStatus);
+            // console.log('----66666----', typeof this.props.loggedUser.id);
             return _react2.default.createElement(
                 'div',
                 { id: 'talk-container' },
@@ -717,6 +718,7 @@ var Sidebar = function (_Component) {
                                             )
                                         ),
                                         _react2.default.createElement('span', { className: 'individualStatus', style: { backgroundColor:
+
                                                 // `${this.state.contactStatus.filter(contact=>
                                                 //      contact.email===c.email)[0] ? 
                                                 //      this.state.contactStatus.filter(contact=> 
@@ -883,7 +885,8 @@ var Sidebar = function (_Component) {
                                             color: _this3.state.newContact.color,
                                             name: _this3.state.newContact.name,
                                             email: _this3.state.newContact.email,
-                                            userId: _this3.props.loggedUser.id
+                                            userId: _this3.props.loggedUser.id,
+                                            status: _this3.props.loggedUser.status
                                         });
                                         _this3.setState({ newContact: {} });
                                     } },
@@ -901,7 +904,7 @@ var Sidebar = function (_Component) {
 }(_react.Component);
 
 var mapState = function mapState(state) {
-    return { loggedUser: state.currentUser, getUserStatus: state.user.getUserStatus };
+    return { loggedUser: state.currentUser, getUserStatus: state.user.getUserStatus, contactStatus: state.status };
 };
 
 var mapDispatch = function mapDispatch(dispatch, ownProps) {
@@ -921,6 +924,9 @@ var mapDispatch = function mapDispatch(dispatch, ownProps) {
         },
         removeExistContact: function removeExistContact(credential) {
             dispatch((0, _contact.removeExistContact)(credential));
+        },
+        updateContactStatus: function updateContactStatus(credentials) {
+            dispatch((0, _contact.updateContactStatus)(credentials));
         }
     };
 };
@@ -1349,7 +1355,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.removeExistContact = exports.addNewContact = undefined;
+exports.removeExistContact = exports.updateContactStatus = exports.addNewContact = undefined;
 exports.default = reducer;
 
 var _axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
@@ -1363,6 +1369,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // action types
 
 var ADD_CONTACT = 'ADD_CONTACT';
+// const   UPDATE_CONTACT_STATUS = 'UPDATE_CONTACT_STATUS';
 var REMOVE_CONTACT = 'REMOVE_CONTACT';
 
 // action creators
@@ -1370,6 +1377,7 @@ var REMOVE_CONTACT = 'REMOVE_CONTACT';
 var addContact = function addContact(contact) {
   return { type: ADD_CONTACT, contact: contact };
 };
+// const updateContact = contact => ({ type: UPDATE_CONTACT_STATUS, contact });
 var removeContact = function removeContact(contact) {
   return { type: REMOVE_CONTACT, contact: contact };
 };
@@ -1381,6 +1389,14 @@ var addNewContact = exports.addNewContact = function addNewContact(credentials) 
     _axios2.default.post('/api/contact', credentials).then(function (res) {
       dispatch(addContact(res.data));
       dispatch((0, _currentUser.fetchCurrentUser)());
+    });
+  };
+};
+
+var updateContactStatus = exports.updateContactStatus = function updateContactStatus(credentials) {
+  return function (dispatch) {
+    _axios2.default.put('/api/contact', credentials).then(function () {
+      return dispatch((0, _currentUser.fetchCurrentUser)());
     });
   };
 };
@@ -1517,7 +1533,7 @@ function reducer() {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.fetchId = fetchId;
+exports.getCurrentUser = undefined;
 exports.default = reducer;
 
 var _socket = __webpack_require__(/*! ../socket */ "./Client/socket.js");
@@ -1533,28 +1549,48 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // action types
 
 var FETCH_VALUE = 'FETCH_VALUE';
+// const FIRST_STATUS = 'FIRST_STATUS';
 
 // action creators
 
-function fetchId(value) {
-  var action = { type: FETCH_VALUE, value: value };
-  return action;
-}
+var contactStatus = function contactStatus(contact) {
+  return { type: FETCH_VALUE, contact: contact };
+};
+// const firstStatus = status => ({ type: FIRST_STATUS, status });
 
 //Thunk
 
+var getCurrentUser = exports.getCurrentUser = function getCurrentUser(value) {
+  return function (dispatch) {
+    _axios2.default.get('/api/me').then(function (res) {
+      return res.data.contacts.filter(function (c) {
+        return c.ownId == value.id;
+      })[0];
+    }).then(function (contact) {
+      if (contact) {
+        _axios2.default.get('/api/users/' + contact.ownId).then(function (res) {
+          return dispatch(contactStatus(res.data));
+        });
+      }
+    });
+  };
+};
+
+// export const initialStatus = (credential) => dispatch => {
+//   axios
+// }
 
 // Reducer
 
 function reducer() {
-  var initialId = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+  var initialState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var action = arguments[1];
 
   switch (action.type) {
     case FETCH_VALUE:
-      return action.value;
+      return action.contact;
     default:
-      return initialId;
+      return initialState;
   }
 }
 
@@ -1573,7 +1609,7 @@ function reducer() {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getUserInfo = exports.changeUserInfo = undefined;
+exports.changeUserInfo = undefined;
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -1590,16 +1626,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // action types
 
 var CHANGE_USER_STATUS = 'CHANGE_USER_STATUS';
-var GET_USER = 'GET_USER';
+// const GET_USER = 'GET_USER';
 
 // action creators
 
 var changeUser = function changeUser(user) {
   return { type: CHANGE_USER_STATUS, user: user };
 };
-var getUser = function getUser(user) {
-  return { type: GET_USER, user: user };
-};
+// const getUser = user =>({ type: GET_USER, user });
 
 // Thunk creators
 
@@ -1612,13 +1646,10 @@ var changeUserInfo = exports.changeUserInfo = function changeUserInfo(credential
   };
 };
 
-var getUserInfo = exports.getUserInfo = function getUserInfo(credential) {
-  return function (dispatch) {
-    _axios2.default.get('/api/users/' + credential).then(function (res) {
-      return dispatch(getUser(res.data.status));
-    });
-  };
-};
+// export const getUserInfo = (credential) => dispatch => {
+//   axios.get(`/api/users/${credential}`)
+//     .then(res => dispatch(getUser(res.data.status)));
+// }
 
 // Reducer
 
@@ -1630,9 +1661,9 @@ function reducer() {
     case CHANGE_USER_STATUS:
       return _extends({}, user, {
         changeUserStatus: action.user });
-    case GET_USER:
-      return _extends({}, user, {
-        getUserStatus: action.user });
+    // case GET_USER:
+    //   return {...user,
+    //           getUserStatus:action.user};
     default:
       return user;
   }
@@ -1675,8 +1706,8 @@ socket.on('connect', function () {
     console.log('connected to the server!');
 
     socket.on('contact ownId', function (value) {
-        console.log('***************', JSON.stringify(value));
-        _store2.default.dispatch((0, _status.fetchId)(value));
+        // console.log('***************', JSON.stringify(value));
+        _store2.default.dispatch((0, _status.getCurrentUser)(value));
         // axios.get('api/me').then(res=>{
         //     console.log('***********', res.data)
         //   });

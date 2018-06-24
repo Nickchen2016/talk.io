@@ -24,6 +24,10 @@ const Contact = db.define('contact', {
             notEmpty: true,
             isEmail: true
         }
+    },
+    status: {
+        type: Sequelize.STRING,
+        allowNull: false
     }
 
 })

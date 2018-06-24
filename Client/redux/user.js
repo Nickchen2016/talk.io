@@ -4,12 +4,12 @@ import { fetchCurrentUser } from './currentUser';
 // action types
 
 const CHANGE_USER_STATUS = 'CHANGE_USER_STATUS';
-const GET_USER = 'GET_USER';
+// const GET_USER = 'GET_USER';
 
 // action creators
 
 const changeUser = user => ({ type: CHANGE_USER_STATUS, user });
-const getUser = user =>({ type: GET_USER, user });
+// const getUser = user =>({ type: GET_USER, user });
 
 // Thunk creators
 
@@ -20,10 +20,10 @@ const getUser = user =>({ type: GET_USER, user });
                    });
   }
 
-  export const getUserInfo = (credential) => dispatch => {
-    axios.get(`/api/users/${credential}`)
-      .then(res => dispatch(getUser(res.data.status)));
-  }
+  // export const getUserInfo = (credential) => dispatch => {
+  //   axios.get(`/api/users/${credential}`)
+  //     .then(res => dispatch(getUser(res.data.status)));
+  // }
 
 // Reducer
 
@@ -32,9 +32,9 @@ export default function reducer (user = {changeUserStatus:'',getUserStatus:''}, 
       case CHANGE_USER_STATUS:
         return {...user,
                 changeUserStatus:action.user};
-      case GET_USER:
-        return {...user,
-                getUserStatus:action.user};
+      // case GET_USER:
+      //   return {...user,
+      //           getUserStatus:action.user};
       default:
         return user;
     }

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Talkpage from './Talkpage';
 import { changeUserInfo, getUserInfo } from '../redux/user';
 import { logout } from '../redux/currentUser';
-import { addNewContact, removeExistContact } from '../redux/contact';
+import { addNewContact, removeExistContact,updateContactStatus } from '../redux/contact';
 import axios from 'axios';
 import socket from '../socket';
 
@@ -23,8 +23,8 @@ class Sidebar extends Component{
             searchName:'',
             newContact:{},
             // contactStatus: [],
-            loggedInfo: 'loggedInfo'
-            // currentStatus: 'rgb(102,255,153)'
+            loggedInfo: 'loggedInfo',
+            currentStatus: 'rgb(102,255,153)'
         }
         this.loggedInfo= this.loggedInfo.bind(this);
         this.search= this.search.bind(this);
@@ -67,8 +67,9 @@ class Sidebar extends Component{
 // }
 
 changeStatus(status){
-    // this.setState({currentStatus: status});
-    this.props.changeUserInfo({id:this.props.loggedUser.id, status});
+    this.setState({currentStatus: status});
+    this.props.changeUserInfo({id:(this.props.loggedUser.id).toString(), status});
+    this.props.updateContactStatus({ownId: (this.props.loggedUser.id).toString(), status})
     socket.emit('my id',{ id: this.props.loggedUser.id });
 }
 
@@ -136,7 +137,7 @@ searchNewContact(el){
         //     c.email===this.props.socketStatus.email?c.status===this.props.socketStatus.status:contactStatus.push(this.props.socketStatus.status)
         // })
 
-        console.log('----66666----', this.props.getUserStatus);
+        // console.log('----66666----', typeof this.props.loggedUser.id);
         return(
             <div id='talk-container'>
 
@@ -195,7 +196,8 @@ searchNewContact(el){
                                             <span className='individualProfile' style={{backgroundColor:`${c.color}`}}>
                                                 <span className='individualCapital'>{ c.name[0].toUpperCase() }</span>
                                             </span>
-                                            <span className='individualStatus' style={{backgroundColor:
+                                            <span className='individualStatus' style={{backgroundColor: 
+                                            
                                             // `${this.state.contactStatus.filter(contact=>
                                             //      contact.email===c.email)[0] ? 
                                             //      this.state.contactStatus.filter(contact=> 
@@ -283,7 +285,8 @@ searchNewContact(el){
                                  color: this.state.newContact.color, 
                                  name: this.state.newContact.name,
                                  email: this.state.newContact.email,
-                                 userId: this.props.loggedUser.id
+                                 userId: this.props.loggedUser.id,
+                                 status: this.props.loggedUser.status
                                 }); 
                                 this.setState({newContact: {}})
                                 }}>
@@ -301,7 +304,7 @@ searchNewContact(el){
     }
 }
 
-const mapState =(state)=>({loggedUser:state.currentUser, getUserStatus: state.user.getUserStatus});
+const mapState =(state)=>({loggedUser:state.currentUser, getUserStatus: state.user.getUserStatus, contactStatus: state.status});
 
 const mapDispatch = (dispatch, ownProps)=>({
     logout: (credential) => {dispatch(logout(credential));
@@ -310,7 +313,8 @@ const mapDispatch = (dispatch, ownProps)=>({
     changeUserInfo: (credentials) => {dispatch(changeUserInfo(credentials))},
     addNewContact: (credentials) => {dispatch(addNewContact(credentials))},
     getUserInfo: (credential) => {dispatch(getUserInfo(credential))},
-    removeExistContact: (credential) => {dispatch(removeExistContact(credential))}
+    removeExistContact: (credential) => {dispatch(removeExistContact(credential))},
+    updateContactStatus: (credentials) => {dispatch(updateContactStatus(credentials))}
 });
 
 export default connect(mapState, mapDispatch)(Sidebar);

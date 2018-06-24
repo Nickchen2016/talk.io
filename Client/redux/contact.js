@@ -4,11 +4,13 @@ import { fetchCurrentUser } from './currentUser';
 // action types
 
 const   ADD_CONTACT = 'ADD_CONTACT';
+// const   UPDATE_CONTACT_STATUS = 'UPDATE_CONTACT_STATUS';
 const   REMOVE_CONTACT = 'REMOVE_CONTACT';
 
 // action creators
 
 const addContact = contact => ({ type: ADD_CONTACT, contact });
+// const updateContact = contact => ({ type: UPDATE_CONTACT_STATUS, contact });
 const removeContact = contact => ({ type: REMOVE_CONTACT, contact });
 
 // Thunk creators
@@ -17,6 +19,11 @@ const removeContact = contact => ({ type: REMOVE_CONTACT, contact });
     axios.post('/api/contact', credentials)
       .then(res => {dispatch(addContact(res.data))
                     dispatch(fetchCurrentUser())});
+  }
+
+  export const updateContactStatus = (credentials)=> dispatch=> {
+    axios.put('/api/contact', credentials)
+    .then(()=> dispatch(fetchCurrentUser()));
   }
 
   export const removeExistContact = (credential) => dispatch => {
