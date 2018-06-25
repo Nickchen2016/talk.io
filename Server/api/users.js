@@ -28,7 +28,7 @@ apiRouter.get('/:id', (req,res,next)=>{
 apiRouter.put('/', (req,res,next)=>{
     Users.findOne({
         where: req.body,
-        attributes:['id','name','email','color']
+        attributes:['id','name','email','color','status']
     })
     .then((result)=>{
         res.status(201).json(result)

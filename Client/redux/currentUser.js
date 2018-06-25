@@ -1,5 +1,8 @@
 import axios from 'axios';
 import socket from '../socket';
+import { changeUserInfo } from './user';
+import { updateContactStatus } from './contact';
+
 
 // action types
 
@@ -16,6 +19,8 @@ const removeCurrentUser = () =>({ type: REMOVE_CURRENT_USER });
 export const login = (credentials) => dispatch => {
     axios.put('/api/me', credentials)
          .then(res => { 
+               dispatch(changeUserInfo({id: res.data.id, status: 'rgb(102,255,153)'}));
+               dispatch(updateContactStatus({ownId: res.data.id, status: 'rgb(102,255,153)'}))
                dispatch(setCurrentUser(res.data));
                socket.emit('my id',{id: res.data.id})
           });

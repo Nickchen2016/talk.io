@@ -27,9 +27,8 @@ class Login extends Component {
         this.props.login({
                 email: event.target.email.value,
                 password: event.target.password.value,
-                status: 'rgb(102,255,153)'
+                // status: 'rgb(102,255,153)'
         });
-        
         this.props.history.push('/sidebar');
     }
 

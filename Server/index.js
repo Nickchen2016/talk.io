@@ -73,7 +73,7 @@ passport.use(new GoogleStrategy({
   
   //config user <=> session about passport
   passport.serializeUser((user, done)=>{
-    done(null, user.id)
+      done(null, user.id)
   });
   passport.deserializeUser((id,done)=>{
     Users.findById(id, {include:[{model: Contact}]})

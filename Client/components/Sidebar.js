@@ -5,7 +5,7 @@ import { changeUserInfo, getUserInfo } from '../redux/user';
 import { logout } from '../redux/currentUser';
 import { addNewContact, removeExistContact,updateContactStatus } from '../redux/contact';
 import axios from 'axios';
-import socket from '../socket';
+// import socket from '../socket';
 
 
 class Sidebar extends Component{
@@ -22,9 +22,8 @@ class Sidebar extends Component{
             statusBar:'',
             searchName:'',
             newContact:{},
-            // contactStatus: [],
-            loggedInfo: 'loggedInfo',
-            currentStatus: 'rgb(102,255,153)'
+            chatSign:'',
+            loggedInfo: 'loggedInfo'
         }
         this.loggedInfo= this.loggedInfo.bind(this);
         this.search= this.search.bind(this);
@@ -37,40 +36,12 @@ class Sidebar extends Component{
         this.individualDelete= this.individualDelete.bind(this);
         this.undo= this.undo.bind(this);
         this.changeStatus= this.changeStatus.bind(this);
-        // this.addNewContact= this.addNewContact.bind(this);
     }
 
-// componentDidUpdate( previousProps,previousState ){
-
-//     if(this.props.socketStatus.status !== previousProps.socketStatus.status || this.props.socketStatus.email !== previousProps.socketStatus.email){
-//         let temp = this.state.contactStatus;
-//         let found = false;
-//         for(let i = 0; i < temp.length; i++) {
-//             if(temp[i].email===this.props.socketStatus.email){
-//                 found = true;
-//                 temp[i].status = this.props.socketStatus.status;
-//             }
-//         }
-
-//         if(found) this.setState({contactStatus: temp});
-//         else {
-//             if(this.props.socketStatus.hasOwnProperty('email')){
-//             temp.push(this.props.socketStatus);
-//             this.setState({contactStatus: temp});
-//             }
-//         }
-//     }
-//     // if(this.state.contactStatus.length > previousState.contactStatus.length){
-//     //         socket.emit('my status', {email: this.props.loggedUser.email, status: this.props.loggedUser.status})
-//     // }
-
-// }
 
 changeStatus(status){
-    this.setState({currentStatus: status});
-    this.props.changeUserInfo({id:(this.props.loggedUser.id).toString(), status});
-    this.props.updateContactStatus({ownId: (this.props.loggedUser.id).toString(), status})
-    socket.emit('my id',{ id: this.props.loggedUser.id });
+    this.props.updateContactStatus({ownId: this.props.loggedUser.id, status});
+    this.props.changeUserInfo({id:this.props.loggedUser.id, status});
 }
 
 loggedInfo() {
@@ -106,7 +77,7 @@ mouseLeave(){
 }
 
 undo(){
-    this.setState({delete:''})
+    this.setState({delete:'', id:''})
 }
 
 search(){
@@ -132,12 +103,8 @@ searchNewContact(el){
 
 
     render() {
-        // let contactStatus= [];
-        // contactStatus.length===0?contactStatus.push(this.props.socketStatus):contactStatus.map(c=>{
-        //     c.email===this.props.socketStatus.email?c.status===this.props.socketStatus.status:contactStatus.push(this.props.socketStatus.status)
-        // })
 
-        // console.log('----66666----', typeof this.props.loggedUser.id);
+        // console.log('----66666----', this.state.chatSign);
         return(
             <div id='talk-container'>
 
@@ -180,7 +147,7 @@ searchNewContact(el){
                             }).filter(el=>el.name.toLowerCase().includes(this.state.searchName))
                             .map(c=>{
                                 return (
-                                    <div className='individualContactInfo' key={c.id}>
+                                    <div className='individualContactInfo' key={c.id} onMouseOver={()=>{c.status==='rgb(102,255,153)'?this.setState({id: c.id, chatSign: 'chatSign'}):this.setState({chatSign: ''})}} onMouseLeave={()=> this.setState({chatSign: ''})}>
                                         <div className='individualContact'>
 
                                             {this.state.id===c.id&&this.state.delete==='delete'?
@@ -188,7 +155,7 @@ searchNewContact(el){
                                                 <span className='confirmText'>Are you sure to<br/>delete?</span>
                                                 <div className='confirmButton'>
                                                     <span className='undoRemove' onClick={this.undo}></span>
-                                                    <span className='confirmRemove' onClick={()=>this.props.removeExistContact(c.id)}></span>
+                                                    <span className='confirmRemove' onClick={()=>{this.props.removeExistContact(c.id); this.setState({delete: ''})}}></span>
                                                 </div>
                                             </div>:''}
 
@@ -196,29 +163,15 @@ searchNewContact(el){
                                             <span className='individualProfile' style={{backgroundColor:`${c.color}`}}>
                                                 <span className='individualCapital'>{ c.name[0].toUpperCase() }</span>
                                             </span>
-                                            <span className='individualStatus' style={{backgroundColor: 
-                                            
-                                            // `${this.state.contactStatus.filter(contact=>
-                                            //      contact.email===c.email)[0] ? 
-                                            //      this.state.contactStatus.filter(contact=> 
-                                            //         contact.email===c.email)[0].status
-                                            //     :
-                                                'rgb(188,190,192)'
-                                            // }`
-                                            }}></span>
+                                            <span className='individualStatus' style={{backgroundColor: c.status}}></span>
                                             <span className='individualName'>{ c.name }</span>
                                         </div>
 
-                                        {/* ${this.state.contactStatus.filter(contact=>
-                                                 contact.email===c.email)[0] ? 
-                                                 this.state.contactStatus.filter(contact=> 
-                                                    contact.email===c.email)[0].status
-                                                :'rgb(188,190,192)'} */}
-
-                                        {/* <div className='chatSign'>
-                                            <span><img src='./img/chat.png' width='35px' /></span>
-                                            <span>Start<br/>Chat</span>
-                                        </div> */}
+                                        { this.state.id===c.id&&this.state.chatSign==='chatSign'&&this.state.delete!=='delete'?<div className={this.state.chatSign}>
+                                                                            <span><img src='./img/chat.png' width='35px' /></span>
+                                                                            <span>Start<br/>Chat</span>
+                                                                           </div>:'' }
+                                        
                                     </div>
                                 )
                             })
@@ -240,7 +193,7 @@ searchNewContact(el){
                             <span value={this.props.loggedUser.email}>Email</span>
                         </div>
                     </div>
-                    <button id='signoutButton' onClick={()=>this.props.logout({id: this.props.loggedUser.id})}>Log out</button>
+                    <button id='signoutButton' onClick={()=>this.props.logout({id: this.props.loggedUser.id, status:'rgb(188,190,192)'})}>Log out</button>
                 </div>:''}
 
                 {this.state.search==='searchBar'?<div id={this.state.search}>
@@ -286,7 +239,7 @@ searchNewContact(el){
                                  name: this.state.newContact.name,
                                  email: this.state.newContact.email,
                                  userId: this.props.loggedUser.id,
-                                 status: this.props.loggedUser.status
+                                 status: this.state.newContact.status
                                 }); 
                                 this.setState({newContact: {}})
                                 }}>

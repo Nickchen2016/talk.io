@@ -3,7 +3,7 @@ const db = require('./just-the-db');
 
 const Contact = db.define('contact', {
     ownId: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
         allowNull: false
     },
     color: {

@@ -137,10 +137,9 @@ var Login = function (_Component) {
             //     .catch(console.error);
             this.props.login({
                 email: event.target.email.value,
-                password: event.target.password.value,
-                status: 'rgb(102,255,153)'
+                password: event.target.password.value
+                // status: 'rgb(102,255,153)'
             });
-
             this.props.history.push('/sidebar');
         }
 
@@ -404,10 +403,6 @@ var _axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 
 var _axios2 = _interopRequireDefault(_axios);
 
-var _socket = __webpack_require__(/*! ../socket */ "./Client/socket.js");
-
-var _socket2 = _interopRequireDefault(_socket);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -415,6 +410,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+// import socket from '../socket';
+
 
 var Sidebar = function (_Component) {
     _inherits(Sidebar, _Component);
@@ -435,9 +433,8 @@ var Sidebar = function (_Component) {
             statusBar: '',
             searchName: '',
             newContact: {},
-            // contactStatus: [],
-            loggedInfo: 'loggedInfo',
-            currentStatus: 'rgb(102,255,153)'
+            chatSign: '',
+            loggedInfo: 'loggedInfo'
         };
         _this.loggedInfo = _this.loggedInfo.bind(_this);
         _this.search = _this.search.bind(_this);
@@ -450,43 +447,14 @@ var Sidebar = function (_Component) {
         _this.individualDelete = _this.individualDelete.bind(_this);
         _this.undo = _this.undo.bind(_this);
         _this.changeStatus = _this.changeStatus.bind(_this);
-        // this.addNewContact= this.addNewContact.bind(this);
         return _this;
     }
-
-    // componentDidUpdate( previousProps,previousState ){
-
-    //     if(this.props.socketStatus.status !== previousProps.socketStatus.status || this.props.socketStatus.email !== previousProps.socketStatus.email){
-    //         let temp = this.state.contactStatus;
-    //         let found = false;
-    //         for(let i = 0; i < temp.length; i++) {
-    //             if(temp[i].email===this.props.socketStatus.email){
-    //                 found = true;
-    //                 temp[i].status = this.props.socketStatus.status;
-    //             }
-    //         }
-
-    //         if(found) this.setState({contactStatus: temp});
-    //         else {
-    //             if(this.props.socketStatus.hasOwnProperty('email')){
-    //             temp.push(this.props.socketStatus);
-    //             this.setState({contactStatus: temp});
-    //             }
-    //         }
-    //     }
-    //     // if(this.state.contactStatus.length > previousState.contactStatus.length){
-    //     //         socket.emit('my status', {email: this.props.loggedUser.email, status: this.props.loggedUser.status})
-    //     // }
-
-    // }
 
     _createClass(Sidebar, [{
         key: 'changeStatus',
         value: function changeStatus(status) {
-            this.setState({ currentStatus: status });
-            this.props.changeUserInfo({ id: this.props.loggedUser.id.toString(), status: status });
-            this.props.updateContactStatus({ ownId: this.props.loggedUser.id.toString(), status: status });
-            _socket2.default.emit('my id', { id: this.props.loggedUser.id });
+            this.props.updateContactStatus({ ownId: this.props.loggedUser.id, status: status });
+            this.props.changeUserInfo({ id: this.props.loggedUser.id, status: status });
         }
     }, {
         key: 'loggedInfo',
@@ -533,7 +501,7 @@ var Sidebar = function (_Component) {
     }, {
         key: 'undo',
         value: function undo() {
-            this.setState({ delete: '' });
+            this.setState({ delete: '', id: '' });
         }
     }, {
         key: 'search',
@@ -569,12 +537,7 @@ var Sidebar = function (_Component) {
         value: function render() {
             var _this3 = this;
 
-            // let contactStatus= [];
-            // contactStatus.length===0?contactStatus.push(this.props.socketStatus):contactStatus.map(c=>{
-            //     c.email===this.props.socketStatus.email?c.status===this.props.socketStatus.status:contactStatus.push(this.props.socketStatus.status)
-            // })
-
-            // console.log('----66666----', typeof this.props.loggedUser.id);
+            // console.log('----66666----', this.state.chatSign);
             return _react2.default.createElement(
                 'div',
                 { id: 'talk-container' },
@@ -682,7 +645,11 @@ var Sidebar = function (_Component) {
                             }).map(function (c) {
                                 return _react2.default.createElement(
                                     'div',
-                                    { className: 'individualContactInfo', key: c.id },
+                                    { className: 'individualContactInfo', key: c.id, onMouseOver: function onMouseOver() {
+                                            c.status === 'rgb(102,255,153)' ? _this3.setState({ id: c.id, chatSign: 'chatSign' }) : _this3.setState({ chatSign: '' });
+                                        }, onMouseLeave: function onMouseLeave() {
+                                            return _this3.setState({ chatSign: '' });
+                                        } },
                                     _react2.default.createElement(
                                         'div',
                                         { className: 'individualContact' },
@@ -701,7 +668,7 @@ var Sidebar = function (_Component) {
                                                 { className: 'confirmButton' },
                                                 _react2.default.createElement('span', { className: 'undoRemove', onClick: _this3.undo }),
                                                 _react2.default.createElement('span', { className: 'confirmRemove', onClick: function onClick() {
-                                                        return _this3.props.removeExistContact(c.id);
+                                                        _this3.props.removeExistContact(c.id);_this3.setState({ delete: '' });
                                                     } })
                                             )
                                         ) : '',
@@ -717,22 +684,29 @@ var Sidebar = function (_Component) {
                                                 c.name[0].toUpperCase()
                                             )
                                         ),
-                                        _react2.default.createElement('span', { className: 'individualStatus', style: { backgroundColor:
-
-                                                // `${this.state.contactStatus.filter(contact=>
-                                                //      contact.email===c.email)[0] ? 
-                                                //      this.state.contactStatus.filter(contact=> 
-                                                //         contact.email===c.email)[0].status
-                                                //     :
-                                                'rgb(188,190,192)'
-                                                // }`
-                                            } }),
+                                        _react2.default.createElement('span', { className: 'individualStatus', style: { backgroundColor: c.status } }),
                                         _react2.default.createElement(
                                             'span',
                                             { className: 'individualName' },
                                             c.name
                                         )
-                                    )
+                                    ),
+                                    _this3.state.id === c.id && _this3.state.chatSign === 'chatSign' && _this3.state.delete !== 'delete' ? _react2.default.createElement(
+                                        'div',
+                                        { className: _this3.state.chatSign },
+                                        _react2.default.createElement(
+                                            'span',
+                                            null,
+                                            _react2.default.createElement('img', { src: './img/chat.png', width: '35px' })
+                                        ),
+                                        _react2.default.createElement(
+                                            'span',
+                                            null,
+                                            'Start',
+                                            _react2.default.createElement('br', null),
+                                            'Chat'
+                                        )
+                                    ) : ''
                                 );
                             })
                         )
@@ -774,7 +748,7 @@ var Sidebar = function (_Component) {
                         _react2.default.createElement(
                             'button',
                             { id: 'signoutButton', onClick: function onClick() {
-                                    return _this3.props.logout({ id: _this3.props.loggedUser.id });
+                                    return _this3.props.logout({ id: _this3.props.loggedUser.id, status: 'rgb(188,190,192)' });
                                 } },
                             'Log out'
                         )
@@ -886,7 +860,7 @@ var Sidebar = function (_Component) {
                                             name: _this3.state.newContact.name,
                                             email: _this3.state.newContact.email,
                                             userId: _this3.props.loggedUser.id,
-                                            status: _this3.props.loggedUser.status
+                                            status: _this3.state.newContact.status
                                         });
                                         _this3.setState({ newContact: {} });
                                     } },
@@ -1364,6 +1338,10 @@ var _axios2 = _interopRequireDefault(_axios);
 
 var _currentUser = __webpack_require__(/*! ./currentUser */ "./Client/redux/currentUser.js");
 
+var _socket = __webpack_require__(/*! ../socket */ "./Client/socket.js");
+
+var _socket2 = _interopRequireDefault(_socket);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // action types
@@ -1397,6 +1375,8 @@ var updateContactStatus = exports.updateContactStatus = function updateContactSt
   return function (dispatch) {
     _axios2.default.put('/api/contact', credentials).then(function () {
       return dispatch((0, _currentUser.fetchCurrentUser)());
+    }).then(function () {
+      return _socket2.default.emit('my id', { id: credentials.ownId });
     });
   };
 };
@@ -1450,6 +1430,10 @@ var _socket = __webpack_require__(/*! ../socket */ "./Client/socket.js");
 
 var _socket2 = _interopRequireDefault(_socket);
 
+var _user = __webpack_require__(/*! ./user */ "./Client/redux/user.js");
+
+var _contact = __webpack_require__(/*! ./contact */ "./Client/redux/contact.js");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // action types
@@ -1471,6 +1455,8 @@ var removeCurrentUser = function removeCurrentUser() {
 var login = exports.login = function login(credentials) {
   return function (dispatch) {
     _axios2.default.put('/api/me', credentials).then(function (res) {
+      dispatch((0, _user.changeUserInfo)({ id: res.data.id, status: 'rgb(102,255,153)' }));
+      dispatch((0, _contact.updateContactStatus)({ ownId: res.data.id, status: 'rgb(102,255,153)' }));
       dispatch(setCurrentUser(res.data));
       _socket2.default.emit('my id', { id: res.data.id });
     });
@@ -1544,6 +1530,8 @@ var _axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 
 var _axios2 = _interopRequireDefault(_axios);
 
+var _currentUser = __webpack_require__(/*! ./currentUser */ "./Client/redux/currentUser.js");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // action types
@@ -1562,17 +1550,17 @@ var contactStatus = function contactStatus(contact) {
 
 var getCurrentUser = exports.getCurrentUser = function getCurrentUser(value) {
   return function (dispatch) {
+    // dispatch(contactStatus(value))
     _axios2.default.get('/api/me').then(function (res) {
       return res.data.contacts.filter(function (c) {
         return c.ownId == value.id;
       })[0];
     }).then(function (contact) {
-      if (contact) {
-        _axios2.default.get('/api/users/' + contact.ownId).then(function (res) {
-          return dispatch(contactStatus(res.data));
-        });
-      }
-    });
+      if (contact) dispatch((0, _currentUser.fetchCurrentUser)());
+    }
+    // console.log('&&&&&&&', contact)
+    // dispatch(contactStatus(value))
+    );
   };
 };
 
@@ -1708,12 +1696,7 @@ socket.on('connect', function () {
     socket.on('contact ownId', function (value) {
         // console.log('***************', JSON.stringify(value));
         _store2.default.dispatch((0, _status.getCurrentUser)(value));
-        // axios.get('api/me').then(res=>{
-        //     console.log('***********', res.data)
-        //   });
     });
-
-    // socket.emit('my status', value);
 });
 
 // socket.on('disconnect', function(socket){

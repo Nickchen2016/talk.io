@@ -12,13 +12,8 @@ import store from './store';
         socket.on('contact ownId', value => {
             // console.log('***************', JSON.stringify(value));
             store.dispatch(getCurrentUser(value));
-            // axios.get('api/me').then(res=>{
-            //     console.log('***********', res.data)
-            //   });
         })
 
-
-    // socket.emit('my status', value);
     })
 
     // socket.on('disconnect', function(socket){

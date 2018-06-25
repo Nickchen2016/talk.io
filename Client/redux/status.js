@@ -1,5 +1,6 @@
 import socket from '../socket';
 import axios from 'axios';
+import { fetchCurrentUser } from './currentUser';
 // action types
 
 const FETCH_VALUE = 'FETCH_VALUE';
@@ -13,13 +14,13 @@ const FETCH_VALUE = 'FETCH_VALUE';
 //Thunk
 
 export const getCurrentUser = (value)=> dispatch=> {
+    // dispatch(contactStatus(value))
   axios.get('/api/me')
     .then(res=> res.data.contacts.filter(c => c.ownId==value.id)[0])
-    .then( contact => {
-      if(contact) {axios.get(`/api/users/${contact.ownId}`)
-                    .then(res => dispatch(contactStatus(res.data)))}
-    })
-}
+    .then( contact => {if(contact) dispatch(fetchCurrentUser())}
+      // console.log('&&&&&&&', contact)
+      // dispatch(contactStatus(value))
+  )}
 
 // export const initialStatus = (credential) => dispatch => {
 //   axios

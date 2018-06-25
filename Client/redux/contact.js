@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { fetchCurrentUser } from './currentUser';
+import socket from '../socket';
 
 // action types
 
@@ -23,7 +24,8 @@ const removeContact = contact => ({ type: REMOVE_CONTACT, contact });
 
   export const updateContactStatus = (credentials)=> dispatch=> {
     axios.put('/api/contact', credentials)
-    .then(()=> dispatch(fetchCurrentUser()));
+    .then(()=> dispatch(fetchCurrentUser()))
+    .then(()=> socket.emit('my id',{ id: credentials.ownId}))
   }
 
   export const removeExistContact = (credential) => dispatch => {
