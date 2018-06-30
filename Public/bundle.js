@@ -1167,8 +1167,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-// import SimpleWebRTC from 'simplewebrtc';
-
 
 var Talkpage = function (_Component) {
     _inherits(Talkpage, _Component);
@@ -1190,8 +1188,12 @@ var Talkpage = function (_Component) {
             img: '',
             activeDrags: 0,
             videoSrc: {},
+            stream: {},
+            counter_stream: {},
             video: ''
         };
+        _this.handleVideo = _this.handleVideo.bind(_this);
+        _this.videoError = _this.videoError.bind(_this);
         _this.capture = _this.capture.bind(_this);
         _this.onStart = _this.onStart.bind(_this);
         _this.onStop = _this.onStop.bind(_this);
@@ -1211,42 +1213,58 @@ var Talkpage = function (_Component) {
                 });
             });
 
-            this.state.peer.on('connection', function (connection) {
-                console.log('someone connected');
-                console.log(connection);
-
-                _this2.setState({
-                    conn: connection
-                }, function () {
-                    _this2.state.conn.on('open', function () {
-                        _this2.setState({
-                            connected: true
-                        });
+            this.state.peer.on('call', function (call) {
+                console.log('******Been called here*******', call);
+                call.answer(_this2.state.stream);
+                _this2.setState({ call: call }, function () {
+                    _this2.state.call.on('stream', function (stream) {
+                        console.log('********I got stream from requestor********', stream);
+                        _this2.setState({ counter_stream: URL.createObjectURL(stream) });
                     });
-                    _this2.state.conn.on('data', function (data) {
-                        return console.log('Received ', data);
-                    });
-                    // this.state.conn.on('data', this.onReceiveData);
-                    // this.state.conn.send('Hello world')
                 });
             });
+
+            // this.state.peer.on('connection', (connection) => {
+            // 	console.log('someone connected');
+            // 	console.log(connection);
+
+            // 	this.setState({
+            // 		conn: connection
+            // 	}, () => {
+            // 		this.state.conn.on('open', () => {
+            // 			this.setState({
+            // 				connected: true
+            //             });
+            // 		});
+            //         this.state.conn.on('data', (data)=> console.log('Received ', data))
+
+            // 	});
+            // });
         }
+    }, {
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            navigator.mediaDevices.getUserMedia = navigator.mediaDevices.getUserMedia || navigator.mediaDevices.webkitGetUserMedia || navigator.mediaDevices.mozGetUserMedia || navigator.mediaDevices.msGetUserMedia || navigator.mediaDevices.oGetUserMedia;
+            if (navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ video: true }).then(this.handleVideo).catch(this.videoError);
+            }
+        }
+    }, {
+        key: 'handleVideo',
+        value: function handleVideo(stream) {
+            this.setState({ stream: stream });
+            var videoSrc = URL.createObjectURL(stream);
+            this.setState({ videoSrc: videoSrc });
+            _socket2.default.emit('peer_id', this.state.my_id);
+        }
+    }, {
+        key: 'videoError',
+        value: function videoError(err) {}
     }, {
         key: 'componentWillUnmount',
         value: function componentWillUnmount() {
             this.state.peer.destroy();
         }
-
-        // componentDidMount(){
-        //     // navigator.mediaDevices.getUserMedia = navigator.mediaDevices.getUserMedia || navigator.mediaDevices.webkitGetUserMedia || navigator.mediaDevices.mozGetUserMedia || navigator.mediaDevices.msGetUserMedia || navigator.mediaDevices.oGetUserMedia;
-        //     // if(navigator.mediaDevices.getUserMedia) {
-        //     //     navigator.mediaDevices.getUserMedia({video: true})
-        //     //     .then(this.handleVideo)
-        //     //     .catch(this.videoError)
-        //     // }
-
-        // }
-
     }, {
         key: 'capture',
         value: function capture() {
@@ -1255,23 +1273,29 @@ var Talkpage = function (_Component) {
             console.log('Here is the counter id I got: ', this.props.counterId);
             var peer_id = this.props.counterId;
             this.setState({ peer_id: peer_id });
-            var connection = this.state.peer.connect(peer_id);
 
-            this.setState({
-                conn: connection
-            }, function () {
-                _this3.state.conn.on('open', function () {
-                    _this3.setState({
-                        connected: true
-                    });
-                    _this3.state.conn.send('Hello world');
+            var call = this.state.peer.call(peer_id, this.state.stream);
+            this.setState({ call: call }, function () {
+                _this3.state.call.on('stream', function (stream) {
+                    console.log('*********I got stream from the reciever********', stream);
+                    _this3.setState({ counter_stream: URL.createObjectURL(stream) });
                 });
-                _this3.state.conn.on('data', function (data) {
-                    return console.log('--------Received---------', data);
-                });
-                // this.state.conn.on('data', this.onReceiveData);
-                // this.state.conn.send('Hello world')
             });
+            // var connection = this.state.peer.connect(peer_id);
+
+            // this.setState({
+            //     conn: connection
+            // }, () => {
+            // 	this.state.conn.on('open', () => {
+            // 		this.setState({
+            // 			connected: true
+            //         });
+            //     this.state.conn.send('Hello world')
+            //     });
+            //     this.state.conn.on('data', (data)=> console.log('--------Received---------', data))
+            //     // this.state.conn.on('data', this.onReceiveData);
+            //     // this.state.conn.send('Hello world')
+            // });
         }
     }, {
         key: 'onStart',
@@ -1286,25 +1310,12 @@ var Talkpage = function (_Component) {
     }, {
         key: 'render',
         value: function render() {
-            var _this4 = this;
-
             console.log('----------', this.state);
             // const dragHandlers = {onStart: this.onStart, onStop: this.onStop};
             return _react2.default.createElement(
                 'div',
                 { id: 'camera', className: this.props.active },
-                _react2.default.createElement(
-                    'form',
-                    { onSubmit: function onSubmit(event) {
-                            event.preventDefault();_this4.setState({ peer_id: event.target.peer_id.value });_socket2.default.emit('peer_id', event.target.peer_id.value);
-                        } },
-                    _react2.default.createElement('input', { name: 'peer_id', type: 'text' }),
-                    _react2.default.createElement(
-                        'button',
-                        { type: 'submit' },
-                        'Submit'
-                    )
-                ),
+                _react2.default.createElement('video', { id: 'localVideo', src: this.state.videoSrc, autoPlay: 'true' }),
                 _react2.default.createElement(
                     _reactDraggable2.default,
                     { bounds: 'parent' },
@@ -1328,7 +1339,8 @@ var Talkpage = function (_Component) {
                                 null,
                                 'Nick Chen'
                             )
-                        )
+                        ),
+                        _react2.default.createElement('video', { id: 'remoteVideo', src: this.state.counter_stream, autoPlay: 'true' })
                     )
                 ),
                 _react2.default.createElement(
