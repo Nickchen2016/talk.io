@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import Signup from './Signup';
 import Login from './Login';
 import Sidebar from './Sidebar';
-// import { getUserInfo } from '../redux/user';
+import { getUserInfo } from '../redux/user';
 import { fetchCurrentUser } from '../redux/currentUser';
 
 class Root extends Component {
@@ -23,7 +23,6 @@ class Root extends Component {
                        <Route exact path="/" component={Signup} />
                        <Route exact path="/login" component={Login} />
                        <Route exact path="/sidebar" component={Sidebar} />
-                       {/* <Route component={Signup} /> */}
                </div>
            </Router> 
         );

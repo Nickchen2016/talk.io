@@ -1,6 +1,7 @@
 import io from 'socket.io-client';
 import { getCurrentUser } from './redux/status';
 import store from './store';
+import { fetchPeerId } from './redux/peer_id';
 // import axios from 'axios';
 
 // const socketIo = value => {
@@ -12,6 +13,9 @@ import store from './store';
         socket.on('contact ownId', value => {
             // console.log('***************', JSON.stringify(value));
             store.dispatch(getCurrentUser(value));
+        })
+        socket.on('counter_id', value=> {
+            store.dispatch(fetchPeerId(value));
         })
 
     })

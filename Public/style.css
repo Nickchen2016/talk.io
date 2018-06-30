@@ -574,7 +574,7 @@ a {
     transition: filter 0.4s linear;
 }
 
-.webcam {
+#localVideo {
     position: absolute;
     z-index: -2;
     min-width:100%; min-height:100%; 
@@ -729,21 +729,31 @@ a {
     background-color: rgba(0,0,0,0.5)
 }
 
-.box {
+#remote {
     background: #D1D3D4;
     border-radius: 6px;
     width: 320px;
-    height: 200px;
-    margin: 20px;
-    padding: 10px;
+    height: 230px;
+    margin: 30px;
     float: right;
   }
+
+#remoteVideo {
+    border-radius: 6px;
+    width: 320px;
+    height: 230px;
+    /* min-width:100%; min-height:100%;  */
+    width:auto; height:auto;
+    /* background-color: red; */
+}
 
   .react-draggable, .cursor {
     cursor: move;
   }
 
   #contactToChat {
+    position: absolute;
+    padding: 10px;
     display: flex;
     width: 300px; height: 40px;
     font-size: 15px;

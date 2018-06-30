@@ -5,6 +5,7 @@ import { changeUserInfo, getUserInfo } from '../redux/user';
 import { logout } from '../redux/currentUser';
 import { addNewContact, removeExistContact,updateContactStatus } from '../redux/contact';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 // import socket from '../socket';
 
 
@@ -33,9 +34,9 @@ class Sidebar extends Component{
         this.onClick= this.onCLick.bind(this);
         this.mouseOver= this.mouseOver.bind(this);
         this.mouseLeave= this.mouseLeave.bind(this);
-        this.individualDelete= this.individualDelete.bind(this);
         this.undo= this.undo.bind(this);
         this.changeStatus= this.changeStatus.bind(this);
+        this.chat=this.chat.bind(this);
     }
 
 
@@ -54,10 +55,6 @@ showStatusBar(){
     }else{
         this.setState({statusBar:''})
     }
-}
-
-individualDelete() {
-        this.setState({delete: 'delete'})
 }
 
 onCLick(){
@@ -101,10 +98,14 @@ searchNewContact(el){
          .catch(err=> console.error('=======',err))
 }
 
+chat(){
+
+}
+
 
     render() {
 
-        // console.log('----66666----', this.state.chatSign);
+        // console.log('----66666----', this.props);
         return(
             <div id='talk-container'>
 
@@ -147,7 +148,7 @@ searchNewContact(el){
                             }).filter(el=>el.name.toLowerCase().includes(this.state.searchName))
                             .map(c=>{
                                 return (
-                                    <div className='individualContactInfo' key={c.id} onMouseOver={()=>{c.status==='rgb(102,255,153)'?this.setState({id: c.id, chatSign: 'chatSign'}):this.setState({chatSign: ''})}} onMouseLeave={()=> this.setState({chatSign: ''})}>
+                                    <div className='individualContactInfo' key={c.id} onMouseOver={()=>{c.status==='rgb(102,255,153)'?this.setState({id: c.id, chatSign: 'chatSign'}):this.setState({id: c.id, chatSign: ''})}} onMouseLeave={()=> this.setState({id: '', chatSign: '', delete:''})}>
                                         <div className='individualContact'>
 
                                             {this.state.id===c.id&&this.state.delete==='delete'?
@@ -155,11 +156,11 @@ searchNewContact(el){
                                                 <span className='confirmText'>Are you sure to<br/>delete?</span>
                                                 <div className='confirmButton'>
                                                     <span className='undoRemove' onClick={this.undo}></span>
-                                                    <span className='confirmRemove' onClick={()=>{this.props.removeExistContact(c.id); this.setState({delete: ''})}}></span>
+                                                    <span className='confirmRemove' onClick={()=>{this.props.removeExistContact(c.id); this.setState({id: '', delete: ''})}}></span>
                                                 </div>
                                             </div>:''}
 
-                                            <span className='close' onClick={()=>{this.setState({id: c.id});this.individualDelete()}}></span>
+                                            <span className='close' onClick={()=>{this.setState({delete: 'delete'})}}></span>
                                             <span className='individualProfile' style={{backgroundColor:`${c.color}`}}>
                                                 <span className='individualCapital'>{ c.name[0].toUpperCase() }</span>
                                             </span>
@@ -167,7 +168,7 @@ searchNewContact(el){
                                             <span className='individualName'>{ c.name }</span>
                                         </div>
 
-                                        { this.state.id===c.id&&this.state.chatSign==='chatSign'&&this.state.delete!=='delete'?<div className={this.state.chatSign}>
+                                        { this.state.id===c.id&&this.state.chatSign==='chatSign'&&this.state.delete!=='delete'?<div className={this.state.chatSign} onClick={()=>this.chat()}>
                                                                             <span><img src='./img/chat.png' width='35px' /></span>
                                                                             <span>Start<br/>Chat</span>
                                                                            </div>:'' }
@@ -255,6 +256,11 @@ searchNewContact(el){
             </div>
         )
     }
+}
+
+Talkpage.propTypes = {
+    opts: PropTypes.object,
+    history: PropTypes.object
 }
 
 const mapState =(state)=>({loggedUser:state.currentUser, getUserStatus: state.user.getUserStatus, contactStatus: state.status});
