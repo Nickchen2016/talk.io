@@ -1246,7 +1246,10 @@ var Talkpage = function (_Component) {
         value: function componentDidMount() {
             navigator.mediaDevices.getUserMedia = navigator.mediaDevices.getUserMedia || navigator.mediaDevices.webkitGetUserMedia || navigator.mediaDevices.mozGetUserMedia || navigator.mediaDevices.msGetUserMedia || navigator.mediaDevices.oGetUserMedia;
             if (navigator.mediaDevices.getUserMedia) {
-                navigator.mediaDevices.getUserMedia({ video: true }).then(this.handleVideo).catch(this.videoError);
+                navigator.mediaDevices.getUserMedia({
+                    video: { width: { min: 320 },
+                        height: { min: 240 } }
+                }).then(this.handleVideo).catch(this.videoError);
             }
         }
     }, {

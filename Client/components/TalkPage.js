@@ -75,7 +75,10 @@ class Talkpage extends Component{
     componentDidMount(){
         navigator.mediaDevices.getUserMedia = navigator.mediaDevices.getUserMedia || navigator.mediaDevices.webkitGetUserMedia || navigator.mediaDevices.mozGetUserMedia || navigator.mediaDevices.msGetUserMedia || navigator.mediaDevices.oGetUserMedia;
         if(navigator.mediaDevices.getUserMedia) {
-            navigator.mediaDevices.getUserMedia({video: true})
+            navigator.mediaDevices.getUserMedia({
+                video: {width:{ min: 320 },
+                        height:{ min: 240 }}
+            })
             .then(this.handleVideo)
             .catch(this.videoError)
         }
@@ -141,10 +144,6 @@ class Talkpage extends Component{
             <div id='camera' className={this.props.active}>
 
                 <video id='localVideo' src={this.state.videoSrc} autoPlay='true'></video>
-                {/* <form onSubmit={(event)=>{event.preventDefault(); this.setState({peer_id: event.target.peer_id.value}); socket.emit('peer_id', event.target.peer_id.value)}}>
-                    <input name='peer_id' type='text'></input>
-                    <button type='submit'>Submit</button>
-                </form> */}
 
                 <Draggable bounds='parent' >
                     <div id='remote'>

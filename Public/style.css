@@ -732,8 +732,9 @@ a {
 #remote {
     background: #D1D3D4;
     border-radius: 6px;
+    border: 1px solid black;
     width: 320px;
-    height: 230px;
+    height: 240px;
     margin: 30px;
     float: right;
   }
@@ -742,9 +743,6 @@ a {
     border-radius: 6px;
     width: 320px;
     height: 230px;
-    /* min-width:100%; min-height:100%;  */
-    width:auto; height:auto;
-    /* background-color: red; */
 }
 
   .react-draggable, .cursor {
