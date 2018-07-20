@@ -4,7 +4,6 @@ import Draggable from 'react-draggable';
 import Peer from 'peerjs';
 import PropTypes from 'prop-types';
 import socket from'../socket';
-import randomstring from 'randomstring';
 
 class Talkpage extends Component{
 
@@ -76,8 +75,12 @@ class Talkpage extends Component{
         navigator.mediaDevices.getUserMedia = navigator.mediaDevices.getUserMedia || navigator.mediaDevices.webkitGetUserMedia || navigator.mediaDevices.mozGetUserMedia || navigator.mediaDevices.msGetUserMedia || navigator.mediaDevices.oGetUserMedia;
         if(navigator.mediaDevices.getUserMedia) {
             navigator.mediaDevices.getUserMedia({
-                video: {width:{ min: 320 },
-                        height:{ min: 240 }}
+                audio: {
+                        volume: 0.9,
+                        echoCancellation: true,
+                        noiseSuppression: true
+                },
+                video: true
             })
             .then(this.handleVideo)
             .catch(this.videoError)
@@ -138,14 +141,14 @@ class Talkpage extends Component{
           }
 
     render() {
-        console.log('----------', this.state);
+        console.log('----------', this.props);
         // const dragHandlers = {onStart: this.onStart, onStop: this.onStop};
         return(
             <div id='camera' className={this.props.active}>
 
-                <video id='localVideo' src={this.state.videoSrc} autoPlay='true'></video>
+                <video id='localVideo' src={this.state.videoSrc} autoPlay='true' muted ></video>
 
-                <Draggable bounds='parent' >
+                {this.props.callForChat!=''?<Draggable bounds='parent' >
                     <div id='remote'>
                         <div id='contactToChat'>
                             <span style={{backgroundColor:'black'}}>
@@ -160,7 +163,7 @@ class Talkpage extends Component{
                         </div> */}
                         <video id='remoteVideo' src={this.state.counter_stream} autoPlay='true'></video>
                     </div>
-                </Draggable>
+                </Draggable>:''}
 
                 {/* {this.state.screenshot==='screenshot'? */}
                             {/* <div id={this.state.screenshot}>

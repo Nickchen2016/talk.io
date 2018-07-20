@@ -24,6 +24,7 @@ class Sidebar extends Component{
             searchName:'',
             newContact:{},
             chatSign:'',
+            callForChat:'',
             loggedInfo: 'loggedInfo'
         }
         this.loggedInfo= this.loggedInfo.bind(this);
@@ -99,7 +100,8 @@ searchNewContact(el){
 }
 
 chat(){
-
+    this.setState({callForChat:'callForChat',active:'', statusBar:'',search:'',add:'',searchName:'', loggedInfo:'loggedInfo',newContact: {}});
+    
 }
 
 
@@ -194,7 +196,7 @@ chat(){
                             <span value={this.props.loggedUser.email}>Email</span>
                         </div>
                     </div>
-                    <button id='signoutButton' onClick={()=>this.props.logout({id: this.props.loggedUser.id, status:'rgb(188,190,192)'})}>Log out</button>
+                    <button id='signoutButton' onClick={()=>{this.changeStatus('rgb(188,190,192)'); this.props.logout(this.props.loggedUser.id)}}>Log out</button>
                 </div>:''}
 
                 {this.state.search==='searchBar'?<div id={this.state.search}>
@@ -252,7 +254,7 @@ chat(){
                     </div>:''}
             </div>:''}
 
-            <Talkpage active={this.state.active}/>
+            <Talkpage active={this.state.active} callForChat={this.state.callForChat}/>
             </div>
         )
     }
