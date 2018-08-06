@@ -1,6 +1,7 @@
 import io from 'socket.io-client';
 import { getCurrentUser } from './redux/status';
 import store from './store';
+import { fetchInvitationKey } from './redux/invitation';
 import { fetchPeerId } from './redux/peer_id';
 // import axios from 'axios';
 
@@ -14,7 +15,20 @@ import { fetchPeerId } from './redux/peer_id';
             // console.log('***************', JSON.stringify(value));
             store.dispatch(getCurrentUser(value));
         })
-        socket.on('counter_id', value=> {
+        // socket.on('counter_id', value=> {
+        //     store.dispatch(fetchPeerId(value));
+        // })
+        socket.on('chat_invitation', value=> {
+            console.log('+++++++++', value)
+            store.dispatch(fetchInvitationKey(value));
+            store.dispatch(fetchPeerId(value.peer_id));
+        })
+        socket.on('reject_invitation', value => {
+            console.log('++++ reject invitation ++++', value)
+            store.dispatch(fetchInvitationKey(value));
+        })
+        socket.on('confirm_invitation', value => {
+            console.log('++++ confirm peerId ++++', value)
             store.dispatch(fetchPeerId(value));
         })
 

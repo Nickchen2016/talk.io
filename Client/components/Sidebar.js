@@ -4,9 +4,10 @@ import Talkpage from './Talkpage';
 import { changeUserInfo, getUserInfo } from '../redux/user';
 import { logout } from '../redux/currentUser';
 import { addNewContact, removeExistContact,updateContactStatus } from '../redux/contact';
+import { rejectInvitationKey } from '../redux/invitation';
 import axios from 'axios';
 import PropTypes from 'prop-types';
-// import socket from '../socket';
+import socket from '../socket';
 
 
 class Sidebar extends Component{
@@ -99,9 +100,9 @@ searchNewContact(el){
          .catch(err=> console.error('=======',err))
 }
 
-chat(){
+chat(value){
     this.setState({callForChat:'callForChat',active:'', statusBar:'',search:'',add:'',searchName:'', loggedInfo:'loggedInfo',newContact: {}});
-    
+    socket.emit('trans_info', value);
 }
 
 
@@ -170,7 +171,7 @@ chat(){
                                             <span className='individualName'>{ c.name }</span>
                                         </div>
 
-                                        { this.state.id===c.id&&this.state.chatSign==='chatSign'&&this.state.delete!=='delete'?<div className={this.state.chatSign} onClick={()=>this.chat()}>
+                                        { this.state.id===c.id&&this.state.chatSign==='chatSign'&&this.state.delete!=='delete'?<div className={this.state.chatSign} onClick={()=>this.chat({guest_id:c.ownId,room:this.props.loggedUser.id+c.ownId,inviter:this.props.loggedUser.name})}>
                                                                             <span><img src='./img/chat.png' width='35px' /></span>
                                                                             <span>Start<br/>Chat</span>
                                                                            </div>:'' }
@@ -185,6 +186,16 @@ chat(){
                 </div>
 
             </div>
+
+            {this.props.invitation&&this.props.invitation.guest_id===this.props.loggedUser.id?<div id='notification'><p>{this.props.invitation.inviter} is inviting you for a video chat</p><div>
+                    <div className='confirmButton'>
+                        <span className='undoRemove' onClick={()=>{this.props.rejectInvitationKey(); socket.emit('reject',{inviter:this.props.invitation.inviter, room:this.props.invitation.room, msg:this.props.loggedUser.name +' is not available at the moment'})}}></span>
+                        <span className='confirmRemove' onClick={()=>{this.props.rejectInvitationKey(); socket.emit('confirm', {room:this.props.invitation.room})}}></span>
+                    </div>
+                </div></div>:this.props.invitation&&this.props.invitation.inviter===this.props.loggedUser.name&&this.props.invitation.msg?
+                <div id='notification'><p>{this.props.invitation.msg}</p>
+                    <span className='undoRemove' onClick={()=>{this.props.rejectInvitationKey(); socket.emit('reject',{inviter:this.props.invitation.inviter, room:this.props.invitation.room, msg:this.props.loggedUser.name +' is not available at the moment'})}}></span>
+                </div>:''}
 
             {this.state.active==='active'?<div id={this.state.active}>
 
@@ -265,7 +276,7 @@ Talkpage.propTypes = {
     history: PropTypes.object
 }
 
-const mapState =(state)=>({loggedUser:state.currentUser, getUserStatus: state.user.getUserStatus, contactStatus: state.status});
+const mapState =(state)=>({loggedUser:state.currentUser, getUserStatus: state.user.getUserStatus, contactStatus: state.status, invitation: state.invitation});
 
 const mapDispatch = (dispatch, ownProps)=>({
     logout: (credential) => {dispatch(logout(credential));
@@ -275,7 +286,8 @@ const mapDispatch = (dispatch, ownProps)=>({
     addNewContact: (credentials) => {dispatch(addNewContact(credentials))},
     getUserInfo: (credential) => {dispatch(getUserInfo(credential))},
     removeExistContact: (credential) => {dispatch(removeExistContact(credential))},
-    updateContactStatus: (credentials) => {dispatch(updateContactStatus(credentials))}
+    updateContactStatus: (credentials) => {dispatch(updateContactStatus(credentials))},
+    rejectInvitationKey: (credential) => {dispatch(rejectInvitationKey(credential))}
 });
 
 export default connect(mapState, mapDispatch)(Sidebar);

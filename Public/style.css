@@ -8,6 +8,15 @@
     src: url('./fonts/AvenirMed.ttf')
 }
 
+#notification {
+    display: flex;
+    position: absolute; z-index: 10;
+    top:20px;margin-left: 30%;
+    height: 50px;width: 500px;
+    background-color: white;
+    border-radius: 6px;
+}
+
 .container {
     position: fixed;
     top: 0; right: 0; bottom: 0; left: 0;

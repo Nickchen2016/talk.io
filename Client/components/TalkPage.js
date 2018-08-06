@@ -22,7 +22,7 @@ class Talkpage extends Component{
             activeDrags: 0,
             videoSrc:{},
             stream:{},
-            counter_stream: {},
+            counter_videoSrc: {},
             video: ''
         }
         this.handleVideo= this.handleVideo.bind(this);
@@ -47,11 +47,12 @@ class Talkpage extends Component{
             this.setState({call}, ()=>{
                 this.state.call.on('stream', stream=>{
                     console.log('********I got stream from requestor********', stream)
-                    this.setState({counter_stream: URL.createObjectURL(stream)});
+                    this.setState({counter_videoSrc: URL.createObjectURL(stream)});
                 })
             })
         })
 
+        //--------------------------------------------------------------------------------
 		// this.state.peer.on('connection', (connection) => {
 		// 	console.log('someone connected');
 		// 	console.log(connection);
@@ -67,7 +68,9 @@ class Talkpage extends Component{
         //         this.state.conn.on('data', (data)=> console.log('Received ', data))
 
 		// 	});
-		// });
+        // });
+        
+        //--------------------------------------------------------------------------------
     }
 
 
@@ -85,7 +88,6 @@ class Talkpage extends Component{
             .then(this.handleVideo)
             .catch(this.videoError)
         }
-
     }
 
     handleVideo(stream){
@@ -103,17 +105,19 @@ class Talkpage extends Component{
     }
 
     capture(){
-        console.log('Here is the counter id I got: ', this.props.counterId)
-        let peer_id= this.props.counterId;
+        console.log('Here is the counter id I got: ', this.props.peer_id)
+        let peer_id= this.props.peer_id;
         this.setState({peer_id});
 
         var call = this.state.peer.call(peer_id, this.state.stream);
         this.setState({call}, ()=>{
             this.state.call.on('stream', stream=>{
                 console.log('*********I got stream from the reciever********', stream)
-                this.setState({counter_stream: URL.createObjectURL(stream)});
+                this.setState({counter_videoSrc: URL.createObjectURL(stream)});
             })
         })
+
+        //--------------------------------------------------------------------------------
         // var connection = this.state.peer.connect(peer_id);
 
 		// this.setState({
@@ -128,7 +132,9 @@ class Talkpage extends Component{
         //     this.state.conn.on('data', (data)=> console.log('--------Received---------', data))
         //     // this.state.conn.on('data', this.onReceiveData);
         //     // this.state.conn.send('Hello world')
-		// });
+        // });
+        
+        //--------------------------------------------------------------------------------
 
     }
 
@@ -141,12 +147,14 @@ class Talkpage extends Component{
           }
 
     render() {
-        console.log('----------', this.props);
+        // console.log('-----1----', this.state,'-----2----',this.props.peer_id);
         // const dragHandlers = {onStart: this.onStart, onStop: this.onStop};
         return(
             <div id='camera' className={this.props.active}>
 
                 <video id='localVideo' src={this.state.videoSrc} autoPlay='true' muted ></video>
+
+                {/* {this.props.invitation&&this.props.invitation.guest_id===this.props.loggedUser.id?<div id='notification'>{this.props.invitation.inviter} is inviting you for a video chat</div>:''} */}
 
                 {this.props.callForChat!=''?<Draggable bounds='parent' >
                     <div id='remote'>
@@ -161,7 +169,7 @@ class Talkpage extends Component{
                             <span></span>
                             <span></span>
                         </div> */}
-                        <video id='remoteVideo' src={this.state.counter_stream} autoPlay='true'></video>
+                        <video id='remoteVideo' src={this.state.counter_videoSrc} autoPlay='true'></video>
                     </div>
                 </Draggable>:''}
 
@@ -173,7 +181,7 @@ class Talkpage extends Component{
                             {/* :''} */}
                 <div id='controlButtons'>
                     <span onClick={this.audio} value='Mute'><img src='./img/mute.png'/></span>
-                    <span onClick={this.capture} value='Screenshot'><img src='./img/screenshoot.png'/></span>
+                    {/* <span onClick={this.capture} value='Screenshot'><img src='./img/screenshoot.png'/></span> */}
                     <span  value='End'><img src='./img/stop.png'/></span>
                 </div>
             </div>
@@ -185,6 +193,6 @@ Talkpage.propTypes = {
     opts: PropTypes.object
 }
 
-const mapState =(state)=>({loggedUser:state.currentUser, counterId: state.peer_id})
+const mapState =(state)=>({loggedUser:state.currentUser, invitation: state.invitation, peer_id: state.peer_id})
 
 export default connect(mapState)(Talkpage);

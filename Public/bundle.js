@@ -399,6 +399,8 @@ var _currentUser = __webpack_require__(/*! ../redux/currentUser */ "./Client/red
 
 var _contact = __webpack_require__(/*! ../redux/contact */ "./Client/redux/contact.js");
 
+var _invitation = __webpack_require__(/*! ../redux/invitation */ "./Client/redux/invitation.js");
+
 var _axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 
 var _axios2 = _interopRequireDefault(_axios);
@@ -407,6 +409,10 @@ var _propTypes = __webpack_require__(/*! prop-types */ "./node_modules/prop-type
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
+var _socket = __webpack_require__(/*! ../socket */ "./Client/socket.js");
+
+var _socket2 = _interopRequireDefault(_socket);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -414,9 +420,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-// import socket from '../socket';
-
 
 var Sidebar = function (_Component) {
     _inherits(Sidebar, _Component);
@@ -534,8 +537,9 @@ var Sidebar = function (_Component) {
         }
     }, {
         key: 'chat',
-        value: function chat() {
+        value: function chat(value) {
             this.setState({ callForChat: 'callForChat', active: '', statusBar: '', search: '', add: '', searchName: '', loggedInfo: 'loggedInfo', newContact: {} });
+            _socket2.default.emit('trans_info', value);
         }
     }, {
         key: 'render',
@@ -699,7 +703,7 @@ var Sidebar = function (_Component) {
                                     _this3.state.id === c.id && _this3.state.chatSign === 'chatSign' && _this3.state.delete !== 'delete' ? _react2.default.createElement(
                                         'div',
                                         { className: _this3.state.chatSign, onClick: function onClick() {
-                                                return _this3.chat();
+                                                return _this3.chat({ guest_id: c.ownId, room: _this3.props.loggedUser.id + c.ownId, inviter: _this3.props.loggedUser.name });
                                             } },
                                         _react2.default.createElement(
                                             'span',
@@ -719,6 +723,41 @@ var Sidebar = function (_Component) {
                         )
                     )
                 ),
+                this.props.invitation && this.props.invitation.guest_id === this.props.loggedUser.id ? _react2.default.createElement(
+                    'div',
+                    { id: 'notification' },
+                    _react2.default.createElement(
+                        'p',
+                        null,
+                        this.props.invitation.inviter,
+                        ' is inviting you for a video chat'
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        null,
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'confirmButton' },
+                            _react2.default.createElement('span', { className: 'undoRemove', onClick: function onClick() {
+                                    _this3.props.rejectInvitationKey();_socket2.default.emit('reject', { inviter: _this3.props.invitation.inviter, room: _this3.props.invitation.room, msg: _this3.props.loggedUser.name + ' is not available at the moment' });
+                                } }),
+                            _react2.default.createElement('span', { className: 'confirmRemove', onClick: function onClick() {
+                                    _this3.props.rejectInvitationKey();_socket2.default.emit('confirm', { room: _this3.props.invitation.room });
+                                } })
+                        )
+                    )
+                ) : this.props.invitation && this.props.invitation.inviter === this.props.loggedUser.name && this.props.invitation.msg ? _react2.default.createElement(
+                    'div',
+                    { id: 'notification' },
+                    _react2.default.createElement(
+                        'p',
+                        null,
+                        this.props.invitation.msg
+                    ),
+                    _react2.default.createElement('span', { className: 'undoRemove', onClick: function onClick() {
+                            _this3.props.rejectInvitationKey();_socket2.default.emit('reject', { inviter: _this3.props.invitation.inviter, room: _this3.props.invitation.room, msg: _this3.props.loggedUser.name + ' is not available at the moment' });
+                        } })
+                ) : '',
                 this.state.active === 'active' ? _react2.default.createElement(
                     'div',
                     { id: this.state.active },
@@ -890,7 +929,7 @@ _Talkpage2.default.propTypes = {
 };
 
 var mapState = function mapState(state) {
-    return { loggedUser: state.currentUser, getUserStatus: state.user.getUserStatus, contactStatus: state.status };
+    return { loggedUser: state.currentUser, getUserStatus: state.user.getUserStatus, contactStatus: state.status, invitation: state.invitation };
 };
 
 var mapDispatch = function mapDispatch(dispatch, ownProps) {
@@ -913,6 +952,9 @@ var mapDispatch = function mapDispatch(dispatch, ownProps) {
         },
         updateContactStatus: function updateContactStatus(credentials) {
             dispatch((0, _contact.updateContactStatus)(credentials));
+        },
+        rejectInvitationKey: function rejectInvitationKey(credential) {
+            dispatch((0, _invitation.rejectInvitationKey)(credential));
         }
     };
 };
@@ -1188,7 +1230,7 @@ var Talkpage = function (_Component) {
             activeDrags: 0,
             videoSrc: {},
             stream: {},
-            counter_stream: {},
+            counter_videoSrc: {},
             video: ''
         };
         _this.handleVideo = _this.handleVideo.bind(_this);
@@ -1218,11 +1260,12 @@ var Talkpage = function (_Component) {
                 _this2.setState({ call: call }, function () {
                     _this2.state.call.on('stream', function (stream) {
                         console.log('********I got stream from requestor********', stream);
-                        _this2.setState({ counter_stream: URL.createObjectURL(stream) });
+                        _this2.setState({ counter_videoSrc: URL.createObjectURL(stream) });
                     });
                 });
             });
 
+            //--------------------------------------------------------------------------------
             // this.state.peer.on('connection', (connection) => {
             // 	console.log('someone connected');
             // 	console.log(connection);
@@ -1239,6 +1282,8 @@ var Talkpage = function (_Component) {
 
             // 	});
             // });
+
+            //--------------------------------------------------------------------------------
         }
     }, {
         key: 'componentDidMount',
@@ -1276,17 +1321,19 @@ var Talkpage = function (_Component) {
         value: function capture() {
             var _this3 = this;
 
-            console.log('Here is the counter id I got: ', this.props.counterId);
-            var peer_id = this.props.counterId;
+            console.log('Here is the counter id I got: ', this.props.peer_id);
+            var peer_id = this.props.peer_id;
             this.setState({ peer_id: peer_id });
 
             var call = this.state.peer.call(peer_id, this.state.stream);
             this.setState({ call: call }, function () {
                 _this3.state.call.on('stream', function (stream) {
                     console.log('*********I got stream from the reciever********', stream);
-                    _this3.setState({ counter_stream: URL.createObjectURL(stream) });
+                    _this3.setState({ counter_videoSrc: URL.createObjectURL(stream) });
                 });
             });
+
+            //--------------------------------------------------------------------------------
             // var connection = this.state.peer.connect(peer_id);
 
             // this.setState({
@@ -1302,6 +1349,8 @@ var Talkpage = function (_Component) {
             //     // this.state.conn.on('data', this.onReceiveData);
             //     // this.state.conn.send('Hello world')
             // });
+
+            //--------------------------------------------------------------------------------
         }
     }, {
         key: 'onStart',
@@ -1316,7 +1365,7 @@ var Talkpage = function (_Component) {
     }, {
         key: 'render',
         value: function render() {
-            console.log('----------', this.props);
+            // console.log('-----1----', this.state,'-----2----',this.props.peer_id);
             // const dragHandlers = {onStart: this.onStart, onStop: this.onStop};
             return _react2.default.createElement(
                 'div',
@@ -1346,7 +1395,7 @@ var Talkpage = function (_Component) {
                                 'Nick Chen'
                             )
                         ),
-                        _react2.default.createElement('video', { id: 'remoteVideo', src: this.state.counter_stream, autoPlay: 'true' })
+                        _react2.default.createElement('video', { id: 'remoteVideo', src: this.state.counter_videoSrc, autoPlay: 'true' })
                     )
                 ) : '',
                 _react2.default.createElement(
@@ -1356,11 +1405,6 @@ var Talkpage = function (_Component) {
                         'span',
                         { onClick: this.audio, value: 'Mute' },
                         _react2.default.createElement('img', { src: './img/mute.png' })
-                    ),
-                    _react2.default.createElement(
-                        'span',
-                        { onClick: this.capture, value: 'Screenshot' },
-                        _react2.default.createElement('img', { src: './img/screenshoot.png' })
                     ),
                     _react2.default.createElement(
                         'span',
@@ -1380,7 +1424,7 @@ Talkpage.propTypes = {
 };
 
 var mapState = function mapState(state) {
-    return { loggedUser: state.currentUser, counterId: state.peer_id };
+    return { loggedUser: state.currentUser, invitation: state.invitation, peer_id: state.peer_id };
 };
 
 exports.default = (0, _reactRedux.connect)(mapState)(Talkpage);
@@ -1613,6 +1657,52 @@ function reducer() {
 
 /***/ }),
 
+/***/ "./Client/redux/invitation.js":
+/*!************************************!*\
+  !*** ./Client/redux/invitation.js ***!
+  \************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = reducer;
+// action types
+
+var INVITATION_KEY = 'INVITATION_KEY';
+var REJECT_KEY = 'REJECT_KEY';
+
+// action creators
+
+var fetchInvitationKey = exports.fetchInvitationKey = function fetchInvitationKey(val) {
+  return { type: INVITATION_KEY, val: val };
+};
+var rejectInvitationKey = exports.rejectInvitationKey = function rejectInvitationKey() {
+  return { type: REJECT_KEY };
+};
+
+// Reducer
+
+function reducer() {
+  var initialState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+  var action = arguments[1];
+
+  switch (action.type) {
+    case INVITATION_KEY:
+      return action.val;
+    case REJECT_KEY:
+      return '';
+    default:
+      return initialState;
+  }
+}
+
+/***/ }),
+
 /***/ "./Client/redux/peer_id.js":
 /*!*********************************!*\
   !*** ./Client/redux/peer_id.js ***!
@@ -1830,6 +1920,8 @@ var _store = __webpack_require__(/*! ./store */ "./Client/store.js");
 
 var _store2 = _interopRequireDefault(_store);
 
+var _invitation = __webpack_require__(/*! ./redux/invitation */ "./Client/redux/invitation.js");
+
 var _peer_id = __webpack_require__(/*! ./redux/peer_id */ "./Client/redux/peer_id.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -1846,7 +1938,20 @@ socket.on('connect', function () {
         // console.log('***************', JSON.stringify(value));
         _store2.default.dispatch((0, _status.getCurrentUser)(value));
     });
-    socket.on('counter_id', function (value) {
+    // socket.on('counter_id', value=> {
+    //     store.dispatch(fetchPeerId(value));
+    // })
+    socket.on('chat_invitation', function (value) {
+        console.log('+++++++++', value);
+        _store2.default.dispatch((0, _invitation.fetchInvitationKey)(value));
+        _store2.default.dispatch((0, _peer_id.fetchPeerId)(value.peer_id));
+    });
+    socket.on('reject_invitation', function (value) {
+        console.log('++++ reject invitation ++++', value);
+        _store2.default.dispatch((0, _invitation.fetchInvitationKey)(value));
+    });
+    socket.on('confirm_invitation', function (value) {
+        console.log('++++ confirm peerId ++++', value);
         _store2.default.dispatch((0, _peer_id.fetchPeerId)(value));
     });
 });
@@ -1902,13 +2007,17 @@ var _contact = __webpack_require__(/*! ./redux/contact */ "./Client/redux/contac
 
 var _contact2 = _interopRequireDefault(_contact);
 
+var _invitation = __webpack_require__(/*! ./redux/invitation */ "./Client/redux/invitation.js");
+
+var _invitation2 = _interopRequireDefault(_invitation);
+
 var _peer_id = __webpack_require__(/*! ./redux/peer_id */ "./Client/redux/peer_id.js");
 
 var _peer_id2 = _interopRequireDefault(_peer_id);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var reducer = (0, _redux.combineReducers)({ currentUser: _currentUser2.default, user: _user2.default, status: _status2.default, contact: _contact2.default, peer_id: _peer_id2.default });
+var reducer = (0, _redux.combineReducers)({ currentUser: _currentUser2.default, user: _user2.default, status: _status2.default, contact: _contact2.default, invitation: _invitation2.default, peer_id: _peer_id2.default });
 
 var store = (0, _redux.createStore)(reducer, (0, _reduxDevtoolsExtension.composeWithDevTools)((0, _redux.applyMiddleware)(_reduxThunk2.default, _reduxLogger2.default)));
 

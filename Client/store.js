@@ -7,10 +7,11 @@ import currentUser from './redux/currentUser';
 import user from './redux/user';
 import status from './redux/status';
 import contact from './redux/contact';
+import invitation from './redux/invitation';
 import peer_id from './redux/peer_id';
 
 
-const reducer = combineReducers({ currentUser, user, status, contact, peer_id });
+const reducer = combineReducers({ currentUser, user, status, contact, invitation, peer_id });
 
 const store = createStore(
     reducer,

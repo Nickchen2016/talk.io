@@ -9,7 +9,22 @@ module.exports = (io) => {
         });
         socket.on('peer_id', value=> {
             console.log('-----ID-----', value);
-            socket.broadcast.emit('counter_id', value);
+            socket.on('trans_info', val=> {
+                console.log('**** Here is my desire_id ****', val.guest_id);
+                val['peer_id']=value;
+                socket.broadcast.emit('chat_invitation', val);
+                socket.join(val.room);
+            });
+            socket.on('confirm', val => {
+                console.log('____ confirm Room ____', val)
+                socket.join(val.room);
+                socket.broadcast.to(val.room).emit('confirm_invitation', value);
+            })
+        })
+        socket.on('reject', val=> {
+            console.log('*** reject ***', val);
+            socket.join(val.room);
+            socket.broadcast.to(val.room).emit('reject_invitation', val);
         })
     socket.on('disconnect', function(socket){
         console.log('sad it cut off:(')
