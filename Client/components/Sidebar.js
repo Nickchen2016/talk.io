@@ -265,7 +265,7 @@ chat(value){
                     </div>:''}
             </div>:''}
 
-            <Talkpage ref={ ref => (this.talkpage = ref) } active={this.state.active} callForChat={this.state.callForChat}/>
+            <Talkpage onRef={ ref => (this.talkpage = ref) } active={this.state.active} callForChat={this.state.callForChat}/>
             </div>
         )
     }

@@ -915,8 +915,8 @@ var Sidebar = function (_Component) {
                         )
                     ) : ''
                 ) : '',
-                _react2.default.createElement(_Talkpage2.default, { ref: function ref(_ref) {
-                        return _this3.talkpage = _ref;
+                _react2.default.createElement(_Talkpage2.default, { onRef: function onRef(ref) {
+                        return _this3.talkpage = ref;
                     }, active: this.state.active, callForChat: this.state.callForChat })
             );
         }
@@ -1292,6 +1292,7 @@ var Talkpage = function (_Component) {
     }, {
         key: 'componentDidMount',
         value: function componentDidMount() {
+            this.props.onRef(this);
             navigator.mediaDevices.getUserMedia = navigator.mediaDevices.getUserMedia || navigator.mediaDevices.webkitGetUserMedia || navigator.mediaDevices.mozGetUserMedia || navigator.mediaDevices.msGetUserMedia || navigator.mediaDevices.oGetUserMedia;
             if (navigator.mediaDevices.getUserMedia) {
                 navigator.mediaDevices.getUserMedia({
@@ -1318,6 +1319,7 @@ var Talkpage = function (_Component) {
     }, {
         key: 'componentWillUnmount',
         value: function componentWillUnmount() {
+            this.props.onRef(undefined);
             this.state.peer.destroy();
         }
     }, {
@@ -1326,25 +1328,32 @@ var Talkpage = function (_Component) {
             var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
                 var _this3 = this;
 
-                var peer_id, call;
+                var counter_peer_id, peer_id, call;
                 return regeneratorRuntime.wrap(function _callee$(_context) {
                     while (1) {
                         switch (_context.prev = _context.next) {
                             case 0:
-                                // const counter_peer_id = await this.props.peer_id;
-                                console.log('Here is the counter id I got: ', this.props.peer_id);
-                                peer_id = this.props.peer_id;
+                                _context.next = 2;
+                                return this.props.peer_id;
 
-                                this.setState({ peer_id: peer_id });
+                            case 2:
+                                counter_peer_id = _context.sent;
 
-                                call = this.state.peer.call(peer_id, this.state.stream);
+                                if (counter_peer_id) {
+                                    console.log('Here is the counter id I got: ', this.props.peer_id);
+                                    peer_id = this.props.peer_id;
 
-                                this.setState({ call: call }, function () {
-                                    _this3.state.call.on('stream', function (stream) {
-                                        console.log('*********I got stream from the reciever********', stream);
-                                        _this3.setState({ counter_videoSrc: URL.createObjectURL(stream) });
+                                    this.setState({ peer_id: peer_id });
+
+                                    call = this.state.peer.call(peer_id, this.state.stream);
+
+                                    this.setState({ call: call }, function () {
+                                        _this3.state.call.on('stream', function (stream) {
+                                            console.log('*********I got stream from the reciever********', stream);
+                                            _this3.setState({ counter_videoSrc: URL.createObjectURL(stream) });
+                                        });
                                     });
-                                });
+                                }
 
                                 //--------------------------------------------------------------------------------
                                 // var connection = this.state.peer.connect(peer_id);
@@ -1365,7 +1374,7 @@ var Talkpage = function (_Component) {
 
                                 //--------------------------------------------------------------------------------
 
-                            case 5:
+                            case 4:
                             case 'end':
                                 return _context.stop();
                         }

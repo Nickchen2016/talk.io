@@ -75,6 +75,7 @@ class Talkpage extends Component{
 
 
     componentDidMount(){
+        this.props.onRef(this);
         navigator.mediaDevices.getUserMedia = navigator.mediaDevices.getUserMedia || navigator.mediaDevices.webkitGetUserMedia || navigator.mediaDevices.mozGetUserMedia || navigator.mediaDevices.msGetUserMedia || navigator.mediaDevices.oGetUserMedia;
         if(navigator.mediaDevices.getUserMedia) {
             navigator.mediaDevices.getUserMedia({
@@ -101,22 +102,25 @@ class Talkpage extends Component{
     }
 
     componentWillUnmount(){
+        this.props.onRef(undefined);
 		this.state.peer.destroy();
     }
 
     async capture(){
-        // const counter_peer_id = await this.props.peer_id;
-        console.log('Here is the counter id I got: ', this.props.peer_id)
-        let peer_id= this.props.peer_id;
-        this.setState({peer_id});
+        const counter_peer_id = await this.props.peer_id;
+        if(counter_peer_id) {
+            console.log('Here is the counter id I got: ', this.props.peer_id)
+            let peer_id= this.props.peer_id;
+            this.setState({peer_id});
 
-        var call = this.state.peer.call(peer_id, this.state.stream);
-        this.setState({call}, ()=>{
+            var call = this.state.peer.call(peer_id, this.state.stream);
+            this.setState({call}, ()=>{
             this.state.call.on('stream', stream=>{
                 console.log('*********I got stream from the reciever********', stream)
                 this.setState({counter_videoSrc: URL.createObjectURL(stream)});
             })
         })
+        }
 
         //--------------------------------------------------------------------------------
         // var connection = this.state.peer.connect(peer_id);
