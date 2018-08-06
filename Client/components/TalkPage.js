@@ -104,7 +104,8 @@ class Talkpage extends Component{
 		this.state.peer.destroy();
     }
 
-    capture(){
+    async capture(){
+        // const counter_peer_id = await this.props.peer_id;
         console.log('Here is the counter id I got: ', this.props.peer_id)
         let peer_id= this.props.peer_id;
         this.setState({peer_id});
