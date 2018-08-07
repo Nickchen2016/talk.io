@@ -1432,6 +1432,13 @@ var Talkpage = function (_Component) {
                                 'Nick Chen'
                             )
                         ),
+                        Object.keys(this.state.counter_videoSrc).length === 0 ? _react2.default.createElement(
+                            'div',
+                            { id: 'loadingDots' },
+                            _react2.default.createElement('span', null),
+                            _react2.default.createElement('span', null),
+                            _react2.default.createElement('span', null)
+                        ) : '',
                         _react2.default.createElement('video', { id: 'remoteVideo', src: this.state.counter_videoSrc, autoPlay: 'true' })
                     )
                 ) : '',

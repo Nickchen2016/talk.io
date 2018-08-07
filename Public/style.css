@@ -780,7 +780,7 @@ a {
   }
 
   #loadingDots {
-      margin: 55px auto 0 auto;
+      margin: 35% auto 0 auto;
       width:85px; height: 30px;
       display: flex;
       align-content: center; 
