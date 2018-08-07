@@ -170,11 +170,12 @@ class Talkpage extends Component{
                             <span>Nick Chen</span>
                         </div>
                         {Object.keys(this.state.counter_videoSrc).length===0?
-                        <div id='loadingDots'>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </div>:''}
+                            <div id='loadingDots'>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>:''
+                        }
                         <video id='remoteVideo' src={this.state.counter_videoSrc} autoPlay='true'></video>
                     </div>
                 </Draggable>:''}
