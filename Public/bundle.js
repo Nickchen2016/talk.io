@@ -442,6 +442,7 @@ var Sidebar = function (_Component) {
             newContact: {},
             chatSign: '',
             callForChat: '',
+            confirmChat: '',
             loggedInfo: 'loggedInfo'
         };
         _this.loggedInfo = _this.loggedInfo.bind(_this);
@@ -742,7 +743,7 @@ var Sidebar = function (_Component) {
                                     _this3.props.rejectInvitationKey();_socket2.default.emit('reject', { inviter: _this3.props.invitation.inviter, room: _this3.props.invitation.room, msg: _this3.props.loggedUser.name + ' is not available at the moment' });
                                 } }),
                             _react2.default.createElement('span', { className: 'confirmRemove', onClick: function onClick() {
-                                    _this3.props.rejectInvitationKey();_socket2.default.emit('confirm', { room: _this3.props.invitation.room });_this3.talkpage.capture();
+                                    _this3.props.rejectInvitationKey();_socket2.default.emit('confirm', { room: _this3.props.invitation.room });_this3.setState({ confirmChat: 'confirmChat' });_this3.talkpage.capture();
                                 } })
                         )
                     )
@@ -917,7 +918,7 @@ var Sidebar = function (_Component) {
                 ) : '',
                 _react2.default.createElement(_Talkpage2.default, { onRef: function onRef(ref) {
                         return _this3.talkpage = ref;
-                    }, active: this.state.active, callForChat: this.state.callForChat })
+                    }, active: this.state.active, callForChat: this.state.callForChat, confirmChat: this.state.confirmChat })
             );
         }
     }]);
@@ -1407,7 +1408,7 @@ var Talkpage = function (_Component) {
                 'div',
                 { id: 'camera', className: this.props.active },
                 _react2.default.createElement('video', { id: 'localVideo', src: this.state.videoSrc, autoPlay: 'true', muted: true }),
-                this.props.callForChat != '' ? _react2.default.createElement(
+                this.props.callForChat != '' || this.props.confirmChat != '' ? _react2.default.createElement(
                     _reactDraggable2.default,
                     { bounds: 'parent' },
                     _react2.default.createElement(

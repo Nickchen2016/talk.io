@@ -26,6 +26,7 @@ class Sidebar extends Component{
             newContact:{},
             chatSign:'',
             callForChat:'',
+            confirmChat: '',
             loggedInfo: 'loggedInfo'
         }
         this.loggedInfo= this.loggedInfo.bind(this);
@@ -190,7 +191,7 @@ chat(value){
             {this.props.invitation&&this.props.invitation.guest_id===this.props.loggedUser.id?<div id='notification'><p>{this.props.invitation.inviter} is inviting you for a video chat</p><div>
                     <div className='confirmButton'>
                         <span className='undoRemove' onClick={()=>{this.props.rejectInvitationKey(); socket.emit('reject',{inviter:this.props.invitation.inviter, room:this.props.invitation.room, msg:this.props.loggedUser.name +' is not available at the moment'})}}></span>
-                        <span className='confirmRemove' onClick={()=>{this.props.rejectInvitationKey(); socket.emit('confirm', {room:this.props.invitation.room}); this.talkpage.capture()}}></span>
+                        <span className='confirmRemove' onClick={()=>{this.props.rejectInvitationKey(); socket.emit('confirm', {room:this.props.invitation.room}); this.setState({confirmChat: 'confirmChat'}); this.talkpage.capture()}}></span>
                     </div>
                 </div></div>:this.props.invitation&&this.props.invitation.inviter===this.props.loggedUser.name&&this.props.invitation.msg?
                 <div id='notification'><p>{this.props.invitation.msg}</p>
@@ -265,7 +266,7 @@ chat(value){
                     </div>:''}
             </div>:''}
 
-            <Talkpage onRef={ ref => (this.talkpage = ref) } active={this.state.active} callForChat={this.state.callForChat}/>
+            <Talkpage onRef={ ref => (this.talkpage = ref) } active={this.state.active} callForChat={this.state.callForChat} confirmChat={this.state.confirmChat}/>
             </div>
         )
     }

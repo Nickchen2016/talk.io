@@ -161,7 +161,7 @@ class Talkpage extends Component{
 
                 {/* {this.props.invitation&&this.props.invitation.guest_id===this.props.loggedUser.id?<div id='notification'>{this.props.invitation.inviter} is inviting you for a video chat</div>:''} */}
 
-                {this.props.callForChat!=''?<Draggable bounds='parent' >
+                {this.props.callForChat!=''||this.props.confirmChat!=''?<Draggable bounds='parent' >
                     <div id='remote'>
                         <div id='contactToChat'>
                             <span style={{backgroundColor:'black'}}>
