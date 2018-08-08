@@ -704,7 +704,7 @@ var Sidebar = function (_Component) {
                                     _this3.state.id === c.id && _this3.state.chatSign === 'chatSign' && _this3.state.delete !== 'delete' ? _react2.default.createElement(
                                         'div',
                                         { className: _this3.state.chatSign, onClick: function onClick() {
-                                                return _this3.chat({ guest_id: c.ownId, room: _this3.props.loggedUser.id + c.ownId, inviter: _this3.props.loggedUser.name });
+                                                _this3.changeStatus('rgb(239,65,54)');_this3.chat({ guest_id: c.ownId, room: _this3.props.loggedUser.id + c.ownId, inviter: _this3.props.loggedUser.name });
                                             } },
                                         _react2.default.createElement(
                                             'span',
@@ -737,7 +737,7 @@ var Sidebar = function (_Component) {
                             _this3.props.rejectInvitationKey();_socket2.default.emit('reject', { inviter: _this3.props.invitation.inviter, room: _this3.props.invitation.room, msg: _this3.props.loggedUser.name + ' is not available at the moment' });_this3.setState({ confirmChat: '' });
                         } }),
                     _react2.default.createElement('span', { className: 'confirmRemove', onClick: function onClick() {
-                            _this3.props.rejectInvitationKey();_socket2.default.emit('confirm', { room: _this3.props.invitation.room });_this3.setState({ confirmChat: 'confirmChat', active: '', statusBar: '', search: '', add: '', searchName: '', loggedInfo: 'loggedInfo', newContact: {} });_this3.talkpage.capture();
+                            _this3.props.rejectInvitationKey();_socket2.default.emit('confirm', { room: _this3.props.invitation.room });_this3.setState({ confirmChat: 'confirmChat', active: '', statusBar: '', search: '', add: '', searchName: '', loggedInfo: 'loggedInfo', newContact: {} });_this3.changeStatus('rgb(239,65,54)');_this3.talkpage.capture();
                         } })
                 ) : this.props.invitation && this.props.invitation.inviter === this.props.loggedUser.name && this.props.invitation.msg ? _react2.default.createElement(
                     'div',
