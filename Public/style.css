@@ -9,12 +9,16 @@
 }
 
 #notification {
-    display: flex;
+    display: flex; align-content: center;
     position: absolute; z-index: 10;
     top:20px;margin-left: 30%;
     height: 50px;width: 500px;
     background-color: white;
     border-radius: 6px;
+}
+
+.notice {
+    margin-left: 8%;
 }
 
 .container {

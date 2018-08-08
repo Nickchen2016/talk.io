@@ -188,14 +188,14 @@ chat(value){
 
             </div>
 
-            {this.props.invitation&&this.props.invitation.guest_id===this.props.loggedUser.id?<div id='notification'><p>{this.props.invitation.inviter} is inviting you for a video chat</p><div>
-                    <div className='confirmButton'>
-                        <span className='undoRemove' onClick={()=>{this.props.rejectInvitationKey(); socket.emit('reject',{inviter:this.props.invitation.inviter, room:this.props.invitation.room, msg:this.props.loggedUser.name +' is not available at the moment'})}}></span>
-                        <span className='confirmRemove' onClick={()=>{this.props.rejectInvitationKey(); socket.emit('confirm', {room:this.props.invitation.room}); this.setState({confirmChat: 'confirmChat'}); this.talkpage.capture()}}></span>
-                    </div>
-                </div></div>:this.props.invitation&&this.props.invitation.inviter===this.props.loggedUser.name&&this.props.invitation.msg?
-                <div id='notification'><p>{this.props.invitation.msg}</p>
-                    <span className='undoRemove' onClick={()=>{this.props.rejectInvitationKey(); socket.emit('reject',{inviter:this.props.invitation.inviter, room:this.props.invitation.room, msg:this.props.loggedUser.name +' is not available at the moment'})}}></span>
+            {this.props.invitation&&this.props.invitation.guest_id===this.props.loggedUser.id?<div id='notification'>
+                        <p className='notice'>{this.props.invitation.inviter} is inviting you for a video chat</p>
+                        <span className='undoRemove' onClick={()=>{this.props.rejectInvitationKey(); socket.emit('reject',{inviter:this.props.invitation.inviter, room:this.props.invitation.room, msg:this.props.loggedUser.name +' is not available at the moment'}); this.setState({confirmChat: ''})}}></span>
+                        <span className='confirmRemove' onClick={()=>{this.props.rejectInvitationKey(); socket.emit('confirm', {room:this.props.invitation.room}); this.setState({confirmChat: 'confirmChat', active:'', statusBar:'',search:'',add:'',searchName:'', loggedInfo:'loggedInfo',newContact: {}}); this.talkpage.capture()}}></span>          
+                </div>:this.props.invitation&&this.props.invitation.inviter===this.props.loggedUser.name&&this.props.invitation.msg?
+                <div id='notification'>
+                    <p className='notice'>{this.props.invitation.msg}</p>
+                    <span className='undoRemove' onClick={()=>{this.props.rejectInvitationKey(); this.setState({callForChat:''})}}></span>
                 </div>:''}
 
             {this.state.active==='active'?<div id={this.state.active}>

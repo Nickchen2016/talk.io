@@ -66,7 +66,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./Client/index.js");
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -729,34 +729,26 @@ var Sidebar = function (_Component) {
                     { id: 'notification' },
                     _react2.default.createElement(
                         'p',
-                        null,
+                        { className: 'notice' },
                         this.props.invitation.inviter,
                         ' is inviting you for a video chat'
                     ),
-                    _react2.default.createElement(
-                        'div',
-                        null,
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'confirmButton' },
-                            _react2.default.createElement('span', { className: 'undoRemove', onClick: function onClick() {
-                                    _this3.props.rejectInvitationKey();_socket2.default.emit('reject', { inviter: _this3.props.invitation.inviter, room: _this3.props.invitation.room, msg: _this3.props.loggedUser.name + ' is not available at the moment' });
-                                } }),
-                            _react2.default.createElement('span', { className: 'confirmRemove', onClick: function onClick() {
-                                    _this3.props.rejectInvitationKey();_socket2.default.emit('confirm', { room: _this3.props.invitation.room });_this3.setState({ confirmChat: 'confirmChat' });_this3.talkpage.capture();
-                                } })
-                        )
-                    )
+                    _react2.default.createElement('span', { className: 'undoRemove', onClick: function onClick() {
+                            _this3.props.rejectInvitationKey();_socket2.default.emit('reject', { inviter: _this3.props.invitation.inviter, room: _this3.props.invitation.room, msg: _this3.props.loggedUser.name + ' is not available at the moment' });_this3.setState({ confirmChat: '' });
+                        } }),
+                    _react2.default.createElement('span', { className: 'confirmRemove', onClick: function onClick() {
+                            _this3.props.rejectInvitationKey();_socket2.default.emit('confirm', { room: _this3.props.invitation.room });_this3.setState({ confirmChat: 'confirmChat', active: '', statusBar: '', search: '', add: '', searchName: '', loggedInfo: 'loggedInfo', newContact: {} });_this3.talkpage.capture();
+                        } })
                 ) : this.props.invitation && this.props.invitation.inviter === this.props.loggedUser.name && this.props.invitation.msg ? _react2.default.createElement(
                     'div',
                     { id: 'notification' },
                     _react2.default.createElement(
                         'p',
-                        null,
+                        { className: 'notice' },
                         this.props.invitation.msg
                     ),
                     _react2.default.createElement('span', { className: 'undoRemove', onClick: function onClick() {
-                            _this3.props.rejectInvitationKey();_socket2.default.emit('reject', { inviter: _this3.props.invitation.inviter, room: _this3.props.invitation.room, msg: _this3.props.loggedUser.name + ' is not available at the moment' });
+                            _this3.props.rejectInvitationKey();_this3.setState({ callForChat: '' });
                         } })
                 ) : '',
                 this.state.active === 'active' ? _react2.default.createElement(
@@ -1402,13 +1394,13 @@ var Talkpage = function (_Component) {
     }, {
         key: 'render',
         value: function render() {
-            // console.log('-----1----', this.state,'-----2----',this.props.peer_id);
+            // console.log('-----1----', this.props.confirmChat);
             // const dragHandlers = {onStart: this.onStart, onStop: this.onStop};
             return _react2.default.createElement(
                 'div',
                 { id: 'camera', className: this.props.active },
                 _react2.default.createElement('video', { id: 'localVideo', src: this.state.videoSrc, autoPlay: 'true', muted: true }),
-                this.props.callForChat != '' || this.props.confirmChat != '' ? _react2.default.createElement(
+                this.props.callForChat != '' && !this.props.invitation.msg || this.props.confirmChat != '' ? _react2.default.createElement(
                     _reactDraggable2.default,
                     { bounds: 'parent' },
                     _react2.default.createElement(
@@ -18838,7 +18830,7 @@ var BrowserWebSocket = global.WebSocket || global.MozWebSocket;
 var NodeWebSocket;
 if (typeof window === 'undefined') {
   try {
-    NodeWebSocket = __webpack_require__(/*! ws */ 0);
+    NodeWebSocket = __webpack_require__(/*! ws */ 1);
   } catch (e) { }
 }
 
@@ -57315,6 +57307,19 @@ module.exports = yeast;
 /***/ }),
 
 /***/ 0:
+/*!**********************************************!*\
+  !*** multi babel-polyfill ./Client/index.js ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(/*! babel-polyfill */"./node_modules/babel-polyfill/lib/index.js");
+module.exports = __webpack_require__(/*! ./Client/index.js */"./Client/index.js");
+
+
+/***/ }),
+
+/***/ 1:
 /*!********************!*\
   !*** ws (ignored) ***!
   \********************/
