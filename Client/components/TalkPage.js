@@ -4,6 +4,8 @@ import Draggable from 'react-draggable';
 import Peer from 'peerjs';
 import PropTypes from 'prop-types';
 import socket from'../socket';
+import { changeUserInfo } from '../redux/user';
+import { updateContactStatus } from '../redux/contact';
 
 class Talkpage extends Component{
 
@@ -15,21 +17,23 @@ class Talkpage extends Component{
             peer_id: '',
             initialized: false,
             files: [],
-
             audio: true,
-            screenshot:'',
             img:'',
             activeDrags: 0,
             videoSrc:{},
             stream:{},
             counter_videoSrc: {},
-            video: ''
+            video: '',
+            endCall: false
         }
         this.handleVideo= this.handleVideo.bind(this);
         this.videoError= this.videoError.bind(this);
-        this.capture= this.capture.bind(this);
+        this.connectCall= this.connectCall.bind(this);
+        // this.muted= this.muted.bind(this);
+        this.endCall= this.endCall.bind(this);
         this.onStart = this.onStart.bind(this);
         this.onStop = this.onStop.bind(this);
+        this.changeStatus= this.changeStatus.bind(this);
     }
 
     componentWillMount(){
@@ -51,26 +55,6 @@ class Talkpage extends Component{
                 })
             })
         })
-
-        //--------------------------------------------------------------------------------
-		// this.state.peer.on('connection', (connection) => {
-		// 	console.log('someone connected');
-		// 	console.log(connection);
-
-		// 	this.setState({
-		// 		conn: connection
-		// 	}, () => {
-		// 		this.state.conn.on('open', () => {
-		// 			this.setState({
-		// 				connected: true
-        //             });
-		// 		});
-        //         this.state.conn.on('data', (data)=> console.log('Received ', data))
-
-		// 	});
-        // });
-        
-        //--------------------------------------------------------------------------------
     }
 
 
@@ -106,7 +90,7 @@ class Talkpage extends Component{
 		this.state.peer.destroy();
     }
 
-    async capture(){
+    async connectCall(){
         const counter_peer_id = await this.props.peer_id;
         if(counter_peer_id) {
             console.log('Here is the counter id I got: ', this.props.peer_id)
@@ -122,25 +106,17 @@ class Talkpage extends Component{
         })
         }
 
-        //--------------------------------------------------------------------------------
-        // var connection = this.state.peer.connect(peer_id);
+    }
 
-		// this.setState({
-		//     conn: connection
-		// }, () => {
-		// 	this.state.conn.on('open', () => {
-		// 		this.setState({
-		// 			connected: true
-        //         });
-        //     this.state.conn.send('Hello world')
-        //     });
-        //     this.state.conn.on('data', (data)=> console.log('--------Received---------', data))
-        //     // this.state.conn.on('data', this.onReceiveData);
-        //     // this.state.conn.send('Hello world')
-        // });
-        
-        //--------------------------------------------------------------------------------
+    endCall(){
+        this.setState({ endCall: true })
+        this.state.peer.destroy();
+        this.changeStatus('rgb(102,255,153)')
+    }
 
+    changeStatus(status){
+        this.props.updateContactStatus({ownId: this.props.loggedUser.id, status});
+        this.props.changeUserInfo({id:this.props.loggedUser.id, status});
     }
 
         onStart() {
@@ -159,9 +135,7 @@ class Talkpage extends Component{
 
                 <video id='localVideo' src={this.state.videoSrc} autoPlay='true' muted ></video>
 
-                {/* {this.props.invitation&&this.props.invitation.guest_id===this.props.loggedUser.id?<div id='notification'>{this.props.invitation.inviter} is inviting you for a video chat</div>:''} */}
-
-                {this.props.callForChat!=''&&!this.props.invitation.msg||this.props.confirmChat!=''?<Draggable bounds='parent' >
+                {this.props.callForChat!=''&&!this.props.invitation.msg&&!this.state.endCall||this.props.confirmChat!=''&&!this.state.endCall?<Draggable bounds='parent' >
                     <div id='remote'>
                         <div id='contactToChat'>
                             <span style={{backgroundColor:'black'}}>
@@ -180,16 +154,10 @@ class Talkpage extends Component{
                     </div>
                 </Draggable>:''}
 
-                {/* {this.state.screenshot==='screenshot'? */}
-                            {/* <div id={this.state.screenshot}>
-                                <img src={this.state.img} />
-                                <span className='close' onClick={this.removePhoto}></span>
-                            </div> */}
-                            {/* :''} */}
                 <div id='controlButtons'>
-                    <span onClick={this.audio} value='Mute'><img src='./img/mute.png'/></span>
+                    <span onClick={this.muted} value='Mute'><img src='./img/mute.png'/></span>
                     {/* <span onClick={this.capture} value='Screenshot'><img src='./img/screenshoot.png'/></span> */}
-                    <span  value='End'><img src='./img/stop.png'/></span>
+                    <span onClick={this.endCall} value='End'><img src='./img/stop.png'/></span>
                 </div>
             </div>
         )
@@ -200,6 +168,10 @@ Talkpage.propTypes = {
     opts: PropTypes.object
 }
 
-const mapState =(state)=>({loggedUser:state.currentUser, invitation: state.invitation, peer_id: state.peer_id})
+const mapState =(state)=>({loggedUser:state.currentUser, invitation: state.invitation, peer_id: state.peer_id});
+const mapDispatch = (dispatch)=>({
+    changeUserInfo: (credentials) => {dispatch(changeUserInfo(credentials))},
+    updateContactStatus: (credentials) => {dispatch(updateContactStatus(credentials))}
+})
 
-export default connect(mapState)(Talkpage);
+export default connect(mapState, mapDispatch)(Talkpage);

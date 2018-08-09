@@ -737,7 +737,7 @@ var Sidebar = function (_Component) {
                             _this3.props.rejectInvitationKey();_socket2.default.emit('reject', { inviter: _this3.props.invitation.inviter, room: _this3.props.invitation.room, msg: _this3.props.loggedUser.name + ' is not available at the moment' });_this3.setState({ confirmChat: '' });
                         } }),
                     _react2.default.createElement('span', { className: 'confirmRemove', onClick: function onClick() {
-                            _this3.props.rejectInvitationKey();_socket2.default.emit('confirm', { room: _this3.props.invitation.room });_this3.setState({ confirmChat: 'confirmChat', active: '', statusBar: '', search: '', add: '', searchName: '', loggedInfo: 'loggedInfo', newContact: {} });_this3.changeStatus('rgb(239,65,54)');_this3.talkpage.capture();
+                            _this3.props.rejectInvitationKey();_socket2.default.emit('confirm', { room: _this3.props.invitation.room });_this3.setState({ confirmChat: 'confirmChat', active: '', statusBar: '', search: '', add: '', searchName: '', loggedInfo: 'loggedInfo', newContact: {} });_this3.changeStatus('rgb(239,65,54)');_this3.talkpage.connectCall();
                         } })
                 ) : this.props.invitation && this.props.invitation.inviter === this.props.loggedUser.name && this.props.invitation.msg ? _react2.default.createElement(
                     'div',
@@ -1196,6 +1196,10 @@ var _socket = __webpack_require__(/*! ../socket */ "./Client/socket.js");
 
 var _socket2 = _interopRequireDefault(_socket);
 
+var _user = __webpack_require__(/*! ../redux/user */ "./Client/redux/user.js");
+
+var _contact = __webpack_require__(/*! ../redux/contact */ "./Client/redux/contact.js");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
@@ -1220,21 +1224,23 @@ var Talkpage = function (_Component) {
             peer_id: '',
             initialized: false,
             files: [],
-
             audio: true,
-            screenshot: '',
             img: '',
             activeDrags: 0,
             videoSrc: {},
             stream: {},
             counter_videoSrc: {},
-            video: ''
+            video: '',
+            endCall: false
         };
         _this.handleVideo = _this.handleVideo.bind(_this);
         _this.videoError = _this.videoError.bind(_this);
-        _this.capture = _this.capture.bind(_this);
+        _this.connectCall = _this.connectCall.bind(_this);
+        // this.muted= this.muted.bind(this);
+        _this.endCall = _this.endCall.bind(_this);
         _this.onStart = _this.onStart.bind(_this);
         _this.onStop = _this.onStop.bind(_this);
+        _this.changeStatus = _this.changeStatus.bind(_this);
         return _this;
     }
 
@@ -1261,26 +1267,6 @@ var Talkpage = function (_Component) {
                     });
                 });
             });
-
-            //--------------------------------------------------------------------------------
-            // this.state.peer.on('connection', (connection) => {
-            // 	console.log('someone connected');
-            // 	console.log(connection);
-
-            // 	this.setState({
-            // 		conn: connection
-            // 	}, () => {
-            // 		this.state.conn.on('open', () => {
-            // 			this.setState({
-            // 				connected: true
-            //             });
-            // 		});
-            //         this.state.conn.on('data', (data)=> console.log('Received ', data))
-
-            // 	});
-            // });
-
-            //--------------------------------------------------------------------------------
         }
     }, {
         key: 'componentDidMount',
@@ -1316,7 +1302,7 @@ var Talkpage = function (_Component) {
             this.state.peer.destroy();
         }
     }, {
-        key: 'capture',
+        key: 'connectCall',
         value: function () {
             var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
                 var _this3 = this;
@@ -1348,25 +1334,6 @@ var Talkpage = function (_Component) {
                                     });
                                 }
 
-                                //--------------------------------------------------------------------------------
-                                // var connection = this.state.peer.connect(peer_id);
-
-                                // this.setState({
-                                //     conn: connection
-                                // }, () => {
-                                // 	this.state.conn.on('open', () => {
-                                // 		this.setState({
-                                // 			connected: true
-                                //         });
-                                //     this.state.conn.send('Hello world')
-                                //     });
-                                //     this.state.conn.on('data', (data)=> console.log('--------Received---------', data))
-                                //     // this.state.conn.on('data', this.onReceiveData);
-                                //     // this.state.conn.send('Hello world')
-                                // });
-
-                                //--------------------------------------------------------------------------------
-
                             case 4:
                             case 'end':
                                 return _context.stop();
@@ -1375,12 +1342,25 @@ var Talkpage = function (_Component) {
                 }, _callee, this);
             }));
 
-            function capture() {
+            function connectCall() {
                 return _ref.apply(this, arguments);
             }
 
-            return capture;
+            return connectCall;
         }()
+    }, {
+        key: 'endCall',
+        value: function endCall() {
+            this.setState({ endCall: true });
+            this.state.peer.destroy();
+            this.changeStatus('rgb(102,255,153)');
+        }
+    }, {
+        key: 'changeStatus',
+        value: function changeStatus(status) {
+            this.props.updateContactStatus({ ownId: this.props.loggedUser.id, status: status });
+            this.props.changeUserInfo({ id: this.props.loggedUser.id, status: status });
+        }
     }, {
         key: 'onStart',
         value: function onStart() {
@@ -1400,7 +1380,7 @@ var Talkpage = function (_Component) {
                 'div',
                 { id: 'camera', className: this.props.active },
                 _react2.default.createElement('video', { id: 'localVideo', src: this.state.videoSrc, autoPlay: 'true', muted: true }),
-                this.props.callForChat != '' && !this.props.invitation.msg || this.props.confirmChat != '' ? _react2.default.createElement(
+                this.props.callForChat != '' && !this.props.invitation.msg && !this.state.endCall || this.props.confirmChat != '' && !this.state.endCall ? _react2.default.createElement(
                     _reactDraggable2.default,
                     { bounds: 'parent' },
                     _react2.default.createElement(
@@ -1439,12 +1419,12 @@ var Talkpage = function (_Component) {
                     { id: 'controlButtons' },
                     _react2.default.createElement(
                         'span',
-                        { onClick: this.audio, value: 'Mute' },
+                        { onClick: this.muted, value: 'Mute' },
                         _react2.default.createElement('img', { src: './img/mute.png' })
                     ),
                     _react2.default.createElement(
                         'span',
-                        { value: 'End' },
+                        { onClick: this.endCall, value: 'End' },
                         _react2.default.createElement('img', { src: './img/stop.png' })
                     )
                 )
@@ -1462,8 +1442,18 @@ Talkpage.propTypes = {
 var mapState = function mapState(state) {
     return { loggedUser: state.currentUser, invitation: state.invitation, peer_id: state.peer_id };
 };
+var mapDispatch = function mapDispatch(dispatch) {
+    return {
+        changeUserInfo: function changeUserInfo(credentials) {
+            dispatch((0, _user.changeUserInfo)(credentials));
+        },
+        updateContactStatus: function updateContactStatus(credentials) {
+            dispatch((0, _contact.updateContactStatus)(credentials));
+        }
+    };
+};
 
-exports.default = (0, _reactRedux.connect)(mapState)(Talkpage);
+exports.default = (0, _reactRedux.connect)(mapState, mapDispatch)(Talkpage);
 
 /***/ }),
 

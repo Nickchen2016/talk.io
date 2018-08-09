@@ -9,7 +9,7 @@
 }
 
 #notification {
-    display: flex; align-content: center;
+    display: flex;
     position: absolute; z-index: 10;
     top:20px;margin-left: 30%;
     height: 50px;width: 500px;
@@ -265,9 +265,7 @@ a {
 }
 
 #contactList {
-    overflow: auto;
-    height:100%;
-    /* background-color: red;  */
+    overflow: auto; height:100%;
 }
 
 #contactList::-webkit-scrollbar {
@@ -301,7 +299,7 @@ a {
     align-content: center;
     background-color: #66FF99;
     height: 100px; width: 90px;
-    cursor: pointer
+    cursor: pointer;
 }
 
 .chatSign > span:first-child {
@@ -684,7 +682,7 @@ a {
     position: absolute;
     align-content: center;
     bottom: 12%;
-    margin-left: 26%; margin-right: 30%;
+    margin-left: 30%; margin-right: 30%;
     height: 50px; width: 600px;
 }
 
@@ -720,18 +718,6 @@ a {
 
 #controlButtons > span:nth-child(2):hover::after {
     margin-left: -10px
-}
-
-#screenshot {
-    position: absolute;
-    display: flex;
-    z-index:0;
-    bottom:4%; left:4%;
-}
-
-#screenshot img {
-    height:180px;
-    border-radius: 6px;
 }
 
 #active {				
