@@ -441,8 +441,7 @@ var Sidebar = function (_Component) {
             searchName: '',
             newContact: {},
             chatSign: '',
-            callForChat: '',
-            confirmChat: '',
+            guestCallForChat: '',
             loggedInfo: 'loggedInfo'
         };
         _this.loggedInfo = _this.loggedInfo.bind(_this);
@@ -539,7 +538,7 @@ var Sidebar = function (_Component) {
     }, {
         key: 'chat',
         value: function chat(value) {
-            this.setState({ callForChat: 'callForChat', active: '', statusBar: '', search: '', add: '', searchName: '', loggedInfo: 'loggedInfo', newContact: {} });
+            this.setState({ guestCallForChat: { guest_name: value.guest_name, guest_color: value.guest_color }, active: '', statusBar: '', search: '', add: '', searchName: '', loggedInfo: 'loggedInfo', newContact: {} });
             _socket2.default.emit('trans_info', value);
         }
     }, {
@@ -704,7 +703,7 @@ var Sidebar = function (_Component) {
                                     _this3.state.id === c.id && _this3.state.chatSign === 'chatSign' && _this3.state.delete !== 'delete' ? _react2.default.createElement(
                                         'div',
                                         { className: _this3.state.chatSign, onClick: function onClick() {
-                                                _this3.changeStatus('rgb(239,65,54)');_this3.chat({ guest_id: c.ownId, room: _this3.props.loggedUser.id + c.ownId, inviter: _this3.props.loggedUser.name });
+                                                _this3.changeStatus('rgb(239,65,54)');_this3.talkpage.initializeEndCall(true);_this3.chat({ guest_id: c.ownId, guest_name: c.name, guest_color: c.color, room: _this3.props.loggedUser.id + c.ownId, inviter: _this3.props.loggedUser.name, inviter_color: _this3.props.loggedUser.color });
                                             } },
                                         _react2.default.createElement(
                                             'span',
@@ -734,10 +733,10 @@ var Sidebar = function (_Component) {
                         ' is inviting you for a video chat'
                     ),
                     _react2.default.createElement('span', { className: 'undoRemove', onClick: function onClick() {
-                            _this3.props.rejectInvitationKey();_socket2.default.emit('reject', { inviter: _this3.props.invitation.inviter, room: _this3.props.invitation.room, msg: _this3.props.loggedUser.name + ' is not available at the moment' });_this3.setState({ confirmChat: '' });
+                            _this3.props.rejectInvitationKey();_this3.changeStatus('rgb(102,255,153)');_socket2.default.emit('reject', { inviter: _this3.props.invitation.inviter, room: _this3.props.invitation.room, msg: _this3.props.loggedUser.name + ' is not available at the moment' });
                         } }),
                     _react2.default.createElement('span', { className: 'confirmRemove', onClick: function onClick() {
-                            _this3.props.rejectInvitationKey();_socket2.default.emit('confirm', { room: _this3.props.invitation.room });_this3.setState({ confirmChat: 'confirmChat', active: '', statusBar: '', search: '', add: '', searchName: '', loggedInfo: 'loggedInfo', newContact: {} });_this3.changeStatus('rgb(239,65,54)');_this3.talkpage.connectCall();
+                            _this3.props.rejectInvitationKey();_socket2.default.emit('confirm', { room: _this3.props.invitation.room });_this3.setState({ active: '', statusBar: '', search: '', add: '', searchName: '', loggedInfo: 'loggedInfo', newContact: {} });_this3.changeStatus('rgb(239,65,54)');_this3.talkpage.initializeEndCall(true);_this3.talkpage.connectCall();
                         } })
                 ) : this.props.invitation && this.props.invitation.inviter === this.props.loggedUser.name && this.props.invitation.msg ? _react2.default.createElement(
                     'div',
@@ -748,7 +747,7 @@ var Sidebar = function (_Component) {
                         this.props.invitation.msg
                     ),
                     _react2.default.createElement('span', { className: 'undoRemove', onClick: function onClick() {
-                            _this3.props.rejectInvitationKey();_this3.setState({ callForChat: '' });
+                            _this3.props.rejectInvitationKey();_this3.talkpage.initializeEndCall(false);_this3.changeStatus('rgb(102,255,153)');_this3.setState({ guestCallForChat: '' });
                         } })
                 ) : '',
                 this.state.active === 'active' ? _react2.default.createElement(
@@ -910,7 +909,7 @@ var Sidebar = function (_Component) {
                 ) : '',
                 _react2.default.createElement(_Talkpage2.default, { onRef: function onRef(ref) {
                         return _this3.talkpage = ref;
-                    }, active: this.state.active, callForChat: this.state.callForChat, confirmChat: this.state.confirmChat })
+                    }, active: this.state.active, guestCallForChat: this.state.guestCallForChat })
             );
         }
     }]);
@@ -1200,9 +1199,11 @@ var _user = __webpack_require__(/*! ../redux/user */ "./Client/redux/user.js");
 
 var _contact = __webpack_require__(/*! ../redux/contact */ "./Client/redux/contact.js");
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _peer_id = __webpack_require__(/*! ../redux/peer_id */ "./Client/redux/peer_id.js");
 
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+var _inviterInfo = __webpack_require__(/*! ../redux/inviterInfo */ "./Client/redux/inviterInfo.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1236,7 +1237,8 @@ var Talkpage = function (_Component) {
         _this.handleVideo = _this.handleVideo.bind(_this);
         _this.videoError = _this.videoError.bind(_this);
         _this.connectCall = _this.connectCall.bind(_this);
-        // this.muted= this.muted.bind(this);
+        _this.initializeEndCall = _this.initializeEndCall.bind(_this);
+        _this.muted = _this.muted.bind(_this);
         _this.endCall = _this.endCall.bind(_this);
         _this.onStart = _this.onStart.bind(_this);
         _this.onStop = _this.onStop.bind(_this);
@@ -1262,7 +1264,7 @@ var Talkpage = function (_Component) {
                 call.answer(_this2.state.stream);
                 _this2.setState({ call: call }, function () {
                     _this2.state.call.on('stream', function (stream) {
-                        console.log('********I got stream from requestor********', stream);
+                        console.log('********I got stream from receiver********', stream);
                         _this2.setState({ counter_videoSrc: URL.createObjectURL(stream) });
                     });
                 });
@@ -1294,7 +1296,9 @@ var Talkpage = function (_Component) {
         }
     }, {
         key: 'videoError',
-        value: function videoError(err) {}
+        value: function videoError(err) {
+            console.log('Got error here ' + err);
+        }
     }, {
         key: 'componentWillUnmount',
         value: function componentWillUnmount() {
@@ -1302,58 +1306,48 @@ var Talkpage = function (_Component) {
             this.state.peer.destroy();
         }
     }, {
+        key: 'initializeEndCall',
+        value: function initializeEndCall(val) {
+            this.setState({ endCall: val });
+        }
+    }, {
         key: 'connectCall',
-        value: function () {
-            var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-                var _this3 = this;
+        value: function connectCall() {
+            var _this3 = this;
 
-                var counter_peer_id, peer_id, call;
-                return regeneratorRuntime.wrap(function _callee$(_context) {
-                    while (1) {
-                        switch (_context.prev = _context.next) {
-                            case 0:
-                                _context.next = 2;
-                                return this.props.peer_id;
+            if (this.props.peer_id) {
+                console.log('Here is the counter id I got: ', this.props.peer_id);
+                var peer_id = this.props.peer_id;
+                this.setState({ peer_id: peer_id });
 
-                            case 2:
-                                counter_peer_id = _context.sent;
-
-                                if (counter_peer_id) {
-                                    console.log('Here is the counter id I got: ', this.props.peer_id);
-                                    peer_id = this.props.peer_id;
-
-                                    this.setState({ peer_id: peer_id });
-
-                                    call = this.state.peer.call(peer_id, this.state.stream);
-
-                                    this.setState({ call: call }, function () {
-                                        _this3.state.call.on('stream', function (stream) {
-                                            console.log('*********I got stream from the reciever********', stream);
-                                            _this3.setState({ counter_videoSrc: URL.createObjectURL(stream) });
-                                        });
-                                    });
-                                }
-
-                            case 4:
-                            case 'end':
-                                return _context.stop();
-                        }
-                    }
-                }, _callee, this);
-            }));
-
-            function connectCall() {
-                return _ref.apply(this, arguments);
+                var call = this.state.peer.call(peer_id, this.state.stream);
+                this.setState({ call: call }, function () {
+                    _this3.state.call.on('stream', function (stream) {
+                        console.log('*********I got stream from the inviter********', stream);
+                        _this3.setState({ counter_videoSrc: URL.createObjectURL(stream) });
+                    });
+                });
             }
-
-            return connectCall;
-        }()
+        }
     }, {
         key: 'endCall',
         value: function endCall() {
-            this.setState({ endCall: true });
-            this.state.peer.destroy();
+            this.state.call.close();
             this.changeStatus('rgb(102,255,153)');
+            this.setState({ endCall: false });
+            this.props.deleteId();
+            this.props.deleteInviter();
+        }
+    }, {
+        key: 'muted',
+        value: function muted() {
+            navigator.mediaDevices.getUserMedia = navigator.mediaDevices.getUserMedia || navigator.mediaDevices.webkitGetUserMedia || navigator.mediaDevices.mozGetUserMedia || navigator.mediaDevices.msGetUserMedia || navigator.mediaDevices.oGetUserMedia;
+            if (navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({
+                    audio: false,
+                    video: true
+                }).then(this.handleVideo).catch(this.videoError);
+            }
         }
     }, {
         key: 'changeStatus',
@@ -1374,36 +1368,36 @@ var Talkpage = function (_Component) {
     }, {
         key: 'render',
         value: function render() {
-            // console.log('-----1----', this.props.confirmChat);
+            console.log('-----1----', this.state, '-----2----', this.state.my_id);
             // const dragHandlers = {onStart: this.onStart, onStop: this.onStop};
             return _react2.default.createElement(
                 'div',
                 { id: 'camera', className: this.props.active },
                 _react2.default.createElement('video', { id: 'localVideo', src: this.state.videoSrc, autoPlay: 'true', muted: true }),
-                this.props.callForChat != '' && !this.props.invitation.msg && !this.state.endCall || this.props.confirmChat != '' && !this.state.endCall ? _react2.default.createElement(
+                !this.props.invitation.msg && this.state.endCall ? _react2.default.createElement(
                     _reactDraggable2.default,
                     { bounds: 'parent' },
                     _react2.default.createElement(
                         'div',
                         { id: 'remote' },
-                        _react2.default.createElement(
+                        this.props.guestCallForChat != '' && this.props.invitation === '' || this.props.inviterInfo != '' ? _react2.default.createElement(
                             'div',
                             { id: 'contactToChat' },
                             _react2.default.createElement(
                                 'span',
-                                { style: { backgroundColor: 'black' } },
+                                { style: { backgroundColor: '' + (this.props.guestCallForChat.guest_color || this.props.inviterInfo.inviter_color) } },
                                 _react2.default.createElement(
                                     'span',
                                     { id: 'newCap' },
-                                    'N'
+                                    this.props.guestCallForChat && this.props.guestCallForChat.guest_name[0].toUpperCase() || this.props.inviterInfo && this.props.inviterInfo.inviter[0].toUpperCase()
                                 )
                             ),
                             _react2.default.createElement(
                                 'span',
                                 null,
-                                'Nick Chen'
+                                this.props.guestCallForChat.guest_name || this.props.inviterInfo.inviter
                             )
-                        ),
+                        ) : '',
                         Object.keys(this.state.counter_videoSrc).length === 0 ? _react2.default.createElement(
                             'div',
                             { id: 'loadingDots' },
@@ -1440,10 +1434,16 @@ Talkpage.propTypes = {
 };
 
 var mapState = function mapState(state) {
-    return { loggedUser: state.currentUser, invitation: state.invitation, peer_id: state.peer_id };
+    return { loggedUser: state.currentUser, invitation: state.invitation, peer_id: state.peer_id, inviterInfo: state.inviterInfo, changeUserStatus: state.user.changeUserStatus };
 };
 var mapDispatch = function mapDispatch(dispatch) {
     return {
+        deleteInviter: function deleteInviter() {
+            dispatch((0, _inviterInfo.deleteInviter)());
+        },
+        deleteId: function deleteId() {
+            dispatch((0, _peer_id.deleteId)());
+        },
         changeUserInfo: function changeUserInfo(credentials) {
             dispatch((0, _user.changeUserInfo)(credentials));
         },
@@ -1731,6 +1731,52 @@ function reducer() {
 
 /***/ }),
 
+/***/ "./Client/redux/inviterInfo.js":
+/*!*************************************!*\
+  !*** ./Client/redux/inviterInfo.js ***!
+  \*************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = reducer;
+// action types
+
+var INVITER_INFO = 'INVITER_INFO';
+var REMOVE_INVITER = 'REMOVE_INVITER';
+
+// action creators
+
+var fetchInviterInfo = exports.fetchInviterInfo = function fetchInviterInfo(value) {
+  return { type: INVITER_INFO, value: value };
+};
+var deleteInviter = exports.deleteInviter = function deleteInviter() {
+  return { type: REMOVE_INVITER };
+};
+
+// Reducer
+
+function reducer() {
+  var initialState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+  var action = arguments[1];
+
+  switch (action.type) {
+    case INVITER_INFO:
+      return action.value;
+    case REMOVE_INVITER:
+      return '';
+    default:
+      return initialState;
+  }
+}
+
+/***/ }),
+
 /***/ "./Client/redux/peer_id.js":
 /*!*********************************!*\
   !*** ./Client/redux/peer_id.js ***!
@@ -1748,11 +1794,15 @@ exports.default = reducer;
 // action types
 
 var PEER_ID = 'PEER_ID';
+var REMOVE_ID = 'REMOVE_ID';
 
 // action creators
 
 var fetchPeerId = exports.fetchPeerId = function fetchPeerId(id) {
   return { type: PEER_ID, id: id };
+};
+var deleteId = exports.deleteId = function deleteId() {
+  return { type: REMOVE_ID };
 };
 
 // Reducer
@@ -1764,6 +1814,8 @@ function reducer() {
   switch (action.type) {
     case PEER_ID:
       return action.id;
+    case REMOVE_ID:
+      return '';
     default:
       return initialState;
   }
@@ -1952,6 +2004,8 @@ var _invitation = __webpack_require__(/*! ./redux/invitation */ "./Client/redux/
 
 var _peer_id = __webpack_require__(/*! ./redux/peer_id */ "./Client/redux/peer_id.js");
 
+var _inviterInfo = __webpack_require__(/*! ./redux/inviterInfo */ "./Client/redux/inviterInfo.js");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // import axios from 'axios';
@@ -1972,6 +2026,7 @@ socket.on('connect', function () {
     socket.on('chat_invitation', function (value) {
         console.log('+++++++++', value);
         _store2.default.dispatch((0, _invitation.fetchInvitationKey)(value));
+        _store2.default.dispatch((0, _inviterInfo.fetchInviterInfo)({ inviter: value.inviter, inviter_color: value.inviter_color }));
         _store2.default.dispatch((0, _peer_id.fetchPeerId)(value.peer_id));
     });
     socket.on('reject_invitation', function (value) {
@@ -2043,9 +2098,13 @@ var _peer_id = __webpack_require__(/*! ./redux/peer_id */ "./Client/redux/peer_i
 
 var _peer_id2 = _interopRequireDefault(_peer_id);
 
+var _inviterInfo = __webpack_require__(/*! ./redux/inviterInfo */ "./Client/redux/inviterInfo.js");
+
+var _inviterInfo2 = _interopRequireDefault(_inviterInfo);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var reducer = (0, _redux.combineReducers)({ currentUser: _currentUser2.default, user: _user2.default, status: _status2.default, contact: _contact2.default, invitation: _invitation2.default, peer_id: _peer_id2.default });
+var reducer = (0, _redux.combineReducers)({ currentUser: _currentUser2.default, user: _user2.default, status: _status2.default, contact: _contact2.default, invitation: _invitation2.default, peer_id: _peer_id2.default, inviterInfo: _inviterInfo2.default });
 
 var store = (0, _redux.createStore)(reducer, (0, _reduxDevtoolsExtension.composeWithDevTools)((0, _redux.applyMiddleware)(_reduxThunk2.default, _reduxLogger2.default)));
 

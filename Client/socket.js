@@ -3,6 +3,7 @@ import { getCurrentUser } from './redux/status';
 import store from './store';
 import { fetchInvitationKey } from './redux/invitation';
 import { fetchPeerId } from './redux/peer_id';
+import { fetchInviterInfo } from './redux/inviterInfo';
 // import axios from 'axios';
 
 // const socketIo = value => {
@@ -21,6 +22,7 @@ import { fetchPeerId } from './redux/peer_id';
         socket.on('chat_invitation', value=> {
             console.log('+++++++++', value)
             store.dispatch(fetchInvitationKey(value));
+            store.dispatch(fetchInviterInfo({inviter:value.inviter, inviter_color:value.inviter_color}));
             store.dispatch(fetchPeerId(value.peer_id));
         })
         socket.on('reject_invitation', value => {

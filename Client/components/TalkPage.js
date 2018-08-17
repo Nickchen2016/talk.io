@@ -6,6 +6,8 @@ import PropTypes from 'prop-types';
 import socket from'../socket';
 import { changeUserInfo } from '../redux/user';
 import { updateContactStatus } from '../redux/contact';
+import { deleteId } from '../redux/peer_id';
+import { deleteInviter } from '../redux/inviterInfo';
 
 class Talkpage extends Component{
 
@@ -29,7 +31,8 @@ class Talkpage extends Component{
         this.handleVideo= this.handleVideo.bind(this);
         this.videoError= this.videoError.bind(this);
         this.connectCall= this.connectCall.bind(this);
-        // this.muted= this.muted.bind(this);
+        this.initializeEndCall= this.initializeEndCall.bind(this);
+        this.muted= this.muted.bind(this);
         this.endCall= this.endCall.bind(this);
         this.onStart = this.onStart.bind(this);
         this.onStop = this.onStop.bind(this);
@@ -50,7 +53,7 @@ class Talkpage extends Component{
             call.answer(this.state.stream)
             this.setState({call}, ()=>{
                 this.state.call.on('stream', stream=>{
-                    console.log('********I got stream from requestor********', stream)
+                    console.log('********I got stream from receiver********', stream)
                     this.setState({counter_videoSrc: URL.createObjectURL(stream)});
                 })
             })
@@ -64,9 +67,9 @@ class Talkpage extends Component{
         if(navigator.mediaDevices.getUserMedia) {
             navigator.mediaDevices.getUserMedia({
                 audio: {
-                        volume: 0.9,
-                        echoCancellation: true,
-                        noiseSuppression: true
+                    volume: 0.9,
+                    echoCancellation: true,
+                    noiseSuppression: true
                 },
                 video: true
             })
@@ -83,6 +86,7 @@ class Talkpage extends Component{
     }
 
     videoError(err){
+        console.log('Got error here '+ err)
     }
 
     componentWillUnmount(){
@@ -90,9 +94,12 @@ class Talkpage extends Component{
 		this.state.peer.destroy();
     }
 
-    async connectCall(){
-        const counter_peer_id = await this.props.peer_id;
-        if(counter_peer_id) {
+    initializeEndCall(val){
+        this.setState({ endCall:val });
+    }
+
+    connectCall(){
+        if(this.props.peer_id) {
             console.log('Here is the counter id I got: ', this.props.peer_id)
             let peer_id= this.props.peer_id;
             this.setState({peer_id});
@@ -100,18 +107,31 @@ class Talkpage extends Component{
             var call = this.state.peer.call(peer_id, this.state.stream);
             this.setState({call}, ()=>{
             this.state.call.on('stream', stream=>{
-                console.log('*********I got stream from the reciever********', stream)
+                console.log('*********I got stream from the inviter********', stream)
                 this.setState({counter_videoSrc: URL.createObjectURL(stream)});
             })
         })
         }
-
     }
 
     endCall(){
-        this.setState({ endCall: true })
-        this.state.peer.destroy();
-        this.changeStatus('rgb(102,255,153)')
+            this.state.call.close();
+            this.changeStatus('rgb(102,255,153)');
+            this.setState({ endCall: false });
+            this.props.deleteId();
+            this.props.deleteInviter();
+    }
+
+    muted(){
+        navigator.mediaDevices.getUserMedia = navigator.mediaDevices.getUserMedia || navigator.mediaDevices.webkitGetUserMedia || navigator.mediaDevices.mozGetUserMedia || navigator.mediaDevices.msGetUserMedia || navigator.mediaDevices.oGetUserMedia;
+        if(navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia({
+                audio:false,
+                video: true
+            })
+            .then(this.handleVideo)
+            .catch(this.videoError)
+        }
     }
 
     changeStatus(status){
@@ -128,28 +148,29 @@ class Talkpage extends Component{
           }
 
     render() {
-        // console.log('-----1----', this.props.confirmChat);
+        console.log('-----1----', this.state, '-----2----', this.state.my_id);
         // const dragHandlers = {onStart: this.onStart, onStop: this.onStop};
         return(
             <div id='camera' className={this.props.active}>
 
                 <video id='localVideo' src={this.state.videoSrc} autoPlay='true' muted ></video>
 
-                {this.props.callForChat!=''&&!this.props.invitation.msg&&!this.state.endCall||this.props.confirmChat!=''&&!this.state.endCall?<Draggable bounds='parent' >
+                {!this.props.invitation.msg&&this.state.endCall?<Draggable bounds='parent' >
                     <div id='remote'>
-                        <div id='contactToChat'>
-                            <span style={{backgroundColor:'black'}}>
-                                <span id='newCap'>N</span>
-                            </span>
-                            <span>Nick Chen</span>
-                        </div>
-                        {Object.keys(this.state.counter_videoSrc).length===0?
-                            <div id='loadingDots'>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                            </div>:''
-                        }
+                        {this.props.guestCallForChat!=''&&this.props.invitation===''||this.props.inviterInfo!=''?<div id='contactToChat'>
+                                                                <span style={{backgroundColor:`${this.props.guestCallForChat.guest_color||this.props.inviterInfo.inviter_color}`}}>
+                                                                    <span id='newCap'>{this.props.guestCallForChat&&this.props.guestCallForChat.guest_name[0].toUpperCase()||this.props.inviterInfo&&this.props.inviterInfo.inviter[0].toUpperCase()}</span>
+                                                                </span>
+                                                                <span>{this.props.guestCallForChat.guest_name||this.props.inviterInfo.inviter}</span>
+                                                         </div>:''}
+
+                                                        {Object.keys(this.state.counter_videoSrc).length===0?
+                                                            <div id='loadingDots'>
+                                                                <span></span>
+                                                                <span></span>
+                                                                <span></span>
+                                                            </div>:''
+                                                        }
                         <video id='remoteVideo' src={this.state.counter_videoSrc} autoPlay='true'></video>
                     </div>
                 </Draggable>:''}
@@ -168,8 +189,10 @@ Talkpage.propTypes = {
     opts: PropTypes.object
 }
 
-const mapState =(state)=>({loggedUser:state.currentUser, invitation: state.invitation, peer_id: state.peer_id});
+const mapState =(state)=>({loggedUser:state.currentUser, invitation: state.invitation, peer_id: state.peer_id, inviterInfo:state.inviterInfo, changeUserStatus:state.user.changeUserStatus});
 const mapDispatch = (dispatch)=>({
+    deleteInviter: ()=> {dispatch(deleteInviter())},
+    deleteId: ()=> {dispatch(deleteId())},
     changeUserInfo: (credentials) => {dispatch(changeUserInfo(credentials))},
     updateContactStatus: (credentials) => {dispatch(updateContactStatus(credentials))}
 })

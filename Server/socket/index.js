@@ -8,18 +8,19 @@ module.exports = (io) => {
             socket.broadcast.emit('contact ownId', value);
         });
         socket.on('peer_id', value=> {
-            console.log('-----ID-----', value);
-            socket.on('trans_info', val=> {
-                console.log('**** Here is my desire_id ****', val.guest_id);
-                val['peer_id']=value;
-                socket.broadcast.emit('chat_invitation', val);
-                socket.join(val.room);
-            });
-            socket.on('confirm', val => {
-                console.log('____ confirm Room ____', val)
-                socket.join(val.room);
-                socket.broadcast.to(val.room).emit('confirm_invitation', value);
-            })
+        
+                console.log('-----ID-----', value);
+                socket.on('trans_info', val=> {
+                    console.log('**** Here is my desire_id ****', val.guest_id);
+                    val['peer_id']=value;
+                    socket.broadcast.emit('chat_invitation', val);
+                    socket.join(val.room);
+                });
+                socket.on('confirm', val => {
+                    console.log('____ confirm Room ____', val)
+                    socket.join(val.room);
+                    socket.broadcast.to(val.room).emit('confirm_invitation', value);
+                })
         })
         socket.on('reject', val=> {
             console.log('*** reject ***', val);

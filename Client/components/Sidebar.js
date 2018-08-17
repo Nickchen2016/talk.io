@@ -25,8 +25,7 @@ class Sidebar extends Component{
             searchName:'',
             newContact:{},
             chatSign:'',
-            callForChat:'',
-            confirmChat: '',
+            guestCallForChat:'',
             loggedInfo: 'loggedInfo'
         }
         this.loggedInfo= this.loggedInfo.bind(this);
@@ -102,7 +101,7 @@ searchNewContact(el){
 }
 
 chat(value){
-    this.setState({callForChat:'callForChat',active:'', statusBar:'',search:'',add:'',searchName:'', loggedInfo:'loggedInfo',newContact: {}});
+    this.setState({guestCallForChat:{guest_name: value.guest_name, guest_color: value.guest_color} ,active:'', statusBar:'',search:'',add:'',searchName:'', loggedInfo:'loggedInfo',newContact: {}});
     socket.emit('trans_info', value);
 }
 
@@ -172,7 +171,7 @@ chat(value){
                                             <span className='individualName'>{ c.name }</span>
                                         </div>
 
-                                        { this.state.id===c.id&&this.state.chatSign==='chatSign'&&this.state.delete!=='delete'?<div className={this.state.chatSign} onClick={()=>{this.changeStatus('rgb(239,65,54)'); this.chat({guest_id:c.ownId,room:this.props.loggedUser.id+c.ownId,inviter:this.props.loggedUser.name})}}>
+                                        { this.state.id===c.id&&this.state.chatSign==='chatSign'&&this.state.delete!=='delete'?<div className={this.state.chatSign} onClick={()=>{this.changeStatus('rgb(239,65,54)'); this.talkpage.initializeEndCall(true); this.chat({guest_id:c.ownId, guest_name:c.name, guest_color:c.color, room:this.props.loggedUser.id+c.ownId, inviter:this.props.loggedUser.name, inviter_color:this.props.loggedUser.color})}}>
                                                                             <span><img src='./img/chat.png' width='35px' /></span>
                                                                             <span>Start<br/>Chat</span>
                                                                            </div>:'' }
@@ -190,12 +189,12 @@ chat(value){
 
             {this.props.invitation&&this.props.invitation.guest_id===this.props.loggedUser.id?<div id='notification'>
                         <p className='notice'>{this.props.invitation.inviter} is inviting you for a video chat</p>
-                        <span className='undoRemove' onClick={()=>{this.props.rejectInvitationKey(); socket.emit('reject',{inviter:this.props.invitation.inviter, room:this.props.invitation.room, msg:this.props.loggedUser.name +' is not available at the moment'}); this.setState({confirmChat: ''})}}></span>
-                        <span className='confirmRemove' onClick={()=>{this.props.rejectInvitationKey(); socket.emit('confirm', {room:this.props.invitation.room}); this.setState({confirmChat: 'confirmChat', active:'', statusBar:'',search:'',add:'',searchName:'', loggedInfo:'loggedInfo',newContact: {}}); this.changeStatus('rgb(239,65,54)'); this.talkpage.connectCall()}}></span>          
+                        <span className='undoRemove' onClick={()=>{this.props.rejectInvitationKey(); this.changeStatus('rgb(102,255,153)'); socket.emit('reject',{inviter:this.props.invitation.inviter, room:this.props.invitation.room, msg:this.props.loggedUser.name +' is not available at the moment'})}}></span>
+                        <span className='confirmRemove' onClick={()=>{this.props.rejectInvitationKey(); socket.emit('confirm', {room:this.props.invitation.room}); this.setState({active:'', statusBar:'',search:'',add:'',searchName:'', loggedInfo:'loggedInfo',newContact: {}}); this.changeStatus('rgb(239,65,54)'); this.talkpage.initializeEndCall(true); this.talkpage.connectCall()}}></span>          
                 </div>:this.props.invitation&&this.props.invitation.inviter===this.props.loggedUser.name&&this.props.invitation.msg?
                 <div id='notification'>
                     <p className='notice'>{this.props.invitation.msg}</p>
-                    <span className='undoRemove' onClick={()=>{this.props.rejectInvitationKey(); this.setState({callForChat:''})}}></span>
+                    <span className='undoRemove' onClick={()=>{this.props.rejectInvitationKey(); this.talkpage.initializeEndCall(false); this.changeStatus('rgb(102,255,153)'); this.setState({guestCallForChat:''})}}></span>
                 </div>:''}
 
             {this.state.active==='active'?<div id={this.state.active}>
@@ -266,7 +265,7 @@ chat(value){
                     </div>:''}
             </div>:''}
 
-            <Talkpage onRef={ ref => (this.talkpage = ref) } active={this.state.active} callForChat={this.state.callForChat} confirmChat={this.state.confirmChat}/>
+            <Talkpage onRef={ ref => (this.talkpage = ref) } active={this.state.active} guestCallForChat={this.state.guestCallForChat} />
             </div>
         )
     }
