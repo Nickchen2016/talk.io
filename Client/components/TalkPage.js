@@ -117,7 +117,7 @@ class Talkpage extends Component{
     endCall(){
             this.state.call.close();
             this.changeStatus('rgb(102,255,153)');
-            this.setState({ endCall: false });
+            this.setState({ counter_videoSrc:{}, endCall: false });
             this.props.deleteId();
             this.props.deleteInviter();
     }
