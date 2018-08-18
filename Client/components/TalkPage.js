@@ -67,7 +67,7 @@ class Talkpage extends Component{
         if(navigator.mediaDevices.getUserMedia) {
             navigator.mediaDevices.getUserMedia({
                 audio: {
-                    volume: 0.9,
+                    volume: this.state.toggleAudio,
                     echoCancellation: true,
                     noiseSuppression: true
                 },
@@ -123,15 +123,7 @@ class Talkpage extends Component{
     }
 
     muted(){
-        navigator.mediaDevices.getUserMedia = navigator.mediaDevices.getUserMedia || navigator.mediaDevices.webkitGetUserMedia || navigator.mediaDevices.mozGetUserMedia || navigator.mediaDevices.msGetUserMedia || navigator.mediaDevices.oGetUserMedia;
-        if(navigator.mediaDevices.getUserMedia) {
-            navigator.mediaDevices.getUserMedia({
-                audio:false,
-                video: true
-            })
-            .then(this.handleVideo)
-            .catch(this.videoError)
-        }
+        this.state.stream.getAudioTracks().forEach(track => track.enabled = !track.enabled);
     }
 
     changeStatus(status){
@@ -148,7 +140,7 @@ class Talkpage extends Component{
           }
 
     render() {
-        console.log('-----1----', this.state, '-----2----', this.state.my_id);
+        console.log('-----1----', this.state, '-----2----');
         // const dragHandlers = {onStart: this.onStart, onStop: this.onStop};
         return(
             <div id='camera' className={this.props.active}>

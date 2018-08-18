@@ -1278,7 +1278,7 @@ var Talkpage = function (_Component) {
             if (navigator.mediaDevices.getUserMedia) {
                 navigator.mediaDevices.getUserMedia({
                     audio: {
-                        volume: 0.9,
+                        volume: this.state.toggleAudio,
                         echoCancellation: true,
                         noiseSuppression: true
                     },
@@ -1341,13 +1341,9 @@ var Talkpage = function (_Component) {
     }, {
         key: 'muted',
         value: function muted() {
-            navigator.mediaDevices.getUserMedia = navigator.mediaDevices.getUserMedia || navigator.mediaDevices.webkitGetUserMedia || navigator.mediaDevices.mozGetUserMedia || navigator.mediaDevices.msGetUserMedia || navigator.mediaDevices.oGetUserMedia;
-            if (navigator.mediaDevices.getUserMedia) {
-                navigator.mediaDevices.getUserMedia({
-                    audio: false,
-                    video: true
-                }).then(this.handleVideo).catch(this.videoError);
-            }
+            this.state.stream.getAudioTracks().forEach(function (track) {
+                return track.enabled = !track.enabled;
+            });
         }
     }, {
         key: 'changeStatus',
@@ -1368,7 +1364,7 @@ var Talkpage = function (_Component) {
     }, {
         key: 'render',
         value: function render() {
-            console.log('-----1----', this.state, '-----2----', this.state.my_id);
+            console.log('-----1----', this.state, '-----2----');
             // const dragHandlers = {onStart: this.onStart, onStop: this.onStop};
             return _react2.default.createElement(
                 'div',
