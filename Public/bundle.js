@@ -1344,8 +1344,6 @@ var Talkpage = function (_Component) {
     }, {
         key: 'render',
         value: function render() {
-            console.log('-----1----', this.state, '-----2----');
-            // const dragHandlers = {onStart: this.onStart, onStop: this.onStop};
             return _react2.default.createElement(
                 'div',
                 { id: 'camera', className: this.props.active },

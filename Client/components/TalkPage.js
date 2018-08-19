@@ -140,8 +140,6 @@ class Talkpage extends Component{
           }
 
     render() {
-        console.log('-----1----', this.state, '-----2----');
-        // const dragHandlers = {onStart: this.onStart, onStop: this.onStop};
         return(
             <div id='camera' className={this.props.active}>
 
