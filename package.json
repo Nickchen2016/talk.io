@@ -6,7 +6,8 @@
   "scripts": {
     "start": "nodemon server",
     "pack": "webpack -w",
-    "start-dev": "NODE_ENV='development' npm run pack & npm run start"
+    "start-dev": "NODE_ENV='development' npm run pack & npm run start",
+    "production": "webpack -p"
   },
   "repository": {
     "type": "git",
