@@ -13,6 +13,7 @@ const rgb = ['rgb(255,102,102)','rgb(237,28,36)','rgb(255,242,0)','rgb(255,204,5
 const index = Math.floor(Math.random()*15);
 
 const socketio = require('socket.io');
+if (process.env.NODE_ENV !== 'production') require('../secrets');
 
 const PORT = 8080;
 
@@ -44,11 +45,18 @@ app.use(session({
 //==========//
 
 //config a google strategy (like how you deal with the user profile that google pass down to you)
-passport.use(new GoogleStrategy({
-    clientID: '917673410222-98ofmtp7hbg1m6l8rdbp6nuhdriobepl.apps.googleusercontent.com',
-    clientSecret: 'sFFd8dofD3yqQ8183FFN6qat',
-    callbackURL: '/auth/google/callback'
-  }, (accessToken, refreshToken, profile, done)=>{
+if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
+  console.log('Google client ID / secret not found. Skipping Google OAuth.')
+} else {
+  const googleConfig = {
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: process.env.GOOGLE_CALLBACK
+  }
+
+passport.use(new GoogleStrategy(
+    googleConfig,
+   (accessToken, refreshToken, profile, done)=>{
     Users.findOne({
       where:{
         googleProfileId: profile.id
@@ -91,7 +99,7 @@ passport.use(new GoogleStrategy({
     successRedirect: '/sidebar',
     failureRedirect: '/'
   }));
-  
+}
 
 
 app.use(function(req,res,next){
