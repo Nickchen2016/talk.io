@@ -1,7 +1,6 @@
 
 module.exports = {
-    entry: ['babel-polyfill', // enable async-await function
-            './Client/index.js'], // assumes your entry point is the index.js in the root of your project folder
+    entry: ['./Client/index.js'], // assumes your entry point is the index.js in the root of your project folder
     output: {
       path: __dirname + '/Public',
       filename: 'bundle.js', // assumes your bundle.js will also be in the root of your project folder

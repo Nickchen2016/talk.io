@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import axios from 'axios';
 import { connect } from 'react-redux';
 import { signup } from '../redux/currentUser';
 import colorConfig from '../../Public/color';
@@ -13,7 +12,6 @@ class Signup extends Component {
 
     onSignupSubmit(event) {
         event.preventDefault();
-        // console.log(this.props.history.push('/min'),colorConfig(),'=======', event.target.email.value);
         this.props.signup({
             color: colorConfig(),
             name: event.target.name.value.replace(/^\s|\s$/g, '').split(' ').map(name=> name=name[0].toUpperCase()+name.slice(1)).join(' '),
@@ -22,16 +20,6 @@ class Signup extends Component {
             status: 'rgb(102,255,153)'
         });
         this.props.history.push('/sidebar');
-
-        // axios.post('/api/me', {
-        //     color: colorConfig(),
-        //     name: event.target.name.value,
-        //     email: event.target.email.value,
-        //     password: event.target.password.value
-        // }).then(res=>{
-        //     if(res)this.props.history.push('/min');
-        // })
-        // .catch(console.error);
     }
 
 

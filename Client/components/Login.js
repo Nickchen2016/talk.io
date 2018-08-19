@@ -15,30 +15,14 @@ class Login extends Component {
 
     onLoginSubmit(event) {
         event.preventDefault();
-        // this.name.value = '';
-        // this.password.value = '';
-        
-    //     console.log('-------', event.target.email.value);
-    //     axios.put('/api/me', {
-    //         email: event.target.email.value,
-    //         password: event.target.password.value
-    //     }).then(console.log)
-    //     .catch(console.error);
         this.props.login({
                 email: event.target.email.value,
                 password: event.target.password.value,
-                // status: 'rgb(102,255,153)'
         });
         this.props.history.push('/sidebar');
     }
-
-    // componentWillReceiveProps(){
-    //     this.props.loggedUser&&this.props.loggedUser.hasOwnProperty('id')?this.props.history.push('/sidebar'):this.setState({errMsg:'Fuck that not a user like that!'});
-    // }
     
-    render() {
-
-        // console.log('=========', this.state.errMsg)        
+    render() {      
         return(
 
             <div className="container">

@@ -6,14 +6,12 @@ import { connect } from 'react-redux';
 import Signup from './Signup';
 import Login from './Login';
 import Sidebar from './Sidebar';
-import { getUserInfo } from '../redux/user';
 import { fetchCurrentUser } from '../redux/currentUser';
 
 class Root extends Component {
 
     componentDidMount() {
         this.props.fetchInitialData();
-        // console.log('+++++++++++++++', this.props)
 	}
 
     render(){
@@ -33,7 +31,6 @@ const mapState = null;
 
 const mapDispatch = dispatch => ({
   fetchInitialData: () => {
-    // dispatch(getUserInfo());
 	dispatch(fetchCurrentUser())
   }
 });

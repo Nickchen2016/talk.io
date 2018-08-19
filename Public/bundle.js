@@ -141,32 +141,15 @@ var Login = function (_Component) {
         key: 'onLoginSubmit',
         value: function onLoginSubmit(event) {
             event.preventDefault();
-            // this.name.value = '';
-            // this.password.value = '';
-
-            //     console.log('-------', event.target.email.value);
-            //     axios.put('/api/me', {
-            //         email: event.target.email.value,
-            //         password: event.target.password.value
-            //     }).then(console.log)
-            //     .catch(console.error);
             this.props.login({
                 email: event.target.email.value,
                 password: event.target.password.value
-                // status: 'rgb(102,255,153)'
             });
             this.props.history.push('/sidebar');
         }
-
-        // componentWillReceiveProps(){
-        //     this.props.loggedUser&&this.props.loggedUser.hasOwnProperty('id')?this.props.history.push('/sidebar'):this.setState({errMsg:'Fuck that not a user like that!'});
-        // }
-
     }, {
         key: 'render',
         value: function render() {
-
-            // console.log('=========', this.state.errMsg)        
             return _react2.default.createElement(
                 'div',
                 { className: 'container' },
@@ -320,8 +303,6 @@ var _Sidebar = __webpack_require__(/*! ./Sidebar */ "./Client/components/Sidebar
 
 var _Sidebar2 = _interopRequireDefault(_Sidebar);
 
-var _user = __webpack_require__(/*! ../redux/user */ "./Client/redux/user.js");
-
 var _currentUser = __webpack_require__(/*! ../redux/currentUser */ "./Client/redux/currentUser.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -345,7 +326,6 @@ var Root = function (_Component) {
         key: 'componentDidMount',
         value: function componentDidMount() {
             this.props.fetchInitialData();
-            // console.log('+++++++++++++++', this.props)
         }
     }, {
         key: 'render',
@@ -372,7 +352,6 @@ var mapState = null;
 var mapDispatch = function mapDispatch(dispatch) {
     return {
         fetchInitialData: function fetchInitialData() {
-            // dispatch(getUserInfo());
             dispatch((0, _currentUser.fetchCurrentUser)());
         }
     };
@@ -561,7 +540,6 @@ var Sidebar = function (_Component) {
         value: function render() {
             var _this3 = this;
 
-            // console.log('----66666----', this.props);
             return _react2.default.createElement(
                 'div',
                 { id: 'talk-container' },
@@ -1007,8 +985,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-// import axios from 'axios';
-
 
 var Signup = function (_Component) {
     _inherits(Signup, _Component);
@@ -1026,7 +1002,6 @@ var Signup = function (_Component) {
         key: 'onSignupSubmit',
         value: function onSignupSubmit(event) {
             event.preventDefault();
-            // console.log(this.props.history.push('/min'),colorConfig(),'=======', event.target.email.value);
             this.props.signup({
                 color: (0, _color2.default)(),
                 name: event.target.name.value.replace(/^\s|\s$/g, '').split(' ').map(function (name) {
@@ -1037,16 +1012,6 @@ var Signup = function (_Component) {
                 status: 'rgb(102,255,153)'
             });
             this.props.history.push('/sidebar');
-
-            // axios.post('/api/me', {
-            //     color: colorConfig(),
-            //     name: event.target.name.value,
-            //     email: event.target.email.value,
-            //     password: event.target.password.value
-            // }).then(res=>{
-            //     if(res)this.props.history.push('/min');
-            // })
-            // .catch(console.error);
         }
     }, {
         key: 'render',
@@ -1865,36 +1830,27 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // action types
 
 var FETCH_VALUE = 'FETCH_VALUE';
-// const FIRST_STATUS = 'FIRST_STATUS';
 
 // action creators
 
 var contactStatus = function contactStatus(contact) {
   return { type: FETCH_VALUE, contact: contact };
 };
-// const firstStatus = status => ({ type: FIRST_STATUS, status });
 
 //Thunk
 
 var getCurrentUser = exports.getCurrentUser = function getCurrentUser(value) {
   return function (dispatch) {
-    // dispatch(contactStatus(value))
+
     _axios2.default.get('/api/me').then(function (res) {
       return res.data.contacts.filter(function (c) {
         return c.ownId == value.id;
       })[0];
     }).then(function (contact) {
       if (contact) dispatch((0, _currentUser.fetchCurrentUser)());
-    }
-    // console.log('&&&&&&&', contact)
-    // dispatch(contactStatus(value))
-    );
+    });
   };
 };
-
-// export const initialStatus = (credential) => dispatch => {
-//   axios
-// }
 
 // Reducer
 
@@ -1942,14 +1898,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // action types
 
 var CHANGE_USER_STATUS = 'CHANGE_USER_STATUS';
-// const GET_USER = 'GET_USER';
 
 // action creators
 
 var changeUser = function changeUser(user) {
   return { type: CHANGE_USER_STATUS, user: user };
 };
-// const getUser = user =>({ type: GET_USER, user });
 
 // Thunk creators
 
@@ -1962,11 +1916,6 @@ var changeUserInfo = exports.changeUserInfo = function changeUserInfo(credential
   };
 };
 
-// export const getUserInfo = (credential) => dispatch => {
-//   axios.get(`/api/users/${credential}`)
-//     .then(res => dispatch(getUser(res.data.status)));
-// }
-
 // Reducer
 
 function reducer() {
@@ -1977,9 +1926,6 @@ function reducer() {
     case CHANGE_USER_STATUS:
       return _extends({}, user, {
         changeUserStatus: action.user });
-    // case GET_USER:
-    //   return {...user,
-    //           getUserStatus:action.user};
     default:
       return user;
   }
@@ -2019,8 +1965,6 @@ var _inviterInfo = __webpack_require__(/*! ./redux/inviterInfo */ "./Client/redu
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// import axios from 'axios';
-
 // const socketIo = value => {
 var socket = (0, _socket2.default)(window.location.origin);
 
@@ -2028,12 +1972,9 @@ socket.on('connect', function () {
     console.log('connected to the server!');
 
     socket.on('contact ownId', function (value) {
-        // console.log('***************', JSON.stringify(value));
         _store2.default.dispatch((0, _status.getCurrentUser)(value));
     });
-    // socket.on('counter_id', value=> {
-    //     store.dispatch(fetchPeerId(value));
-    // })
+
     socket.on('chat_invitation', function (value) {
         console.log('+++++++++', value);
         _store2.default.dispatch((0, _invitation.fetchInvitationKey)(value));
@@ -2049,11 +1990,6 @@ socket.on('connect', function () {
         _store2.default.dispatch((0, _peer_id.fetchPeerId)(value));
     });
 });
-
-// socket.on('disconnect', function(socket){
-//     console.log('sad it cut off:(')
-// })
-// }
 
 exports.default = socket;
 
@@ -55791,13 +55727,12 @@ module.exports = yeast;
 /***/ }),
 
 /***/ 0:
-/*!**********************************************!*\
-  !*** multi babel-polyfill ./Client/index.js ***!
-  \**********************************************/
+/*!*******************************!*\
+  !*** multi ./Client/index.js ***!
+  \*******************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! babel-polyfill */"./node_modules/babel-polyfill/lib/index.js");
 module.exports = __webpack_require__(/*! ./Client/index.js */"./Client/index.js");
 
 

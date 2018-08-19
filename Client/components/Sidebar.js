@@ -108,7 +108,6 @@ chat(value){
 
     render() {
 
-        // console.log('----66666----', this.props);
         return(
             <div id='talk-container'>
 
