@@ -8,14 +8,15 @@ const session = require('express-session');
 const { Users, Contact } = require('./db/index');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-// require('babel-polyfill');
+const SequelizeStore = require('connect-session-sequelize')(session.Store)
+const sessionStore = new SequelizeStore({db})
 const rgb = ['rgb(255,102,102)','rgb(237,28,36)','rgb(255,242,0)','rgb(255,204,51)','rgb(255,102,255)','rgb(0,102,255)','rgb(0,0,204)','rgb(102,255,0)','rgb(102,255,153)','rgb(196,154,108)','rgb(153,102,255)','rgb(102,51,255)','rgb(102,0,153)','rgb(139,94,60)','rgb(188,190,192)'];
 const index = Math.floor(Math.random()*15);
 
 const socketio = require('socket.io');
 if (process.env.NODE_ENV !== 'production') require('../secrets');
 
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
 
 
 
@@ -27,6 +28,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 //session
 app.use(session({
     secret: 'talk.io',
+    store: sessionStore,
     resave: false,
     saveUninitialized: false
 }));
@@ -108,14 +110,14 @@ app.use(function(req,res,next){
 })
 
 
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(__dirname, '../Public')));
 app.use(express.static(path.join(__dirname, '../node_module')));
 
 app.use('/api', require('./api'));
 
 
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../public/index.html'));
+    res.sendFile(path.join(__dirname, '../Public/index.html'));
   }); // Send index.html for any other requests
 
 app.use((err,req,res,next)=>{
