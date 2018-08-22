@@ -1,4 +1,5 @@
-# talk.io   <img src'./Public/img/logo2.png' />
+# talk.io
+<img src'./Public/img/logo2.png' />
 
 ## App Screen Shoot
 <img src='./Public/img/sample.png'/>
