@@ -14,7 +14,7 @@ Talk.io is an instant online chat page by using webrtc tech.
 (2). Google authentication<br/>
 (3). Change login users status<br/>
 (4). Add friend/Delete friend<br/>
-(5). Search friend list<br/>
+(5). Search existed friend list<br/>
 (6). Invite friend for video chat<br/>
 (7). Draggable chat window<br/>
 (8). Mute/End call<br/>
