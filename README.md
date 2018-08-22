@@ -1,6 +1,6 @@
 # talk.io
 
-## Sample
+## App Screen Shoot
 <img src='./Public/img/sample.png'/>
 
 ## Why Create?
@@ -10,11 +10,11 @@ The beauty of online chat app provides us an instant way to communicate. But, wh
 Talk.io is an instant online chat page by using webrtc tech.
 
 ## Key features
-(1). Signup/Login/Logout
-(2). Google authentication
-(3). Change login users status
-(4). Add friend/Delete friend
-(5). Search friend list
-(6). Invite friend for video chat
-(7). Draggable chat window
-(8). Mute/End call
+(1). Signup/Login/Logout<br/>
+(2). Google authentication<br/>
+(3). Change login users status<br/>
+(4). Add friend/Delete friend<br/>
+(5). Search friend list<br/>
+(6). Invite friend for video chat<br/>
+(7). Draggable chat window<br/>
+(8). Mute/End call<br/>
