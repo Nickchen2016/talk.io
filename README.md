@@ -1,6 +1,6 @@
 # <img src='./Public/img/logo2.png' />
 
-## App Screen Shoot
+## App Design Sample
 <img src='./Public/img/sample.png'/>
 
 ## Why Create?
