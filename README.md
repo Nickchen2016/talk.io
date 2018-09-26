@@ -4,7 +4,7 @@
 <img src='./Public/img/sample.png'/>
 
 ## Why Create?
-The beauty of online chat app provides us an instant way to communicate. But, what is the real power under the hood which supports this great tech?
+The beauty of online chat app provides us with a whole new way to communicate with each other. But, what is the real power under the hood which supports this great idea? Talk.io is an experimental project that digs into the magic of WebRTC.
 
 ## Description
 Talk.io is an instant online chat page by using webrtc tech.
