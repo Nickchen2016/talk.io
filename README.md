@@ -1,7 +1,7 @@
 # <img src='./Public/img/logo2.png' />
 
 ## Introduction Video
-https://www.youtube.com/watch?v=205_ZzfagnU
+https://youtu.be/EId3phbwzns
 
 ## App Design Sample
 <img src='./Public/img/sample.png'/>
