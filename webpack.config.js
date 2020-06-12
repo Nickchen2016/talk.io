@@ -12,13 +12,13 @@ module.exports = {
     },
     module: {
       rules: [
+
         {
-          test: /\.jsx?$/,
-          exclude: /node_modules/,
-          loader: 'babel-loader',
-          options: {
-            presets: ['react', 'env','stage-2'] // if you aren't using 'babel-preset-env', then omit the 'env'
-          }
+            test: /\.js$/,
+            exclude: /node_modules/,
+            use: {
+                loader: 'babel-loader'
+            }
         }
       ]
     },

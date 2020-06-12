@@ -10,7 +10,7 @@ apiRouter.get('/', (req,res,next)=>{
 });
 
 // apiRouter.put('/:id', (req,res,next)=>{
-//     Contact.findById(req.params.id)
+//     Contact.findByPk(req.params.id)
 //     .then(result => {
 //         if(result){
 //             result.update(req.body)

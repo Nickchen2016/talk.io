@@ -15,7 +15,7 @@ apiRouter.get('/', (req,res,next)=>{
 })
 
 apiRouter.get('/:id', (req,res,next)=>{
-    Users.findById(
+    Users.findByPk(
         req.params.id,
         {attributes:['name','email','status']
     })
@@ -37,7 +37,7 @@ apiRouter.put('/', (req,res,next)=>{
 })
 
 apiRouter.put('/:id', (req,res,next)=>{
-    Users.findById(req.params.id)
+    Users.findByPk(req.params.id)
     .then(result => {
         if(result){
             result.update(req.body)

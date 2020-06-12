@@ -86,7 +86,7 @@ passport.use(new GoogleStrategy(
       done(null, user.id)
   });
   passport.deserializeUser((id,done)=>{
-    Users.findById(id, {include:[{model: Contact}]})
+    Users.findByPk(id, {include:[{model: Contact}]})
     .then(user=>{
       done(null, user);
     })
