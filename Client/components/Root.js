@@ -1,6 +1,4 @@
-'use strict';
-
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Signup from './Signup';
@@ -8,13 +6,12 @@ import Login from './Login';
 import Sidebar from './Sidebar';
 import { fetchCurrentUser } from '../redux/currentUser';
 
-class Root extends Component {
+const Root = (props) => {
 
-    componentDidMount() {
-        this.props.fetchInitialData();
-	}
+    useEffect(()=>{
+      props.fetchInitialData();
+    },[])
 
-    render(){
         return (
            <Router>
                <div>
@@ -24,7 +21,6 @@ class Root extends Component {
                </div>
            </Router> 
         );
-    }
 }
 
 const mapState = null;
