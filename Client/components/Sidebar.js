@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState,useRef } from 'react';
 import { connect } from 'react-redux';
 import Talkpage from './Talkpage';
 import { changeUserInfo, getUserInfo } from '../redux/user';
@@ -10,10 +10,8 @@ import PropTypes from 'prop-types';
 import socket from '../socket';
 
 
-class Sidebar extends Component{
-    constructor(props){
-        super(props);
-        this.state = {
+const Sidebar = (props) =>{
+        const [ localstate,setlocalstate ] = useState({
             search:'',
             add:'',
             active: '',
@@ -27,142 +25,129 @@ class Sidebar extends Component{
             chatSign:'',
             guestCallForChat:'',
             loggedInfo: 'loggedInfo'
-        }
-        this.loggedInfo= this.loggedInfo.bind(this);
-        this.search= this.search.bind(this);
-        this.add= this.add.bind(this);
-        this.searchNewContact= this.searchNewContact.bind(this);
-        this.showStatusBar= this.showStatusBar.bind(this);
-        this.onClick= this.onCLick.bind(this);
-        this.mouseOver= this.mouseOver.bind(this);
-        this.mouseLeave= this.mouseLeave.bind(this);
-        this.undo= this.undo.bind(this);
-        this.changeStatus= this.changeStatus.bind(this);
-        this.chat=this.chat.bind(this);
-    }
+        })
+        const childRef = useRef();
 
 
-changeStatus(status){
-    this.props.updateContactStatus({ownId: this.props.loggedUser.id, status});
-    this.props.changeUserInfo({id:this.props.loggedUser.id, status});
+const changeStatus = (status)=>{
+    props.updateContactStatus({ownId: props.loggedUser.id, status});
+    props.changeUserInfo({id: props.loggedUser.id, status});
 }
 
-loggedInfo() {
-    this.setState({loggedInfo:'loggedInfo',search:'',add:'', statusBar:'',searchName:''})
+const loggedInfo = () => {
+    setlocalstate({...localstate ,loggedInfo:'loggedInfo',search:'',add:'', statusBar:'',searchName:''})
 }    
 
-showStatusBar(){
-    if(this.state.statusBar===''){
-        this.setState({statusBar:'statusBar'})
+const showStatusBar = () => {
+    if(localstate.statusBar===''){
+        setlocalstate({...localstate ,statusBar:'statusBar'})
     }else{
-        this.setState({statusBar:''})
+        setlocalstate({...localstate ,statusBar:''})
     }
 }
 
-onCLick(){
-    if(this.state.active===''){
-        this.setState({active:'active', statusBar:'',search:'',add:'',searchName:'',loggedInfo:'loggedInfo',newContact: {}})
+const handleOnCLick = () => {
+    if(localstate.active===''){
+        setlocalstate({...localstate ,active:'active', statusBar:'',search:'',add:'',searchName:'',loggedInfo:'loggedInfo',newContact: {}})
     }else{
-        this.setState({active:'', statusBar:'',search:'',add:'',searchName:'', loggedInfo:'loggedInfo',newContact: {}})
+        setlocalstate({...localstate ,active:'', statusBar:'',search:'',add:'',searchName:'', loggedInfo:'loggedInfo',newContact: {}})
     }
 }
 
-mouseOver(){
-    if(this.state.words===''&& this.state.isActive===''){this.setState({words:'Toggle menu on click', isActive:'isActive'})}
+const mouseOver = () => {
+    if(localstate.words===''&& localstate.isActive===''){setlocalstate({...localstate ,words:'Toggle menu on click', isActive:'isActive'})}
 }
 
-mouseLeave(){
-    if(this.state.words==='Toggle menu on click'&& this.state.isActive==='isActive'){this.setState({words:'', isActive:''})}
+const mouseLeave = () => {
+    if(localstate.words==='Toggle menu on click'&& localstate.isActive==='isActive'){setlocalstate({...localstate ,words:'', isActive:''})}
 }
 
-undo(){
-    this.setState({delete:'', id:''})
+const undo = () => {
+    setlocalstate({...localstate ,delete:'', id:''})
 }
 
-search(){
-    this.setState({search:'searchBar',add:'',statusBar:'',loggedInfo:''})
+const search = () => {
+    setlocalstate({...localstate ,search:'searchBar',add:'',statusBar:'',loggedInfo:''})
 }
 
-add(){
-    this.setState({add:'addBar',search:'',statusBar:'',loggedInfo:'',searchName:''})
+const add = () => {
+    setlocalstate({...localstate ,add:'addBar',search:'',statusBar:'',loggedInfo:'',searchName:''})
 }
 
-searchNewContact(el){
+const searchNewContact = (el) => {
     el.preventDefault();
 
     axios.put('api/users', {email: el.target.email.value})
          .then(res=> { res.data?
-            this.props.loggedUser.contacts&&this.props.loggedUser.contacts.filter(c=> c.email===res.data.email)[0]&&this.props.loggedUser.contacts.filter(c=> c.email===res.data.email)[0].hasOwnProperty('userId')?
-                this.setState({newContact: this.props.loggedUser.contacts.filter(c=> c.email===res.data.email)[0]})
-                :this.setState({newContact: res.data})
-            :this.setState({newContact: 'Contact not exist'})
+            props.loggedUser.contacts&&props.loggedUser.contacts.filter(c=> c.email===res.data.email)[0]&&props.loggedUser.contacts.filter(c=> c.email===res.data.email)[0].hasOwnProperty('userId')?
+                setlocalstate({...localstate ,newContact: props.loggedUser.contacts.filter(c=> c.email===res.data.email)[0]})
+                :setlocalstate({...localstate ,newContact: res.data})
+            :setlocalstate({...localstate ,newContact: 'Contact not exist'})
         })
          .catch(err=> console.error('=======',err))
 }
 
-chat(value){
-    this.setState({guestCallForChat:{guest_name: value.guest_name, guest_color: value.guest_color} ,active:'', statusBar:'',search:'',add:'',searchName:'', loggedInfo:'loggedInfo',newContact: {}});
+const chat = (value) => {
+    setlocalstate({...localstate ,guestCallForChat:{guest_name: value.guest_name, guest_color: value.guest_color} ,active:'', statusBar:'',search:'',add:'',searchName:'', loggedInfo:'loggedInfo',newContact: {}});
     socket.emit('trans_info', value);
 }
 
-
-    render() {
 
         return(
             <div id='talk-container'>
 
             <div id='talk-menu'>
 
-                <div id='pointer' className={ this.state.active } onClick={ this.onClick } onMouseOver={ this.mouseOver } onMouseLeave={ this.mouseLeave }>
+                <div id='pointer' className={ localstate.active } onClick={handleOnCLick} onMouseOver={ mouseOver } onMouseLeave={ mouseLeave }>
                      <div id='round'></div>
-                     <span id='words' className={ this.state.isActive }>{ this.state.words }</span>
+                     <span id='words' className={ localstate.isActive }>{ localstate.words }</span>
                 </div>
 
-                {this.props.loggedUser.id&&this.state.statusBar==='statusBar'?<div id={this.state.statusBar}>
+                {props.loggedUser.id&&localstate.statusBar==='statusBar'?<div id={localstate.statusBar}>
                                                                                 <span id='triangle'></span>
                                                                                 <span id='bar'>
-                                                                                    <span className='choiceOfStatus' onClick={()=>this.changeStatus('rgb(102,255,153)')}><span className='status2' style={{backgroundColor:'rgb(102,255,153)'}}></span><p>Online</p></span>
-                                                                                    <span className='choiceOfStatus' onClick={()=>this.changeStatus('rgb(239,65,54)')}><span className='status2' style={{backgroundColor:'rgb(239,65,54)'}}></span><p>Busy</p></span>
-                                                                                    <span className='choiceOfStatus' onClick={()=>this.changeStatus('rgb(188,190,192)')}><span className='status2' style={{backgroundColor:'rgb(188,190,192)'}}></span><p>Leave</p></span>
+                                                                                    <span className='choiceOfStatus' onClick={()=>changeStatus('rgb(102,255,153)')}><span className='status2' style={{backgroundColor:'rgb(102,255,153)'}}></span><p>Online</p></span>
+                                                                                    <span className='choiceOfStatus' onClick={()=>changeStatus('rgb(239,65,54)')}><span className='status2' style={{backgroundColor:'rgb(239,65,54)'}}></span><p>Busy</p></span>
+                                                                                    <span className='choiceOfStatus' onClick={()=>changeStatus('rgb(188,190,192)')}><span className='status2' style={{backgroundColor:'rgb(188,190,192)'}}></span><p>Leave</p></span>
                                                                                 </span>
                                                                               </div>:''}
             
-                <div id='sidebar' className={ this.state.active }>
+                <div id='sidebar' className={ localstate.active }>
                 
-                   <div id='search' onClick={this.search}><img src='./img/mag.png' className='sign' style={{marginTop:'18px'}}/></div> 
+                   <div id='search' onClick={search}><img src='./img/mag.png' className='sign' style={{marginTop:'18px'}}/></div> 
                    
-                   <div id='add' onClick={this.add}><img src='./img/plus.png' className='sign'/></div> 
+                   <div id='add' onClick={add}><img src='./img/plus.png' className='sign'/></div> 
                    
                    <div id='me'>
-                    <span id='loggedUserTab' onClick={this.loggedInfo}>
-                        <span id='profile' style={{backgroundColor:`${this.props.loggedUser.color}`}}>
-                            <span id='capital' key={this.props.loggedUser.id}>{this.props.loggedUser.name&&this.props.loggedUser.name[0].toUpperCase()}</span>
+                    <span id='loggedUserTab' onClick={loggedInfo}>
+                        <span id='profile' style={{backgroundColor:`${props.loggedUser.color}`}}>
+                            <span id='capital' key={props.loggedUser.id}>{props.loggedUser.name&&props.loggedUser.name[0].toUpperCase()}</span>
                         </span>
-                        <span id='username'>{ this.props.loggedUser.name&&this.props.loggedUser.name }</span>
+                        <span id='username'>{ props.loggedUser.name&&props.loggedUser.name }</span>
                     </span>    
-                        <span className='status' onClick={this.showStatusBar} style={{backgroundColor: this.props.loggedUser.status}}></span>
+                        <span className='status' onClick={showStatusBar} style={{backgroundColor: props.loggedUser.status}}></span>
                    </div> 
 
                    <div id='contactList'>
                     
-                    { this.props.loggedUser.contacts&&this.props.loggedUser.contacts.sort((a,b)=>{
+                    { props.loggedUser.contacts&&props.loggedUser.contacts.sort((a,b)=>{
                                 return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
-                            }).filter(el=>el.name.toLowerCase().includes(this.state.searchName))
+                            }).filter(el=>el.name.toLowerCase().includes(localstate.searchName))
                             .map(c=>{
                                 return (
-                                    <div className='individualContactInfo' key={c.id} onMouseOver={()=>{c.status==='rgb(102,255,153)'?this.setState({id: c.id, chatSign: 'chatSign'}):this.setState({id: c.id, chatSign: ''})}} onMouseLeave={()=> this.setState({id: '', chatSign: '', delete:''})}>
+                                    <div className='individualContactInfo' key={c.id} onMouseOver={()=>{c.status==='rgb(102,255,153)'?setlocalstate({...localstate ,id: c.id, chatSign: 'chatSign'}):setlocalstate({...localstate,id: c.id, chatSign: ''})}} onMouseLeave={()=> setlocalstate({...localstate, id: '', chatSign: '', delete:''})}>
                                         <div className='individualContact'>
 
-                                            {this.state.id===c.id&&this.state.delete==='delete'?
-                                            <div className={this.state.delete}>
+                                            {localstate.id===c.id&&localstate.delete==='delete'?
+                                            <div className={localstate.delete}>
                                                 <span className='confirmText'>Are you sure to<br/>delete?</span>
                                                 <div className='confirmButton'>
-                                                    <span className='undoRemove' onClick={this.undo}></span>
-                                                    <span className='confirmRemove' onClick={()=>{this.props.removeExistContact(c.id); this.setState({id: '', delete: ''})}}></span>
+                                                    <span className='undoRemove' onClick={undo}></span>
+                                                    <span className='confirmRemove' onClick={()=>{props.removeExistContact(c.id); setlocalstate({...localstate ,id: '', delete: ''})}}></span>
                                                 </div>
                                             </div>:''}
 
-                                            <span className='close' onClick={()=>{this.setState({delete: 'delete'})}}></span>
+                                            <span className='close' onClick={()=>{setlocalstate({...localstate ,delete: 'delete'})}}></span>
                                             <span className='individualProfile' style={{backgroundColor:`${c.color}`}}>
                                                 <span className='individualCapital'>{ c.name[0].toUpperCase() }</span>
                                             </span>
@@ -170,7 +155,9 @@ chat(value){
                                             <span className='individualName'>{ c.name }</span>
                                         </div>
 
-                                        { this.state.id===c.id&&this.state.chatSign==='chatSign'&&this.state.delete!=='delete'?<div className={this.state.chatSign} onClick={()=>{this.changeStatus('rgb(239,65,54)'); this.talkpage.initializeEndCall(true); this.chat({guest_id:c.ownId, guest_name:c.name, guest_color:c.color, room:this.props.loggedUser.id+c.ownId, inviter:this.props.loggedUser.name, inviter_color:this.props.loggedUser.color})}}>
+                                        { localstate.id===c.id&&localstate.chatSign==='chatSign'&&localstate.delete!=='delete'?<div className={localstate.chatSign} onClick={()=>{changeStatus('rgb(239,65,54)'); 
+                                        // talkpage.initializeEndCall(true); 
+                                        chat({guest_id:c.ownId, guest_name:c.name, guest_color:c.color, room:props.loggedUser.id+c.ownId, inviter:props.loggedUser.name, inviter_color:props.loggedUser.color})}}>
                                                                             <span><img src='./img/chat.png' width='35px' /></span>
                                                                             <span>Start<br/>Chat</span>
                                                                            </div>:'' }
@@ -186,75 +173,79 @@ chat(value){
 
             </div>
 
-            {this.props.invitation&&this.props.invitation.guest_id===this.props.loggedUser.id?<div id='notification'>
-                        <p className='notice'>{this.props.invitation.inviter} is inviting you for a video chat</p>
-                        <span className='undoRemove' onClick={()=>{this.props.rejectInvitationKey(); this.changeStatus('rgb(102,255,153)'); socket.emit('reject',{inviter:this.props.invitation.inviter, room:this.props.invitation.room, msg:this.props.loggedUser.name +' is not available at the moment'})}}></span>
-                        <span className='confirmRemove' onClick={()=>{this.props.rejectInvitationKey(); socket.emit('confirm', {room:this.props.invitation.room}); this.setState({active:'', statusBar:'',search:'',add:'',searchName:'', loggedInfo:'loggedInfo',newContact: {}}); this.changeStatus('rgb(239,65,54)'); this.talkpage.initializeEndCall(true); this.talkpage.connectCall()}}></span>          
-                </div>:this.props.invitation&&this.props.invitation.inviter===this.props.loggedUser.name&&this.props.invitation.msg?
+            {props.invitation&&props.invitation.guest_id===props.loggedUser.id?<div id='notification'>
+                        <p className='notice'>{props.invitation.inviter} is inviting you for a video chat</p>
+                        <span className='undoRemove' onClick={()=>{props.rejectInvitationKey(); changeStatus('rgb(102,255,153)'); socket.emit('reject',{inviter:props.invitation.inviter, room:props.invitation.room, msg:props.loggedUser.name +' is not available at the moment'})}}></span>
+                        <span className='confirmRemove' onClick={()=>{props.rejectInvitationKey(); socket.emit('confirm', {room:props.invitation.room}); setlocalstate({...localstate ,active:'', statusBar:'',search:'',add:'',searchName:'', loggedInfo:'loggedInfo',newContact: {}}); changeStatus('rgb(239,65,54)'); 
+                        // talkpage.initializeEndCall(true); talkpage.connectCall()
+                        }}></span>          
+                </div>:props.invitation&&props.invitation.inviter===props.loggedUser.name&&props.invitation.msg?
                 <div id='notification'>
-                    <p className='notice'>{this.props.invitation.msg}</p>
-                    <span className='undoRemove' onClick={()=>{this.props.rejectInvitationKey(); this.talkpage.initializeEndCall(false); this.changeStatus('rgb(102,255,153)'); this.setState({guestCallForChat:''})}}></span>
+                    <p className='notice'>{props.invitation.msg}</p>
+                    <span className='undoRemove' onClick={()=>{props.rejectInvitationKey(); 
+                        // talkpage.initializeEndCall(false); 
+                        changeStatus('rgb(102,255,153)'); setlocalstate({...localstate ,guestCallForChat:''})}}></span>
                 </div>:''}
 
-            {this.state.active==='active'?<div id={this.state.active}>
+            {localstate.active==='active'?<div id={localstate.active}>
 
-                {this.state.loggedInfo==='loggedInfo'?<div id={this.state.loggedInfo}>
+                {localstate.loggedInfo==='loggedInfo'?<div id={localstate.loggedInfo}>
                     <div id='loggedDetail'>
-                        <div id='profileDetail' style={{backgroundColor:`${this.props.loggedUser&&this.props.loggedUser.color}`}}><span>{this.props.loggedUser.name&&this.props.loggedUser.name[0].toUpperCase()}</span></div>
+                        <div id='profileDetail' style={{backgroundColor:`${props.loggedUser&&props.loggedUser.color}`}}><span>{props.loggedUser.name&&props.loggedUser.name[0].toUpperCase()}</span></div>
                         <div id='infoDetail'>
-                            <span value={this.props.loggedUser.name}>Name</span>
-                            <span value={this.props.loggedUser.email}>Email</span>
+                            <span value={props.loggedUser.name}>Name</span>
+                            <span value={props.loggedUser.email}>Email</span>
                         </div>
                     </div>
-                    <button id='signoutButton' onClick={()=>{this.changeStatus('rgb(188,190,192)'); this.props.logout(this.props.loggedUser.id)}}>Log out</button>
+                    <button id='signoutButton' onClick={()=>{changeStatus('rgb(188,190,192)'); props.logout(props.loggedUser.id)}}>Log out</button>
                 </div>:''}
 
-                {this.state.search==='searchBar'?<div id={this.state.search}>
-                                                    <input type='text' name='search' placeholder='Search contacts by name' required onChange={el=>this.setState({searchName:el.target.value.toLowerCase()})} />
+                {localstate.search==='searchBar'?<div id={localstate.search}>
+                                                    <input type='text' name='search' placeholder='Search contacts by name' required onChange={el=>setlocalstate({...localstate ,searchName:el.target.value.toLowerCase()})} />
                                                  </div>:''}
-                {this.state.add==='addBar'?<div id={this.state.add}>
-                                                <form id='addForm' onSubmit={this.searchNewContact}>
+                {localstate.add==='addBar'?<div id={localstate.add}>
+                                                <form id='addForm' onSubmit={searchNewContact}>
                                                     <span><img src='img/add.png' width='28px'/></span>  
                                                     <input type='email' name='email' placeholder='Add new contact by typing Email address' required />
                                                     <button type='Search'>Search</button>
                                                 </form>
 
 
-                {this.state.newContact!=='Contact not exist'&&!Object.keys(this.state.newContact).length?
+                {localstate.newContact!=='Contact not exist'&&!Object.keys(localstate.newContact).length?
                     ''
-                    :this.state.newContact==='Contact not exist'?
-                        <div id='newContact'><p>{this.state.newContact}</p></div>
-                    :this.state.newContact.hasOwnProperty('userId')?
+                    :localstate.newContact==='Contact not exist'?
+                        <div id='newContact'><p>{localstate.newContact}</p></div>
+                    :localstate.newContact.hasOwnProperty('userId')?
                         <div id='newContact'>
-                            <span style={{backgroundColor:`${this.state.newContact.color}`}}>
-                                <span id='newCap'>{this.state.newContact.name[0].toUpperCase()}</span>
+                            <span style={{backgroundColor:`${localstate.newContact.color}`}}>
+                                <span id='newCap'>{localstate.newContact.name[0].toUpperCase()}</span>
                             </span>
-                            <span>{this.state.newContact.name}</span>
+                            <span>{localstate.newContact.name}</span>
                             <span>is in your contacts</span>
                         </div>
-                    :this.state.newContact.id===this.props.loggedUser.id?
+                    :localstate.newContact.id===props.loggedUser.id?
                         <div id='newContact'>
-                            <span style={{backgroundColor:`${this.state.newContact.color}`}}>
-                                <span id='newCap'>{this.state.newContact.name[0].toUpperCase()}</span>
+                            <span style={{backgroundColor:`${localstate.newContact.color}`}}>
+                                <span id='newCap'>{localstate.newContact.name[0].toUpperCase()}</span>
                             </span>
-                            <span>{this.state.newContact.name}</span>
+                            <span>{localstate.newContact.name}</span>
                             <span>You are the owner of this acount</span>
                         </div>
                     :<div id='newContact'>
-                        <span style={{backgroundColor:`${this.state.newContact.color}`}}>
-                            <span id='newCap'>{this.state.newContact.name&&this.state.newContact.name[0].toUpperCase()}</span>
+                        <span style={{backgroundColor:`${localstate.newContact.color}`}}>
+                            <span id='newCap'>{localstate.newContact.name&&localstate.newContact.name[0].toUpperCase()}</span>
                         </span>
-                        <span>{this.state.newContact.name}</span>
-                        <span>{this.state.newContact.email}</span>
-                        <span onClick={()=> {this.props.addNewContact(
-                                {ownId: this.state.newContact.id,
-                                 color: this.state.newContact.color,
-                                 name: this.state.newContact.name,
-                                 email: this.state.newContact.email,
-                                 userId: this.props.loggedUser.id,
-                                 status: this.state.newContact.status
+                        <span>{localstate.newContact.name}</span>
+                        <span>{localstate.newContact.email}</span>
+                        <span onClick={()=> {props.addNewContact(
+                                {ownId: localstate.newContact.id,
+                                 color: localstate.newContact.color,
+                                 name: localstate.newContact.name,
+                                 email: localstate.newContact.email,
+                                 userId: localprops.loggedUser.id,
+                                 status: localstate.newContact.status
                                 }); 
-                                this.setState({newContact: {}})
+                                setlocalstate({...localstate ,newContact: {}})
                                 }}>
                             <img src='./img/plus.png' width='18px'/>
                         </span>
@@ -264,11 +255,12 @@ chat(value){
                     </div>:''}
             </div>:''}
 
-            <Talkpage onRef={ ref => (this.talkpage = ref) } active={this.state.active} guestCallForChat={this.state.guestCallForChat} />
+            <Talkpage 
+            ref={childRef}
+            active={localstate.active} guestCallForChat={localstate.guestCallForChat} />
             </div>
         )
     }
-}
 
 Talkpage.propTypes = {
     opts: PropTypes.object,

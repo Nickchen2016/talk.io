@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState,useEffect,forwardRef,useImperativeHandle } from 'react';
 import { connect } from 'react-redux';
 import Draggable from 'react-draggable';
 import Peer from 'peerjs';
@@ -9,11 +9,9 @@ import { updateContactStatus } from '../redux/contact';
 import { deleteId } from '../redux/peer_id';
 import { deleteInviter } from '../redux/inviterInfo';
 
-class Talkpage extends Component{
+const Talkpage = forwardRef((props,ref) => {
 
-    constructor(props){
-        super(props);
-        this.state={
+        const [localstate,setlocalstate] = useState({
             peer: new Peer(),
             my_id: '',
             peer_id: '',
@@ -27,139 +25,129 @@ class Talkpage extends Component{
             // counter_videoSrc: {},
             video: '',
             endCall: false
-        }
-        this.handleVideo= this.handleVideo.bind(this);
-        this.videoError= this.videoError.bind(this);
-        this.connectCall= this.connectCall.bind(this);
-        this.initializeEndCall= this.initializeEndCall.bind(this);
-        this.muted= this.muted.bind(this);
-        this.endCall= this.endCall.bind(this);
-        this.onStart = this.onStart.bind(this);
-        this.onStop = this.onStop.bind(this);
-        this.changeStatus= this.changeStatus.bind(this);
-    }
-
-    componentWillMount(){
-        this.state.peer.on('open', (id) => {
-			console.log('My peer ID is: ' + id);
-			this.setState({
-				my_id: id,
-				initialized: true
-			});
-        });
-        
-        this.state.peer.on('call', call=>{
-            console.log('******Been called here*******', call);
-            call.answer(this.state.stream)
-            this.setState({call}, ()=>{
-                this.state.call.on('stream', stream=>{
-                    console.log('********I got stream from receiver********', stream)
-                    // this.setState({counter_videoSrc: stream});
-                    let video = document.querySelector('#remoteVideo');
-                    video.srcObject = stream;
-                })
-            })
         })
-    }
+
+    // componentWillMount(){
+    //     this.state.peer.on('open', (id) => {
+	// 		console.log('My peer ID is: ' + id);
+	// 		this.setState({
+	// 			my_id: id,
+	// 			initialized: true
+	// 		});
+    //     });
+        
+    //     this.state.peer.on('call', call=>{
+    //         console.log('******Been called here*******', call);
+    //         call.answer(this.state.stream)
+    //         this.setState({call}, ()=>{
+    //             this.state.call.on('stream', stream=>{
+    //                 console.log('********I got stream from receiver********', stream)
+    //                 // this.setState({counter_videoSrc: stream});
+    //                 let video = document.querySelector('#remoteVideo');
+    //                 video.srcObject = stream;
+    //             })
+    //         })
+    //     })
+    // }
 
 
-    componentDidMount(){
-        this.props.onRef(this);
+    useEffect(()=>{
         navigator.mediaDevices.getUserMedia = navigator.mediaDevices.getUserMedia || navigator.mediaDevices.webkitGetUserMedia || navigator.mediaDevices.mozGetUserMedia || navigator.mediaDevices.msGetUserMedia || navigator.mediaDevices.oGetUserMedia;
         if(navigator.mediaDevices.getUserMedia) {
             navigator.mediaDevices.getUserMedia({
                 audio: {
-                    volume: this.state.toggleAudio,
+                    volume: localstate.toggleAudio,
                     echoCancellation: true,
                     noiseSuppression: true
                 },
                 video: true
             })
-            .then(this.handleVideo)
-            .catch(this.videoError)
+            .then(handleVideo)
+            .catch(videoError)
         }
-    }
+    },[])
 
-    handleVideo(stream){
-        console.log(stream)
-        this.setState({stream});
+    const handleVideo = (stream) => {
+        setlocalstate({...localstate ,stream});
         let video = document.querySelector('#localVideo');
         video.srcObject = stream;
         // let videoSrc = stream;
         // this.setState({ videoSrc });
-        socket.emit('peer_id', this.state.my_id)
+        socket.emit('peer_id', localstate.my_id)
     }
 
-    videoError(err){
+    const videoError = (err) => {
         console.log('Got error here '+ err)
     }
 
-    componentWillUnmount(){
-        this.props.onRef(undefined);
-		this.state.peer.destroy();
-    }
+    // componentWillUnmount(){
+    //     this.props.onRef(undefined);
+	// 	this.state.peer.destroy();
+    // }
 
-    initializeEndCall(val){
-        this.setState({ endCall:val });
-    }
-
-    connectCall(){
-        if(this.props.peer_id) {
-            console.log('Here is the counter id I got: ', this.props.peer_id)
-            let peer_id= this.props.peer_id;
-            this.setState({peer_id});
-
-            var call = this.state.peer.call(peer_id, this.state.stream);
-            this.setState({call}, ()=>{
-            this.state.call.on('stream', stream=>{
-                console.log('*********I got stream from the inviter********', stream)
-                this.setState({counter_videoSrc: stream});
+    useImperativeHandle(ref,() => ({
+        initializeEndCall(val) {
+            setlocalstate({ ...localstate ,endCall:val });
+        },
+        connectCall() {
+            if(props.peer_id) {
+                console.log('Here is the counter id I got: ', props.peer_id)
+                let peer_id= props.peer_id;
+                setlocalstate({...localstate ,peer_id});
+    
+                var call = localstate.peer.call(peer_id, localstate.stream);
+                setlocalstate({...localstate ,call}, ()=>{
+                localstate.call.on('stream', stream=>{
+                    console.log('*********I got stream from the inviter********', stream)
+                    setlocalstate({...localstate ,counter_videoSrc: stream});
+                })
             })
-        })
+            }
         }
+
+    }))
+
+    const endCall = () => {
+            localstate.call.close();
+            changeStatus('rgb(102,255,153)');
+            setlocalstate({ ...localstate ,counter_videoSrc:{}, endCall: false });
+            props.deleteId();
+            props.deleteInviter();
     }
 
-    endCall(){
-            this.state.call.close();
-            this.changeStatus('rgb(102,255,153)');
-            this.setState({ counter_videoSrc:{}, endCall: false });
-            this.props.deleteId();
-            this.props.deleteInviter();
+    const muted = () => {
+        localstate.stream.getAudioTracks().forEach(track => track.enabled = !track.enabled);
     }
 
-    muted(){
-        this.state.stream.getAudioTracks().forEach(track => track.enabled = !track.enabled);
+    const changeStatus = (status) => {
+        props.updateContactStatus({ownId: props.loggedUser.id, status});
+        props.changeUserInfo({id:props.loggedUser.id, status});
     }
 
-    changeStatus(status){
-        this.props.updateContactStatus({ownId: this.props.loggedUser.id, status});
-        this.props.changeUserInfo({id:this.props.loggedUser.id, status});
-    }
-
-        onStart() {
-            this.setState({activeDrags: ++this.state.activeDrags});
+    const onStart = () => {
+            setlocalstate({...localstate ,activeDrags: ++localstate.activeDrags});
           }
         
-        onStop() {
-            this.setState({activeDrags: --this.state.activeDrags});
+    const onStop = () => {
+            setlocalstate({...localstate ,activeDrags: --localstate.activeDrags});
           }
 
-    render() {
+
         return(
-            <div id='camera' className={this.props.active}>
+            <div id='camera' className={props.active}>
 
-                <video id='localVideo' src={this.state.videoSrc} autoPlay={true} muted ></video>
+                <video id='localVideo' src={localstate.videoSrc} autoPlay={true} muted ></video>
 
-                {!this.props.invitation.msg&&this.state.endCall?<Draggable bounds='parent' >
+                {!props.invitation.msg&&localstate.endCall?<Draggable bounds='parent' >
                     <div id='remote'>
-                        {this.props.guestCallForChat!=''&&this.props.invitation===''||this.props.inviterInfo!=''?<div id='contactToChat'>
-                                                                <span style={{backgroundColor:`${this.props.guestCallForChat.guest_color||this.props.inviterInfo.inviter_color}`}}>
-                                                                    <span id='newCap'>{this.props.guestCallForChat&&this.props.guestCallForChat.guest_name[0].toUpperCase()||this.props.inviterInfo&&this.props.inviterInfo.inviter[0].toUpperCase()}</span>
+                        {props.guestCallForChat!=''&&props.invitation===''||props.inviterInfo!=''?<div id='contactToChat'>
+                                                                <span style={{backgroundColor:`${props.guestCallForChat.guest_color||props.inviterInfo.inviter_color}`}}>
+                                                                    <span id='newCap'>{props.guestCallForChat&&props.guestCallForChat.guest_name[0].toUpperCase()||props.inviterInfo&&props.inviterInfo.inviter[0].toUpperCase()}</span>
                                                                 </span>
-                                                                <span>{this.props.guestCallForChat.guest_name||this.props.inviterInfo.inviter}</span>
+                                                                <span>{props.guestCallForChat.guest_name||props.inviterInfo.inviter}</span>
                                                          </div>:''}
 
-                                                        {Object.keys(this.state.counter_videoSrc).length===0?
+                                                        {Object.keys(localstate.counter_videoSrc).length===0?
                                                             <div id='loadingDots'>
                                                                 <span></span>
                                                                 <span></span>
@@ -171,14 +159,13 @@ class Talkpage extends Component{
                 </Draggable>:''}
 
                 <div id='controlButtons'>
-                    <span onClick={this.muted} value='Mute'><img src='./img/mute.png'/></span>
+                    <span onClick={muted} value='Mute'><img src='./img/mute.png'/></span>
                     {/* <span onClick={this.capture} value='Screenshot'><img src='./img/screenshoot.png'/></span> */}
-                    <span onClick={this.endCall} value='End'><img src='./img/stop.png'/></span>
+                    <span onClick={endCall} value='End'><img src='./img/stop.png'/></span>
                 </div>
             </div>
         )
-    }
-}
+})
 
 Talkpage.propTypes = {
     opts: PropTypes.object
@@ -186,10 +173,10 @@ Talkpage.propTypes = {
 
 const mapState =(state)=>({loggedUser:state.currentUser, invitation: state.invitation, peer_id: state.peer_id, inviterInfo:state.inviterInfo, changeUserStatus:state.user.changeUserStatus});
 const mapDispatch = (dispatch)=>({
-    deleteInviter: ()=> {dispatch(deleteInviter())},
-    deleteId: ()=> {dispatch(deleteId())},
-    changeUserInfo: (credentials) => {dispatch(changeUserInfo(credentials))},
-    updateContactStatus: (credentials) => {dispatch(updateContactStatus(credentials))}
+        deleteInviter: ()=> {dispatch(deleteInviter())},
+        deleteId: ()=> {dispatch(deleteId())},
+        changeUserInfo: (credentials) => {dispatch(changeUserInfo(credentials))},
+        updateContactStatus: (credentials) => {dispatch(updateContactStatus(credentials))}
 })
 
 export default connect(mapState, mapDispatch)(Talkpage);
