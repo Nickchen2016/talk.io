@@ -1,29 +1,24 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { signup } from '../redux/currentUser';
 import colorConfig from '../../Public/color';
 
 
-class Signup extends Component {
-    constructor(props){
-        super(props)
-        this.onSignupSubmit = this.onSignupSubmit.bind(this);
-    }
+const Signup =(props)=> {
 
-    onSignupSubmit(event) {
+    const onSignupSubmit = (event) => {
         event.preventDefault();
-        this.props.signup({
+        props.signup({
             color: colorConfig(),
             name: event.target.name.value.replace(/^\s|\s$/g, '').split(' ').map(name=> name=name[0].toUpperCase()+name.slice(1)).join(' '),
             email: event.target.email.value,
             password: event.target.password.value,
             status: 'rgb(102,255,153)'
         });
-        this.props.history.push('/sidebar');
+        props.history.push('/sidebar');
     }
 
 
-    render() {
         return(
 
             <div className="container">
@@ -33,7 +28,7 @@ class Signup extends Component {
                 <div className="item2">
                     <div>
                         <div>
-                            <form onSubmit={this.onSignupSubmit}>
+                            <form onSubmit={onSignupSubmit}>
                                 <div id="table">
                                     <input name="name" type="text" placeholder="Name" required/>
                                     <input name="email" type="email" placeholder="Email" required/>
@@ -53,7 +48,7 @@ class Signup extends Component {
                                     id="google-btn">
                                         <img src="./img/google.png" className='icon'/>
                                         <span id="line"></span>
-                                        <span id="word">{this.props.message} with Google</span>
+                                        <span id="word">{props.message} with Google</span>
                                 </a>
                             </div>
                         </div>
@@ -75,7 +70,6 @@ class Signup extends Component {
             </div>
         )
     }
-}
 
 // Container
 const mapState = () => ({ message: 'Sign up' });
