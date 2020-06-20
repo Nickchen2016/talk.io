@@ -22,9 +22,9 @@ class Talkpage extends Component{
             audio: true,
             img:'',
             activeDrags: 0,
-            videoSrc:{},
+            // videoSrc:{},
             stream:{},
-            counter_videoSrc: {},
+            // counter_videoSrc: {},
             video: '',
             endCall: false
         }
@@ -54,7 +54,9 @@ class Talkpage extends Component{
             this.setState({call}, ()=>{
                 this.state.call.on('stream', stream=>{
                     console.log('********I got stream from receiver********', stream)
-                    this.setState({counter_videoSrc: URL.createObjectURL(stream)});
+                    // this.setState({counter_videoSrc: stream});
+                    let video = document.querySelector('#remoteVideo');
+                    video.srcObject = stream;
                 })
             })
         })
@@ -79,9 +81,12 @@ class Talkpage extends Component{
     }
 
     handleVideo(stream){
+        console.log(stream)
         this.setState({stream});
-        let videoSrc = URL.createObjectURL(stream);
-        this.setState({ videoSrc });
+        let video = document.querySelector('#localVideo');
+        video.srcObject = stream;
+        // let videoSrc = stream;
+        // this.setState({ videoSrc });
         socket.emit('peer_id', this.state.my_id)
     }
 
@@ -108,7 +113,7 @@ class Talkpage extends Component{
             this.setState({call}, ()=>{
             this.state.call.on('stream', stream=>{
                 console.log('*********I got stream from the inviter********', stream)
-                this.setState({counter_videoSrc: URL.createObjectURL(stream)});
+                this.setState({counter_videoSrc: stream});
             })
         })
         }
@@ -143,7 +148,7 @@ class Talkpage extends Component{
         return(
             <div id='camera' className={this.props.active}>
 
-                <video id='localVideo' src={this.state.videoSrc} autoPlay='true' muted ></video>
+                <video id='localVideo' src={this.state.videoSrc} autoPlay={true} muted ></video>
 
                 {!this.props.invitation.msg&&this.state.endCall?<Draggable bounds='parent' >
                     <div id='remote'>
@@ -161,7 +166,7 @@ class Talkpage extends Component{
                                                                 <span></span>
                                                             </div>:''
                                                         }
-                        <video id='remoteVideo' src={this.state.counter_videoSrc} autoPlay='true'></video>
+                        <video id='remoteVideo' autoPlay={true}></video>
                     </div>
                 </Draggable>:''}
 

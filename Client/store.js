@@ -16,7 +16,7 @@ const reducer = combineReducers({ currentUser, user, status, contact, invitation
 
 const store = createStore(
     reducer,
-    composeWithDevTools(applyMiddleware(thunkMiddleware, loggerMiddleware))
+    composeWithDevTools(applyMiddleware(thunkMiddleware))
 );
 
 export default store;
