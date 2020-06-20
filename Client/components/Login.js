@@ -1,28 +1,19 @@
-import React, { Component } from 'react';
-import axios from 'axios';
+import React from 'react';
 import { connect } from 'react-redux';
 import { login } from '../redux/currentUser';
  
 
-class Login extends Component {
-    constructor(props){
-        super(props)
-        this.onLoginSubmit=this.onLoginSubmit.bind(this);
-        this.state={
-            errMsg: ''
-        }
-    }
+const Login = (props) => {
 
-    onLoginSubmit(event) {
+    const onLoginSubmit = (event) => {
         event.preventDefault();
-        this.props.login({
+        props.login({
                 email: event.target.email.value,
                 password: event.target.password.value,
         });
-        this.props.history.push('/sidebar');
+        props.history.push('/sidebar');
     }
-    
-    render() {      
+         
         return(
 
             <div className="container">
@@ -32,12 +23,10 @@ class Login extends Component {
                 <div className="item2">
                     <div>
                         <div>
-                            <form onSubmit={this.onLoginSubmit}>
+                            <form onSubmit={onLoginSubmit}>
                                 <div id="table">
                                     <input name="email" type="email" placeholder="Email" required/>
-                                    {/* ref={ el=> this.name = el } */}
                                     <input name="password" type="password" placeholder="Password" required/>
-                                    {/* ref={ el=> this.password = el } */}
                                 </div>
                                 <button type="submit">Submit</button>
                             </form>
@@ -53,7 +42,7 @@ class Login extends Component {
                                     id="google-btn">
                                         <img src="./img/google.png" className='icon'/>
                                         <span id="line"></span>
-                                        <span id="word">{this.props.message} with Google</span>
+                                        <span id="word">{props.message} with Google</span>
                                 </a>
                             </div>
                         </div>
@@ -75,7 +64,6 @@ class Login extends Component {
             </div>
         )
     }
-}
 
 const mapState = (state)=>({message:'Login', loggedUser: state.currentUser});
 const mapDispatch = (dispatch)=>({
