@@ -29,8 +29,8 @@ const Sidebar = (props) =>{
             connectCall: ''
         })
 useEffect(()=>{
-console.log(localstate.chatSign)
-},[localstate.chatSign])
+console.log(localstate.endCall)
+},[localstate.endCall])
 
 const changeStatus = (status)=>{
     props.updateContactStatus({ownId: props.loggedUser.id, status});
@@ -91,7 +91,7 @@ const searchNewContact = (el) => {
 }
 
 const chat = (value) => {
-    setlocalstate({...localstate ,guestCallForChat:{guest_name: value.guest_name, guest_color: value.guest_color} ,active:'', statusBar:'',search:'',add:'',searchName:'', loggedInfo:'loggedInfo',newContact: {}});
+    setlocalstate({...localstate ,endCall:true, guestCallForChat:{guest_name: value.guest_name, guest_color: value.guest_color} ,active:'', statusBar:'',search:'',add:'',searchName:'', loggedInfo:'loggedInfo',newContact: {}});
     socket.emit('trans_info', value);
 }
 
@@ -160,7 +160,6 @@ const chat = (value) => {
 
                                         { localstate.id===c.id&&localstate.chatSign==='chatSign'&&localstate.delete!=='delete'?<div className={localstate.chatSign} 
                                         onClick={()=>{changeStatus('rgb(239,65,54)');
-                                        setlocalstate({...localstate ,endCall:true});
                                         chat({guest_id:c.ownId, guest_name:c.name, guest_color:c.color, room:props.loggedUser.id+c.ownId, inviter:props.loggedUser.name, inviter_color:props.loggedUser.color})}}>
                                                 <span><img src='./img/chat.png' width='35px' /></span>
                                                 <span>Start<br/>Chat</span>
