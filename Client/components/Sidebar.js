@@ -1,4 +1,4 @@
-import React, { useState,useRef } from 'react';
+import React, { useState,useEffect } from 'react';
 import { connect } from 'react-redux';
 import Talkpage from './Talkpage';
 import { changeUserInfo, getUserInfo } from '../redux/user';
@@ -6,7 +6,7 @@ import { logout } from '../redux/currentUser';
 import { addNewContact, removeExistContact,updateContactStatus } from '../redux/contact';
 import { rejectInvitationKey } from '../redux/invitation';
 import axios from 'axios';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import socket from '../socket';
 
 
@@ -24,10 +24,13 @@ const Sidebar = (props) =>{
             newContact:{},
             chatSign:'',
             guestCallForChat:'',
-            loggedInfo: 'loggedInfo'
+            loggedInfo: 'loggedInfo',
+            endCall: '',
+            connectCall: ''
         })
-        const childRef = useRef();
-
+useEffect(()=>{
+console.log(localstate.chatSign)
+},[localstate.chatSign])
 
 const changeStatus = (status)=>{
     props.updateContactStatus({ownId: props.loggedUser.id, status});
@@ -155,12 +158,13 @@ const chat = (value) => {
                                             <span className='individualName'>{ c.name }</span>
                                         </div>
 
-                                        { localstate.id===c.id&&localstate.chatSign==='chatSign'&&localstate.delete!=='delete'?<div className={localstate.chatSign} onClick={()=>{changeStatus('rgb(239,65,54)'); 
-                                        // talkpage.initializeEndCall(true); 
+                                        { localstate.id===c.id&&localstate.chatSign==='chatSign'&&localstate.delete!=='delete'?<div className={localstate.chatSign} 
+                                        onClick={()=>{changeStatus('rgb(239,65,54)');
+                                        setlocalstate({...localstate ,endCall:true});
                                         chat({guest_id:c.ownId, guest_name:c.name, guest_color:c.color, room:props.loggedUser.id+c.ownId, inviter:props.loggedUser.name, inviter_color:props.loggedUser.color})}}>
-                                                                            <span><img src='./img/chat.png' width='35px' /></span>
-                                                                            <span>Start<br/>Chat</span>
-                                                                           </div>:'' }
+                                                <span><img src='./img/chat.png' width='35px' /></span>
+                                                <span>Start<br/>Chat</span>
+                                        </div>:'' }
                                         
                                     </div>
                                 )
@@ -176,17 +180,20 @@ const chat = (value) => {
             {props.invitation&&props.invitation.guest_id===props.loggedUser.id?<div id='notification'>
                         <p className='notice'>{props.invitation.inviter} is inviting you for a video chat</p>
                         <span className='undoRemove' onClick={()=>{props.rejectInvitationKey(); changeStatus('rgb(102,255,153)'); socket.emit('reject',{inviter:props.invitation.inviter, room:props.invitation.room, msg:props.loggedUser.name +' is not available at the moment'})}}></span>
-                        <span className='confirmRemove' onClick={()=>{props.rejectInvitationKey(); socket.emit('confirm', {room:props.invitation.room}); setlocalstate({...localstate ,active:'', statusBar:'',search:'',add:'',searchName:'', loggedInfo:'loggedInfo',newContact: {}}); changeStatus('rgb(239,65,54)'); 
-                        // talkpage.initializeEndCall(true); talkpage.connectCall()
+                        <span className='confirmRemove' 
+                            onClick={()=>{props.rejectInvitationKey(); 
+                                socket.emit('confirm', {room:props.invitation.room}); 
+                                setlocalstate({...localstate ,active:'', statusBar:'',search:'',add:'',searchName:'', loggedInfo:'loggedInfo',newContact: {},endCall:true, connectCall:true}); 
+                                changeStatus('rgb(239,65,54)'); 
                         }}></span>          
                 </div>:props.invitation&&props.invitation.inviter===props.loggedUser.name&&props.invitation.msg?
                 <div id='notification'>
                     <p className='notice'>{props.invitation.msg}</p>
                     <span className='undoRemove' onClick={()=>{props.rejectInvitationKey(); 
-                        // talkpage.initializeEndCall(false); 
-                        changeStatus('rgb(102,255,153)'); setlocalstate({...localstate ,guestCallForChat:''})}}></span>
+                        changeStatus('rgb(102,255,153)'); 
+                        setlocalstate({...localstate ,guestCallForChat:'',endCall:false})}}>
+                    </span>
                 </div>:''}
-
             {localstate.active==='active'?<div id={localstate.active}>
 
                 {localstate.loggedInfo==='loggedInfo'?<div id={localstate.loggedInfo}>
@@ -242,7 +249,7 @@ const chat = (value) => {
                                  color: localstate.newContact.color,
                                  name: localstate.newContact.name,
                                  email: localstate.newContact.email,
-                                 userId: localprops.loggedUser.id,
+                                 userId: props.loggedUser.id,
                                  status: localstate.newContact.status
                                 }); 
                                 setlocalstate({...localstate ,newContact: {}})
@@ -256,16 +263,17 @@ const chat = (value) => {
             </div>:''}
 
             <Talkpage 
-            ref={childRef}
+            endCall={localstate.endCall}
+            connectCall={localstate.connectCall}
             active={localstate.active} guestCallForChat={localstate.guestCallForChat} />
             </div>
         )
     }
 
-Talkpage.propTypes = {
-    opts: PropTypes.object,
-    history: PropTypes.object
-}
+// Talkpage.propTypes = {
+//     opts: PropTypes.object,
+//     history: PropTypes.object
+// }
 
 const mapState =(state)=>({loggedUser:state.currentUser, getUserStatus: state.user.getUserStatus, contactStatus: state.status, invitation: state.invitation});
 

@@ -1,15 +1,15 @@
-import React, { useState,useEffect,forwardRef,useImperativeHandle } from 'react';
+import React, { useState,useEffect } from 'react';
 import { connect } from 'react-redux';
 import Draggable from 'react-draggable';
 import Peer from 'peerjs';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import socket from'../socket';
 import { changeUserInfo } from '../redux/user';
 import { updateContactStatus } from '../redux/contact';
 import { deleteId } from '../redux/peer_id';
 import { deleteInviter } from '../redux/inviterInfo';
 
-const Talkpage = forwardRef((props,ref) => {
+const Talkpage = (props) => {
 
         const [localstate,setlocalstate] = useState({
             peer: new Peer(),
@@ -27,20 +27,21 @@ const Talkpage = forwardRef((props,ref) => {
             endCall: false
         })
 
-    // componentWillMount(){
-    //     this.state.peer.on('open', (id) => {
+    // useEffect(()=>{
+    //     localstate.peer.on('open', (id) => {
 	// 		console.log('My peer ID is: ' + id);
-	// 		this.setState({
+	// 		setlocalstate({
+    //             ...localstate,
 	// 			my_id: id,
 	// 			initialized: true
 	// 		});
     //     });
         
-    //     this.state.peer.on('call', call=>{
+    //     localstate.peer.on('call', call=>{
     //         console.log('******Been called here*******', call);
-    //         call.answer(this.state.stream)
-    //         this.setState({call}, ()=>{
-    //             this.state.call.on('stream', stream=>{
+    //         call.answer(localstate.stream)
+    //         setlocalstate({...localstate, call}, ()=>{
+    //             localstate.call.on('stream', stream=>{
     //                 console.log('********I got stream from receiver********', stream)
     //                 // this.setState({counter_videoSrc: stream});
     //                 let video = document.querySelector('#remoteVideo');
@@ -48,7 +49,7 @@ const Talkpage = forwardRef((props,ref) => {
     //             })
     //         })
     //     })
-    // }
+    // },[localstate.endCall])
 
 
     useEffect(()=>{
@@ -85,27 +86,33 @@ const Talkpage = forwardRef((props,ref) => {
 	// 	this.state.peer.destroy();
     // }
 
-    useImperativeHandle(ref,() => ({
-        initializeEndCall(val) {
-            setlocalstate({ ...localstate ,endCall:val });
-        },
-        connectCall() {
-            if(props.peer_id) {
-                console.log('Here is the counter id I got: ', props.peer_id)
-                let peer_id= props.peer_id;
-                setlocalstate({...localstate ,peer_id});
-    
-                var call = localstate.peer.call(peer_id, localstate.stream);
-                setlocalstate({...localstate ,call}, ()=>{
-                localstate.call.on('stream', stream=>{
-                    console.log('*********I got stream from the inviter********', stream)
-                    setlocalstate({...localstate ,counter_videoSrc: stream});
-                })
-            })
-            }
-        }
+    useEffect(()=>{
+        console.log('_____endcall____',props)
+    },[props.endCall])
+    // useEffect(()=>{
+    //     console.log('_____connectCall____',props.connectCall)
+    // },[props.connectCall])
 
-    }))
+        // initializeCall(val) {
+        //     console.log('_____I choosed it______')
+        //     setlocalstate({ ...localstate ,endCall:val });
+        // }
+        // connectCall() {
+        //     if(props.peer_id) {
+        //         console.log('Here is the counter id I got: ', props.peer_id)
+        //         let peer_id= props.peer_id;
+        //         setlocalstate({...localstate ,peer_id});
+    
+        //         var call = localstate.peer.call(peer_id, localstate.stream);
+        //         setlocalstate({...localstate ,call}, ()=>{
+        //         localstate.call.on('stream', stream=>{
+        //             console.log('*********I got stream from the inviter********', stream)
+        //             setlocalstate({...localstate ,counter_videoSrc: stream});
+        //         })
+        //     })
+        //     }
+        // }
+
 
     const endCall = () => {
             localstate.call.close();
@@ -165,11 +172,11 @@ const Talkpage = forwardRef((props,ref) => {
                 </div>
             </div>
         )
-})
-
-Talkpage.propTypes = {
-    opts: PropTypes.object
 }
+
+// Talkpage.propTypes = {
+//     opts: PropTypes.object
+// }
 
 const mapState =(state)=>({loggedUser:state.currentUser, invitation: state.invitation, peer_id: state.peer_id, inviterInfo:state.inviterInfo, changeUserStatus:state.user.changeUserStatus});
 const mapDispatch = (dispatch)=>({
