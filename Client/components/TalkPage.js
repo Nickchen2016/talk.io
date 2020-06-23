@@ -18,11 +18,12 @@ const Talkpage = (props) => {
             files: [],
             audio: true,
             img:'',
-            video: ''
+            video: '',
+            my_videoSrc: null
         })
         const [endCall, setendCall] = useState(false);
-        const [callObj,setcallObj] = useState(null);
         const [is_counter_loaded, setis_counter_loaded] = useState(false);
+        const [callObj,setcallObj] = useState(null);
         const [counterStream,setcounterStream] = useState(null);
         const counterVideo = useRef(null);
 
@@ -58,7 +59,7 @@ const Talkpage = (props) => {
 
         
     useEffect(()=>{
-        if(localstate.my_videoSrc!=undefined){
+        if(localstate.my_videoSrc!=null){
             localstate.peer.on('open', (id) => {
                 console.log('My peer ID is: ' + id)
                 setlocalstate({
@@ -114,8 +115,8 @@ const Talkpage = (props) => {
     }
 
     const muted = () => {
-        console.log('my sound track', counterStream)
-        // localstate.my_id.getAudioTracks().forEach(track => track.enabled = !track.enabled);
+        console.log('sound track',counterStream.getAudioTracks()[0]);
+        localstate.my_videoSrc.getAudioTracks()[0].enabled = !(localstate.my_videoSrc.getAudioTracks()[0].enabled);
     }
 
     const changeStatus = (status) => {
