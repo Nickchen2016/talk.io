@@ -115,8 +115,10 @@ const Talkpage = (props) => {
     }
 
     const muted = () => {
-        console.log('sound track',counterStream.getAudioTracks()[0]);
         localstate.my_videoSrc.getAudioTracks()[0].enabled = !(localstate.my_videoSrc.getAudioTracks()[0].enabled);
+    }
+    const capture = () => {
+        localstate.my_videoSrc.getVideoTracks()[0].enabled = !(localstate.my_videoSrc.getVideoTracks()[0].enabled);
     }
 
     const changeStatus = (status) => {
@@ -151,7 +153,7 @@ const Talkpage = (props) => {
 
                 <div id='controlButtons'>
                     <span onClick={muted} value='Mute'><img src='./img/mute.png'/></span>
-                    {/* <span onClick={this.capture} value='Screenshot'><img src='./img/screenshoot.png'/></span> */}
+                    <span onClick={capture} value='Screen'><img src='./img/shutscreen.png'/></span>
                     <span onClick={endVideoCall} value='End'><img src='./img/stop.png'/></span>
                 </div>
             </div>
