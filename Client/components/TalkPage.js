@@ -2,7 +2,6 @@ import React, { useState,useEffect,useRef } from 'react';
 import { connect } from 'react-redux';
 import Draggable from 'react-draggable';
 import Peer from 'peerjs';
-// import PropTypes from 'prop-types';
 import socket from'../socket';
 import { changeUserInfo } from '../redux/user';
 import { updateContactStatus } from '../redux/contact';
@@ -19,12 +18,12 @@ const Talkpage = (props) => {
             files: [],
             audio: true,
             img:'',
-            activeDrags: 0,
-            video: '',
-            has_counter_videoSrc: false
+            video: ''
         })
         const [endCall, setendCall] = useState(false);
-        const [callObj,setcallObj] = useState(null)
+        const [callObj,setcallObj] = useState(null);
+        const [is_counter_loaded, setis_counter_loaded] = useState(false);
+        const [counterStream,setcounterStream] = useState(null);
         const counterVideo = useRef(null);
 
         useEffect(()=>{
@@ -71,8 +70,6 @@ const Talkpage = (props) => {
             })
 
             localstate.peer.on('call', call=>{
-                console.log('what the heck r u!',localstate.my_videoSrc)
-                const video = counterVideo.current;
                 call.answer(localstate.my_videoSrc);
                 setcallObj(call);
             })
@@ -83,6 +80,8 @@ const Talkpage = (props) => {
     useEffect(()=>{
         if(callObj!=null){
                 callObj.on('stream', remoteStream=>{
+                    setis_counter_loaded(true);
+                    setcounterStream(remoteStream);
                     console.log('stream on!',remoteStream);
                     counterVideo.current.srcObject = remoteStream;
                 })
@@ -91,13 +90,9 @@ const Talkpage = (props) => {
 
     useEffect(()=>{
         if(props.endCall){
-            // console.log('I got the endCall',props.endCall)
             setendCall(props.endCall);
         }
         if(props.peer_id&&props.connectCall) {
-            // console.log('I got the connectCall',props.connectCall)
-            //     console.log('Here is the counter id I got: ', props.peer_id, localstate.my_videoSrc)
-            
             setlocalstate({...localstate ,peer_id: props.peer_id});
             const call = localstate.peer.call(props.peer_id, localstate.my_videoSrc);
             setcallObj(call);
@@ -109,29 +104,24 @@ const Talkpage = (props) => {
 
 
     const endVideoCall = () => {
-            callObj.close();
-            changeStatus('rgb(102,255,153)');
-            setendCall(false);
-            props.deleteId();
-            props.deleteInviter();
+        callObj.close();
+        setis_counter_loaded(false);
+        props.changeendCall();
+        setendCall(false);
+        props.deleteId();
+        props.deleteInviter();
+        changeStatus('rgb(102,255,153)');
     }
 
     const muted = () => {
-        localstate.my_id.getAudioTracks().forEach(track => track.enabled = !track.enabled);
+        console.log('my sound track', counterStream)
+        // localstate.my_id.getAudioTracks().forEach(track => track.enabled = !track.enabled);
     }
 
     const changeStatus = (status) => {
         props.updateContactStatus({ownId: props.loggedUser.id, status});
         props.changeUserInfo({id:props.loggedUser.id, status});
     }
-
-    const onStart = () => {
-            setlocalstate({...localstate ,activeDrags: ++localstate.activeDrags});
-          }
-        
-    const onStop = () => {
-            setlocalstate({...localstate ,activeDrags: --localstate.activeDrags});
-          }
 
 
         return(
@@ -147,7 +137,7 @@ const Talkpage = (props) => {
                                 <span>{props.guestCallForChat.guest_name||props.inviterInfo.inviter}</span>
                         </div>:''}
 
-                        {!localstate.has_counter_videoSrc?
+                        {!is_counter_loaded?
                             <div id='loadingDots'>
                                 <span></span>
                                 <span></span>
@@ -167,9 +157,6 @@ const Talkpage = (props) => {
         )
 }
 
-// Talkpage.propTypes = {
-//     opts: PropTypes.object
-// }
 
 const mapState =(state)=>({loggedUser:state.currentUser, invitation: state.invitation, peer_id: state.peer_id, inviterInfo:state.inviterInfo, changeUserStatus:state.user.changeUserStatus});
 const mapDispatch = (dispatch)=>({

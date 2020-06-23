@@ -1,12 +1,11 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import Talkpage from './Talkpage';
-import { changeUserInfo, getUserInfo } from '../redux/user';
+import { changeUserInfo } from '../redux/user';
 import { logout } from '../redux/currentUser';
 import { addNewContact, removeExistContact,updateContactStatus } from '../redux/contact';
 import { rejectInvitationKey } from '../redux/invitation';
 import axios from 'axios';
-// import PropTypes from 'prop-types';
 import socket from '../socket';
 
 
@@ -92,6 +91,9 @@ const chat = (value) => {
     socket.emit('trans_info', value);
 }
 
+const changeendCall = () => {
+    setlocalstate({...localstate, endCall: false})
+}
 
         return(
             <div id='talk-container'>
@@ -260,16 +262,12 @@ const chat = (value) => {
 
             <Talkpage 
             endCall={localstate.endCall}
+            changeendCall = {changeendCall}
             connectCall={localstate.connectCall}
             active={localstate.active} guestCallForChat={localstate.guestCallForChat} />
             </div>
         )
     }
-
-// Talkpage.propTypes = {
-//     opts: PropTypes.object,
-//     history: PropTypes.object
-// }
 
 const mapState =(state)=>({loggedUser:state.currentUser, getUserStatus: state.user.getUserStatus, contactStatus: state.status, invitation: state.invitation});
 
