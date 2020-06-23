@@ -15,19 +15,14 @@ const Talkpage = (props) => {
             my_id: '',
             peer_id: '',
             initialized: false,
-            files: [],
-            audio: true,
-            img:'',
-            video: '',
             my_videoSrc: null
         })
         const [endCall, setendCall] = useState(false);
         const [is_counter_loaded, setis_counter_loaded] = useState(false);
         const [callObj,setcallObj] = useState(null);
-        const [counterStream,setcounterStream] = useState(null);
         const counterVideo = useRef(null);
 
-        useEffect(()=>{
+        useEffect(()=>{ //Get local stream
             navigator.mediaDevices.getUserMedia = navigator.mediaDevices.getUserMedia || navigator.mediaDevices.webkitGetUserMedia || navigator.mediaDevices.mozGetUserMedia || navigator.mediaDevices.msGetUserMedia || navigator.mediaDevices.oGetUserMedia;
             if(navigator.mediaDevices.getUserMedia) {
                 navigator.mediaDevices.getUserMedia({
@@ -46,7 +41,7 @@ const Talkpage = (props) => {
             }
         },[])
     
-        const handleVideo = (stream) => {
+        const handleVideo = (stream) => { //Save local stream to state
             setlocalstate({...localstate ,my_videoSrc: stream});
             let video = document.querySelector('#localVideo');
             video.srcObject = stream;
@@ -58,7 +53,7 @@ const Talkpage = (props) => {
     
 
         
-    useEffect(()=>{
+    useEffect(()=>{ // Create peer id if local stream has been saved
         if(localstate.my_videoSrc!=null){
             localstate.peer.on('open', (id) => {
                 console.log('My peer ID is: ' + id)
@@ -70,7 +65,7 @@ const Talkpage = (props) => {
                 socket.emit('peer_id', localstate.peer._id)
             })
 
-            localstate.peer.on('call', call=>{
+            localstate.peer.on('call', call=>{ // answer the call here
                 call.answer(localstate.my_videoSrc);
                 setcallObj(call);
             })
@@ -78,29 +73,26 @@ const Talkpage = (props) => {
         
     },[localstate.my_videoSrc])
 
-    useEffect(()=>{
+    useEffect(()=>{ // Dynamically assign remote stream to html
         if(callObj!=null){
                 callObj.on('stream', remoteStream=>{
                     setis_counter_loaded(true);
-                    setcounterStream(remoteStream);
                     console.log('stream on!',remoteStream);
                     counterVideo.current.srcObject = remoteStream;
                 })
         }
     },[callObj])
 
-    useEffect(()=>{
+    useEffect(()=>{ // function has been called from parent 
         if(props.endCall){
             setendCall(props.endCall);
         }
-        if(props.peer_id&&props.connectCall) {
+        if(props.peer_id&&props.connectCall) { // make a call to your friend
             setlocalstate({...localstate ,peer_id: props.peer_id});
             const call = localstate.peer.call(props.peer_id, localstate.my_videoSrc);
             setcallObj(call);
         }
     },[props.endCall,props.connectCall])
-
-
 
 
 
