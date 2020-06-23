@@ -21,8 +21,10 @@ const Talkpage = (props) => {
             img:'',
             activeDrags: 0,
             video: '',
-            endCall: false
+            has_counter_videoSrc: false
         })
+        const [endCall, setendCall] = useState(false);
+        const [callObj,setcallObj] = useState(null)
         const counterVideo = useRef(null);
 
         useEffect(()=>{
@@ -72,39 +74,44 @@ const Talkpage = (props) => {
                 console.log('what the heck r u!',localstate.my_videoSrc)
                 const video = counterVideo.current;
                 call.answer(localstate.my_videoSrc);
-                call.on('stream', remoteStream=>{
-                    console.log('stream on!',remoteStream);
-                    video.srcObject = remoteStream;
-                })
+                setcallObj(call);
             })
         }
         
     },[localstate.my_videoSrc])
 
     useEffect(()=>{
-        if(props.endCall){
-            // console.log('I got the endCall',props.endCall)
-            setlocalstate({...localstate, endCall:props.endCall});
-        }
-        if(props.peer_id&&props.connectCall) {
-            // console.log('I got the connectCall',props.connectCall)
-            //     console.log('Here is the counter id I got: ', props.peer_id, localstate.my_videoSrc)
-                setlocalstate({...localstate ,peer_id: props.peer_id, endCall: true});
-                
-                const call = localstate.peer.call(props.peer_id, localstate.my_videoSrc);
-                
-                call.on('stream', remoteStream=>{
+        if(callObj!=null){
+                callObj.on('stream', remoteStream=>{
                     console.log('stream on!',remoteStream);
                     counterVideo.current.srcObject = remoteStream;
                 })
         }
+    },[callObj])
+
+    useEffect(()=>{
+        if(props.endCall){
+            // console.log('I got the endCall',props.endCall)
+            setendCall(props.endCall);
+        }
+        if(props.peer_id&&props.connectCall) {
+            // console.log('I got the connectCall',props.connectCall)
+            //     console.log('Here is the counter id I got: ', props.peer_id, localstate.my_videoSrc)
+            
+            setlocalstate({...localstate ,peer_id: props.peer_id});
+            const call = localstate.peer.call(props.peer_id, localstate.my_videoSrc);
+            setcallObj(call);
+        }
     },[props.endCall,props.connectCall])
 
 
-    const endCall = () => {
-            localstate.call.close();
+
+
+
+    const endVideoCall = () => {
+            callObj.close();
             changeStatus('rgb(102,255,153)');
-            setlocalstate({ ...localstate ,counter_videoSrc:{}, endCall: false });
+            setendCall(false);
             props.deleteId();
             props.deleteInviter();
     }
@@ -131,7 +138,7 @@ const Talkpage = (props) => {
             <div id='camera' className={props.active}>
 
                 <video id='localVideo' autoPlay={true} muted ></video>
-                {localstate.endCall?<Draggable bounds='parent' >
+                {endCall?<Draggable bounds='parent' >
                     <div id='remote'>
                         {props.guestCallForChat!=''&&props.invitation===''||props.inviterInfo!=''?<div id='contactToChat'>
                                 <span style={{backgroundColor:`${props.guestCallForChat.guest_color||props.inviterInfo.inviter_color}`}}>
@@ -140,14 +147,13 @@ const Talkpage = (props) => {
                                 <span>{props.guestCallForChat.guest_name||props.inviterInfo.inviter}</span>
                         </div>:''}
 
-                        {/* {!localstate.has_counter_videoSrc? */}
+                        {!localstate.has_counter_videoSrc?
                             <div id='loadingDots'>
                                 <span></span>
                                 <span></span>
                                 <span></span>
-                            </div>
-                            {/* :''
-                        } */}
+                            </div>:''
+                        }
                         <video id='remoteVideo' ref={counterVideo} autoPlay={true}></video>
                     </div>
                 </Draggable>:''}
@@ -155,7 +161,7 @@ const Talkpage = (props) => {
                 <div id='controlButtons'>
                     <span onClick={muted} value='Mute'><img src='./img/mute.png'/></span>
                     {/* <span onClick={this.capture} value='Screenshot'><img src='./img/screenshoot.png'/></span> */}
-                    <span onClick={endCall} value='End'><img src='./img/stop.png'/></span>
+                    <span onClick={endVideoCall} value='End'><img src='./img/stop.png'/></span>
                 </div>
             </div>
         )

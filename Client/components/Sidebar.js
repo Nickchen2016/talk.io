@@ -179,7 +179,7 @@ const chat = (value) => {
                         <span className='confirmRemove' 
                             onClick={()=>{props.rejectInvitationKey(); 
                                 socket.emit('confirm', {room:props.invitation.room}); 
-                                setlocalstate({...localstate ,active:'', statusBar:'',search:'',add:'',searchName:'', loggedInfo:'loggedInfo',newContact: {},connectCall:true}); 
+                                setlocalstate({...localstate ,active:'', statusBar:'',search:'',add:'',searchName:'', loggedInfo:'loggedInfo',newContact: {}, endCall: true, connectCall:true}); 
                                 changeStatus('rgb(239,65,54)'); 
                         }}></span>          
                 </div>:props.invitation&&props.invitation.inviter===props.loggedUser.name&&props.invitation.msg?
