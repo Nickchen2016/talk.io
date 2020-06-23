@@ -25,12 +25,9 @@ const Sidebar = (props) =>{
             chatSign:'',
             guestCallForChat:'',
             loggedInfo: 'loggedInfo',
-            endCall: '',
-            connectCall: ''
+            endCall: false,
+            connectCall: false
         })
-useEffect(()=>{
-console.log(localstate.endCall)
-},[localstate.endCall])
 
 const changeStatus = (status)=>{
     props.updateContactStatus({ownId: props.loggedUser.id, status});
@@ -182,7 +179,7 @@ const chat = (value) => {
                         <span className='confirmRemove' 
                             onClick={()=>{props.rejectInvitationKey(); 
                                 socket.emit('confirm', {room:props.invitation.room}); 
-                                setlocalstate({...localstate ,active:'', statusBar:'',search:'',add:'',searchName:'', loggedInfo:'loggedInfo',newContact: {},endCall:true, connectCall:true}); 
+                                setlocalstate({...localstate ,active:'', statusBar:'',search:'',add:'',searchName:'', loggedInfo:'loggedInfo',newContact: {},connectCall:true}); 
                                 changeStatus('rgb(239,65,54)'); 
                         }}></span>          
                 </div>:props.invitation&&props.invitation.inviter===props.loggedUser.name&&props.invitation.msg?
@@ -282,7 +279,7 @@ const mapDispatch = (dispatch, ownProps)=>({
     },
     changeUserInfo: (credentials) => {dispatch(changeUserInfo(credentials))},
     addNewContact: (credentials) => {dispatch(addNewContact(credentials))},
-    getUserInfo: (credential) => {dispatch(getUserInfo(credential))},
+    // getUserInfo: (credential) => {dispatch(getUserInfo(credential))},
     removeExistContact: (credential) => {dispatch(removeExistContact(credential))},
     updateContactStatus: (credentials) => {dispatch(updateContactStatus(credentials))},
     rejectInvitationKey: (credential) => {dispatch(rejectInvitationKey(credential))}

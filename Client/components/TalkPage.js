@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect,useRef } from 'react';
 import { connect } from 'react-redux';
 import Draggable from 'react-draggable';
 import Peer from 'peerjs';
@@ -20,98 +20,85 @@ const Talkpage = (props) => {
             audio: true,
             img:'',
             activeDrags: 0,
-            // videoSrc:{},
-            stream:{},
-            // counter_videoSrc: {},
             video: '',
             endCall: false
         })
+        const counterVideo = useRef(null);
 
-    // useEffect(()=>{
-    //     localstate.peer.on('open', (id) => {
-	// 		console.log('My peer ID is: ' + id);
-	// 		setlocalstate({
-    //             ...localstate,
-	// 			my_id: id,
-	// 			initialized: true
-	// 		});
-    //     });
-        
-    //     localstate.peer.on('call', call=>{
-    //         console.log('******Been called here*******', call);
-    //         call.answer(localstate.stream)
-    //         setlocalstate({...localstate, call}, ()=>{
-    //             localstate.call.on('stream', stream=>{
-    //                 console.log('********I got stream from receiver********', stream)
-    //                 // this.setState({counter_videoSrc: stream});
-    //                 let video = document.querySelector('#remoteVideo');
-    //                 video.srcObject = stream;
-    //             })
-    //         })
-    //     })
-    // },[localstate.endCall])
-
-
-    useEffect(()=>{
-        navigator.mediaDevices.getUserMedia = navigator.mediaDevices.getUserMedia || navigator.mediaDevices.webkitGetUserMedia || navigator.mediaDevices.mozGetUserMedia || navigator.mediaDevices.msGetUserMedia || navigator.mediaDevices.oGetUserMedia;
-        if(navigator.mediaDevices.getUserMedia) {
-            navigator.mediaDevices.getUserMedia({
-                audio: {
-                    volume: localstate.toggleAudio,
-                    echoCancellation: true,
-                    noiseSuppression: true
-                },
-                video: true
-            })
-            .then(handleVideo)
-            .catch(videoError)
-        }
-    },[])
-
-    const handleVideo = (stream) => {
-        setlocalstate({...localstate ,stream});
-        let video = document.querySelector('#localVideo');
-        video.srcObject = stream;
-        // let videoSrc = stream;
-        // this.setState({ videoSrc });
-        socket.emit('peer_id', localstate.my_id)
-    }
-
-    const videoError = (err) => {
-        console.log('Got error here '+ err)
-    }
-
-    // componentWillUnmount(){
-    //     this.props.onRef(undefined);
-	// 	this.state.peer.destroy();
-    // }
-
-    useEffect(()=>{
-        console.log('_____endcall____',props)
-    },[props.endCall])
-    // useEffect(()=>{
-    //     console.log('_____connectCall____',props.connectCall)
-    // },[props.connectCall])
-
-        // initializeCall(val) {
-        //     console.log('_____I choosed it______')
-        //     setlocalstate({ ...localstate ,endCall:val });
-        // }
-        // connectCall() {
-        //     if(props.peer_id) {
-        //         console.log('Here is the counter id I got: ', props.peer_id)
-        //         let peer_id= props.peer_id;
-        //         setlocalstate({...localstate ,peer_id});
+        useEffect(()=>{
+            navigator.mediaDevices.getUserMedia = navigator.mediaDevices.getUserMedia || navigator.mediaDevices.webkitGetUserMedia || navigator.mediaDevices.mozGetUserMedia || navigator.mediaDevices.msGetUserMedia || navigator.mediaDevices.oGetUserMedia;
+            if(navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({
+                    audio: {
+                        volume: localstate.toggleAudio,
+                        echoCancellation: true,
+                        noiseSuppression: true
+                    },
+                    video: true
+                })
+                .then(handleVideo)
+                .catch(videoError)
+            }
+            return ()=>{
+                localstate.peer.destroy();
+            }
+        },[])
     
-        //         var call = localstate.peer.call(peer_id, localstate.stream);
-        //         setlocalstate({...localstate ,call}, ()=>{
-        //         localstate.call.on('stream', stream=>{
-        //             console.log('*********I got stream from the inviter********', stream)
-        //             setlocalstate({...localstate ,counter_videoSrc: stream});
-        //         })
-        //     })
-        //     }
-        // }
+        const handleVideo = (stream) => {
+            setlocalstate({...localstate ,my_videoSrc: stream});
+            let video = document.querySelector('#localVideo');
+            video.srcObject = stream;
+        }
+    
+        const videoError = (err) => {
+            console.log('Got error here '+ err)
+        }
+    
+
+        
+    useEffect(()=>{
+        if(localstate.my_videoSrc!=undefined){
+            localstate.peer.on('open', (id) => {
+                console.log('My peer ID is: ' + id)
+                setlocalstate({
+                    ...localstate,
+                    my_id: localstate.peer._id,
+                    initialized: true
+                });
+                socket.emit('peer_id', localstate.peer._id)
+            })
+
+            localstate.peer.on('call', call=>{
+                console.log('what the heck r u!',localstate.my_videoSrc)
+                const video = counterVideo.current;
+                call.answer(localstate.my_videoSrc);
+                call.on('stream', remoteStream=>{
+                    console.log('stream on!',remoteStream);
+                    video.srcObject = remoteStream;
+                })
+            })
+        }
+        
+    },[localstate.my_videoSrc])
+
+    useEffect(()=>{
+        if(props.endCall){
+            // console.log('I got the endCall',props.endCall)
+            setlocalstate({...localstate, endCall:props.endCall});
+        }
+        if(props.peer_id&&props.connectCall) {
+            // console.log('I got the connectCall',props.connectCall)
+            //     console.log('Here is the counter id I got: ', props.peer_id, localstate.my_videoSrc)
+                setlocalstate({...localstate ,peer_id: props.peer_id, endCall: true});
+                
+                const call = localstate.peer.call(props.peer_id, localstate.my_videoSrc);
+                
+                call.on('stream', remoteStream=>{
+                    console.log('stream on!',remoteStream);
+                    counterVideo.current.srcObject = remoteStream;
+                })
+        }
+    },[props.endCall,props.connectCall])
 
 
     const endCall = () => {
@@ -123,7 +110,7 @@ const Talkpage = (props) => {
     }
 
     const muted = () => {
-        localstate.stream.getAudioTracks().forEach(track => track.enabled = !track.enabled);
+        localstate.my_id.getAudioTracks().forEach(track => track.enabled = !track.enabled);
     }
 
     const changeStatus = (status) => {
@@ -143,25 +130,25 @@ const Talkpage = (props) => {
         return(
             <div id='camera' className={props.active}>
 
-                <video id='localVideo' src={localstate.videoSrc} autoPlay={true} muted ></video>
-
-                {!props.invitation.msg&&localstate.endCall?<Draggable bounds='parent' >
+                <video id='localVideo' autoPlay={true} muted ></video>
+                {localstate.endCall?<Draggable bounds='parent' >
                     <div id='remote'>
                         {props.guestCallForChat!=''&&props.invitation===''||props.inviterInfo!=''?<div id='contactToChat'>
-                                                                <span style={{backgroundColor:`${props.guestCallForChat.guest_color||props.inviterInfo.inviter_color}`}}>
-                                                                    <span id='newCap'>{props.guestCallForChat&&props.guestCallForChat.guest_name[0].toUpperCase()||props.inviterInfo&&props.inviterInfo.inviter[0].toUpperCase()}</span>
-                                                                </span>
-                                                                <span>{props.guestCallForChat.guest_name||props.inviterInfo.inviter}</span>
-                                                         </div>:''}
+                                <span style={{backgroundColor:`${props.guestCallForChat.guest_color||props.inviterInfo.inviter_color}`}}>
+                                    <span id='newCap'>{props.guestCallForChat&&props.guestCallForChat.guest_name[0].toUpperCase()||props.inviterInfo&&props.inviterInfo.inviter[0].toUpperCase()}</span>
+                                </span>
+                                <span>{props.guestCallForChat.guest_name||props.inviterInfo.inviter}</span>
+                        </div>:''}
 
-                                                        {Object.keys(localstate.counter_videoSrc).length===0?
-                                                            <div id='loadingDots'>
-                                                                <span></span>
-                                                                <span></span>
-                                                                <span></span>
-                                                            </div>:''
-                                                        }
-                        <video id='remoteVideo' autoPlay={true}></video>
+                        {/* {!localstate.has_counter_videoSrc? */}
+                            <div id='loadingDots'>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                            {/* :''
+                        } */}
+                        <video id='remoteVideo' ref={counterVideo} autoPlay={true}></video>
                     </div>
                 </Draggable>:''}
 

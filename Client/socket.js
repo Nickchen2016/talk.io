@@ -16,7 +16,7 @@ import { fetchInviterInfo } from './redux/inviterInfo';
         })
 
         socket.on('chat_invitation', value=> {
-            console.log('+++++++++', value)
+            console.log('+++++ chat_invitation +++++', value)
             store.dispatch(fetchInvitationKey(value));
             store.dispatch(fetchInviterInfo({inviter:value.inviter, inviter_color:value.inviter_color}));
             store.dispatch(fetchPeerId(value.peer_id));
@@ -26,7 +26,7 @@ import { fetchInviterInfo } from './redux/inviterInfo';
             store.dispatch(fetchInvitationKey(value));
         })
         socket.on('confirm_invitation', value => {
-            console.log('++++ confirm peerId ++++', value)
+            console.log('++++ confirm _invitation peerId ++++', value)
             store.dispatch(fetchPeerId(value));
         })
 
