@@ -10,7 +10,7 @@ https://youtu.be/EId3phbwzns
 The beauty of online chat applications is that they provide us with a whole new way to communicate with each other. But what is the real power under the hood that supports this great idea? Talk.io is a study project that digs into the magic of WebRTC.
 
 ## Description
-Talk.io is an instant online chat page made by using WebRTC technology.
+Talk.io is an instant online chat page made by the React-Express-NodeJS-PostgreSQL stack using WebRTC technology.
 
 ## Key features
 (1). Signup/Login/Logout<br/>
